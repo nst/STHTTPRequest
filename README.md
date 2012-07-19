@@ -1,22 +1,22 @@
-#### STHTTPRequest
+### STHTTPRequest
 
 _A NSURLConnection wrapper for humans_
 
-Simple...
+##### Simple...
 
 -   400 lines of Objective-C you can understand
 -   runs on iOS 4+ and Mac OS X 10.6+
 -   just drag-and-drop .h and .m in your project
 -   new BSD license
 
-Yet powerful
+##### ... yet powerful
 
 -   synchronous and asynchronous (block based) calls
 -   easy to set request headers, cookies and POST data
 -   easy to get response status, headers and encoding
 -   supports HTTP and proxy authentication
 
-Typical usage
+##### Typical usage
 
     STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"http://google.com"];
         
@@ -31,38 +31,38 @@ Typical usage
     
     [r startAsynchronous];
 
-Starting a synchronous request
+##### Starting a synchronous request
 
     NSError *error = nil;
     NSString *body = [r startSynchronousWithError:&error];
 
-Getting HTTP data and metadata
+##### Getting HTTP data and metadata
 
     NSInteger     status   = r.responseStatus;
     NSDictionary *headers  = r.responseHeaders;
     NSString     *encoding = r.textEncodingName;
     NSData       *data     = r.responseData;
 
-Addding a request header
+##### Addding a request header
 
     [r addRequestHeaderWithKey:@"test" value:@"1234"];
 
-Adding a request cookie
+##### Adding a request cookie
 
     [r setCookieWithName:@"test" value:@"1234"];
 
-Setting a POST dictionary
+##### Setting a POST dictionary
     
     r.POSTDictionary = [NSDictionary dictionaryWithObject:@"o1" forKey:@"k1"];
 
-Setting credentials
+##### Setting credentials
 
     r.credential = \
         [NSURLCredential credentialWithUser:@"username"
                                    password:@"password"
                                 persistence:NSURLCredentialPersistenceForSession];
 
-Setting proxy credentials
+##### Setting proxy credentials
 
     r.proxyCredential = \
         [NSURLCredential credentialWithUser:@"username"
