@@ -18,32 +18,20 @@
 typedef void (^completionBlock_t)(NSDictionary *headers, NSString *body);
 typedef void (^errorBlock_t)(NSError *error);
 
-@interface STHTTPRequest : NSObject {
-    NSURL *url;
-    NSDictionary *POSTDictionary;
-    NSMutableData *responseData;
-    NSDictionary *customRequestHeaders;
-    NSDictionary *_responseHeaders;
-    completionBlock_t completionBlock;
-    errorBlock_t errorBlock;
-    NSURLCredential *credential;
-    NSURLCredential *proxyCredential;
-    NSInteger responseStatus;
-    NSString *textEncodingName;
-    NSStringEncoding postDataEncoding;
-}
+@interface STHTTPRequest : NSObject
 
 @property (copy) completionBlock_t completionBlock;
 @property (copy) errorBlock_t errorBlock;
-@property (nonatomic) NSInteger responseStatus;
 @property (nonatomic) NSStringEncoding postDataEncoding;
 @property (nonatomic, retain) NSURLCredential *credential;
 @property (nonatomic, retain) NSURLCredential *proxyCredential;
 @property (nonatomic, retain) NSDictionary *POSTDictionary;
-@property (nonatomic, retain) NSString *textEncodingName;
-@property (nonatomic, retain) NSData *responseData;
-@property (nonatomic, retain) NSDictionary *responseHeaders;
-@property (nonatomic, readonly) NSURL *url;
+@property (nonatomic, retain) NSMutableDictionary *requestHeaders;
+@property (nonatomic, readonly) NSInteger responseStatus;
+@property (nonatomic, retain, readonly) NSString *responseStringEncodingName;
+@property (nonatomic, retain, readonly) NSDictionary *responseHeaders;
+@property (nonatomic, retain, readonly) NSURL *url;
+@property (nonatomic, retain, readonly) NSMutableData *responseData;
 
 + (STHTTPRequest *)requestWithURL:(NSURL *)url;
 + (STHTTPRequest *)requestWithURLString:(NSString *)urlString;
@@ -53,26 +41,31 @@ typedef void (^errorBlock_t)(NSError *error);
 
 - (NSStringEncoding)responseStringEncoding;
 
+// Credentials
+- (void)setUsername:(NSString *)username password:(NSString *)password;
+- (void)setProxyUsername:(NSString *)username password:(NSString *)password;
+
 // Cookies
-+ (void)setCookieWithName:(NSString *)name value:(NSString *)value url:(NSURL *)url;
-- (void)setCookieWithName:(NSString *)name value:(NSString *)value;
++ (void)addCookieWithName:(NSString *)name value:(NSString *)value url:(NSURL *)url;
+- (void)addCookieWithName:(NSString *)name value:(NSString *)value;
+- (NSArray *)requestCookies;
 + (NSArray *)sessionCookies;
 + (void)deleteSessionCookies;
-- (NSArray *)requestCookies;
 
 // Credentials
 + (NSURLCredential *)sessionAuthenticationCredentialsForURL:(NSURL *)requestURL;
-+ (void)deleteAllCredentials;
 - (void)setUsername:(NSString *)username password:(NSString *)password;
 - (NSString *)username;
 - (NSString *)password;
++ (void)deleteAllCredentials;
 
 // Headers
-- (void)addRequestHeaderWithKey:(NSString *)name value:(NSString *)value;
+- (void)setHeaderWithName:(NSString *)name value:(NSString *)value;
+- (void)removeHeaderWithName:(NSString *)name;
 - (NSDictionary *)responseHeaders;
 
-// Clear Session
-+ (void)clearSession;
+// Session
++ (void)clearSession; // delete all credentials and cookies
 
 @end
 

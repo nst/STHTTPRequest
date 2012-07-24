@@ -8,7 +8,15 @@
 
 #import "STHTTPRequest.h"
 
-static NSMutableDictionary *credentialsStorage;
+static NSMutableDictionary *sharedCredentialsStorage;
+
+@interface STHTTPRequest ()
+@property (nonatomic) NSInteger responseStatus;
+@property (nonatomic, retain) NSMutableData *responseData;
+@property (nonatomic, retain) NSString *responseStringEncodingName;
+@property (nonatomic, retain) NSDictionary *responseHeaders;
+@property (nonatomic, retain) NSURL *url;
+@end
 
 @implementation STHTTPRequest
 
@@ -21,8 +29,9 @@ static NSMutableDictionary *credentialsStorage;
 @synthesize responseData;
 @synthesize url;
 @synthesize responseStatus;
-@synthesize textEncodingName;
+@synthesize responseStringEncodingName;
 @synthesize postDataEncoding;
+@synthesize requestHeaders;
 
 #pragma mark Initializers
 
@@ -41,7 +50,7 @@ static NSMutableDictionary *credentialsStorage;
     if (self = [super init]) {
         url = [theURL retain];
         responseData = [[NSMutableData alloc] init];
-        customRequestHeaders = [[NSMutableDictionary dictionary] retain];
+        requestHeaders = [[NSMutableDictionary dictionary] retain];
         postDataEncoding = NSUTF8StringEncoding;
     }
     
@@ -54,8 +63,8 @@ static NSMutableDictionary *credentialsStorage;
 }
 
 - (void)dealloc {
-    [textEncodingName release];
-    [customRequestHeaders release];
+    [responseStringEncodingName release];
+    [requestHeaders release];
     [url release];
     [responseData release];
     [responseHeaders release];
@@ -69,35 +78,47 @@ static NSMutableDictionary *credentialsStorage;
 
 #pragma mark Credentials
 
-+ (NSMutableDictionary *)credentialsStorage {
-    if(credentialsStorage == nil) {
-        credentialsStorage = [[NSMutableDictionary dictionary] retain];
++ (NSMutableDictionary *)sharedCredentialsStorage {
+    if(sharedCredentialsStorage == nil) {
+        sharedCredentialsStorage = [[NSMutableDictionary dictionary] retain];
     }
-    return credentialsStorage;
+    return sharedCredentialsStorage;
 }
 
 + (NSURLCredential *)sessionAuthenticationCredentialsForURL:(NSURL *)requestURL {
-    return [[[self class] credentialsStorage] valueForKey:[requestURL host]];
+    return [[[self class] sharedCredentialsStorage] valueForKey:[requestURL host]];
 }
 
 + (void)deleteAllCredentials {
-    [credentialsStorage autorelease];
-    credentialsStorage = [[NSMutableDictionary dictionary] retain];
+    [sharedCredentialsStorage autorelease];
+    sharedCredentialsStorage = [[NSMutableDictionary dictionary] retain];
 }
 
 - (void)setCredential:(NSURLCredential *)c {
 #if DEBUG
     NSAssert(url, @"missing url to set credential");
 #endif
-    [[[self class] credentialsStorage] setObject:c forKey:[url host]];
+    [[[self class] sharedCredentialsStorage] setObject:c forKey:[url host]];
 }
 
 - (NSURLCredential *)credential {
-    return [[[self class] credentialsStorage] valueForKey:[url host]];
+    return [[[self class] sharedCredentialsStorage] valueForKey:[url host]];
 }
 
 - (void)setUsername:(NSString *)username password:(NSString *)password {
-    self.credential = [NSURLCredential credentialWithUser:username password:password persistence:NSURLCredentialPersistenceNone];
+    NSURLCredential *c = [NSURLCredential credentialWithUser:username
+                                                             password:password
+                                                          persistence:NSURLCredentialPersistenceNone];
+    
+    [self setCredential:c];
+}
+
+- (void)setProxyUsername:(NSString *)username password:(NSString *)password {
+    NSURLCredential *c = [NSURLCredential credentialWithUser:username
+                                                             password:password
+                                                          persistence:NSURLCredentialPersistenceNone];
+    
+    [self setProxyCredential:c];    
 }
 
 - (NSString *)username {
@@ -129,13 +150,13 @@ static NSMutableDictionary *credentialsStorage;
     }
 }
 
-+ (void)setCookie:(NSHTTPCookie *)cookie forURL:(NSURL *)url {
++ (void)addCookie:(NSHTTPCookie *)cookie forURL:(NSURL *)url {
     NSArray *cookies = [NSArray arrayWithObject:cookie];
 	
     [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookies:cookies forURL:url mainDocumentURL:nil];    
 }
 
-+ (void)setCookieWithName:(NSString *)name value:(NSString *)value url:(NSURL *)url {
++ (void)addCookieWithName:(NSString *)name value:(NSString *)value url:(NSURL *)url {
     
     NSMutableDictionary *cookieProperties = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                                              name, NSHTTPCookieName,
@@ -150,30 +171,31 @@ static NSMutableDictionary *credentialsStorage;
     
     NSHTTPCookie *cookie = [NSHTTPCookie cookieWithProperties:cookieProperties];
     
-    [[self class] setCookie:cookie forURL:url];
+    [[self class] addCookie:cookie forURL:url];
 }
 
 - (NSArray *)requestCookies {
     return [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookiesForURL:[url absoluteURL]];
 }
 
-- (void)setCookie:(NSHTTPCookie *)cookie {
-    [[self class] setCookie:cookie forURL:url];
+- (void)addCookie:(NSHTTPCookie *)cookie {
+    [[self class] addCookie:cookie forURL:url];
 }
 
-- (void)setCookieWithName:(NSString *)name value:(NSString *)value {
-    [[self class] setCookieWithName:name value:value url:url];
+- (void)addCookieWithName:(NSString *)name value:(NSString *)value {
+    [[self class] addCookieWithName:name value:value url:url];
 }
 
 #pragma mark Headers
 
-- (void)addRequestHeaderWithKey:(NSString *)key value:(NSString *)value {
-    if(key == nil || value == nil) {
-        //NSLog(@"-- cannot add request header, empty key or value: %@ / %@", key, value);
-        return;
-    }
-    
-    [customRequestHeaders setValue:value forKey:key];
+- (void)setHeaderWithName:(NSString *)name value:(NSString *)value {
+    if(name == nil || value == nil) return;
+    [[self requestHeaders] setObject:value forKey:name];
+}
+
+- (void)removeHeaderWithName:(NSString *)name {
+    if(name == nil) return;
+    [[self requestHeaders] removeObjectForKey:name];
 }
 
 - (NSURL *)urlWithCredentials {
@@ -223,12 +245,9 @@ static NSMutableDictionary *credentialsStorage;
         [request setHTTPBody:data];
     }
     
-    if([customRequestHeaders count] > 0) {
-        for(NSString *k in customRequestHeaders) {
-            NSString *v = [customRequestHeaders valueForKey:k];
-            [request addValue:v forHTTPHeaderField:k];
-        }
-    }
+    [requestHeaders enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+        [request addValue:obj forHTTPHeaderField:key];
+    }];
     
     return request;
 }
@@ -241,16 +260,12 @@ static NSMutableDictionary *credentialsStorage;
     return [self requestByAddingCredentialsToURL:YES];
 }
 
-- (NSDictionary *)customRequestHeaders {
-    return customRequestHeaders;
-}
-
 #pragma mark Response
 
 - (NSStringEncoding)responseStringEncoding {
-    if(textEncodingName == nil) return NSUTF8StringEncoding; // by default
+    if(responseStringEncodingName == nil) return NSUTF8StringEncoding; // by default
     
-    return CFStringConvertEncodingToNSStringEncoding(CFStringConvertIANACharSetNameToEncoding((CFStringRef)textEncodingName));
+    return CFStringConvertEncodingToNSStringEncoding(CFStringConvertIANACharSetNameToEncoding((CFStringRef)responseStringEncodingName));
 }
 
 - (NSString *)responseString {
@@ -320,8 +335,10 @@ static NSMutableDictionary *credentialsStorage;
     
     NSURLResponse *urlResponse = nil;
     
-    self.responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&urlResponse error:error];
-    if(responseData == nil) return nil;
+    NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&urlResponse error:error];
+    if(data == nil) return nil;
+
+    self.responseData = [NSMutableData dataWithData:data];
     
     if([urlResponse isKindOfClass:[NSHTTPURLResponse class]]) {
         
@@ -329,7 +346,7 @@ static NSMutableDictionary *credentialsStorage;
         
         self.responseHeaders = [httpResponse allHeaderFields];
         self.responseStatus = [httpResponse statusCode];
-        self.textEncodingName = [httpResponse textEncodingName];
+        self.responseStringEncodingName = [httpResponse textEncodingName];
     }
     
     return [self responseString];
@@ -366,7 +383,7 @@ static NSMutableDictionary *credentialsStorage;
         NSHTTPURLResponse *r = (NSHTTPURLResponse *)response;
         self.responseHeaders = [r allHeaderFields];
         self.responseStatus = [r statusCode];
-        self.textEncodingName = [r textEncodingName];
+        self.responseStringEncodingName = [r textEncodingName];
     }
     
     [responseData setLength:0];

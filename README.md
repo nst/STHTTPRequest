@@ -21,12 +21,11 @@ _A NSURLConnection wrapper for humans_
     STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"http://google.com"];
         
     r.completionBlock = ^(NSDictionary *headers, NSString *body) {
-        NSLog(@"-- %@", headers);
-        NSLog(@"-- %@", body);
+        // ...
     };
     
     r.errorBlock = ^(NSError *error) {
-       NSLog(@"-- %@", error);
+        // ...
     };
     
     [r startAsynchronous];
@@ -40,31 +39,25 @@ _A NSURLConnection wrapper for humans_
 
     NSInteger     status   = r.responseStatus;
     NSDictionary *headers  = r.responseHeaders;
-    NSString     *encoding = r.textEncodingName;
+    NSString     *encoding = r.responseStringEncodingName;
     NSData       *data     = r.responseData;
 
-##### Addding a request header
+##### Adding a request header
 
-    [r addRequestHeaderWithKey:@"test" value:@"1234"];
+    [r addHeaderWithName:@"test" value:@"1234"];
 
 ##### Adding a request cookie
 
-    [r setCookieWithName:@"test" value:@"1234"];
+    [r addCookieWithName:@"test" value:@"1234"];
 
 ##### Setting a POST dictionary
     
-    r.POSTDictionary = [NSDictionary dictionaryWithObject:@"o1" forKey:@"k1"];
+    r.POSTDictionary = [NSDictionary dictionaryWithObject:@"1234" forKey:@"test"];
 
 ##### Setting credentials
 
-    r.credential = \
-        [NSURLCredential credentialWithUser:@"username"
-                                   password:@"password"
-                                persistence:NSURLCredentialPersistenceForSession];
+    [r setUsername:@"test" password:@"1234"];
 
 ##### Setting proxy credentials
 
-    r.proxyCredential = \
-        [NSURLCredential credentialWithUser:@"username"
-                                   password:@"password"
-                                persistence:NSURLCredentialPersistenceForSession];
+    [r setProxyUsername:@"test" password:@"1234"];
