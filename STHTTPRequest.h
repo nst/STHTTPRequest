@@ -69,6 +69,6 @@ typedef void (^errorBlock_t)(NSError *error);
 
 @end
 
-@interface NSError (SQHTTPRequest)
+@interface NSError (STHTTPRequest)
 - (BOOL)st_isAuthenticationError;
 @end
