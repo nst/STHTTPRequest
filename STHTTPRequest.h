@@ -41,10 +41,6 @@ typedef void (^errorBlock_t)(NSError *error);
 
 - (NSStringEncoding)responseStringEncoding;
 
-// Credentials
-- (void)setUsername:(NSString *)username password:(NSString *)password;
-- (void)setProxyUsername:(NSString *)username password:(NSString *)password;
-
 // Cookies
 + (void)addCookieWithName:(NSString *)name value:(NSString *)value url:(NSURL *)url;
 - (void)addCookieWithName:(NSString *)name value:(NSString *)value;
@@ -55,6 +51,7 @@ typedef void (^errorBlock_t)(NSError *error);
 // Credentials
 + (NSURLCredential *)sessionAuthenticationCredentialsForURL:(NSURL *)requestURL;
 - (void)setUsername:(NSString *)username password:(NSString *)password;
+- (void)setProxyUsername:(NSString *)username password:(NSString *)password;
 - (NSString *)username;
 - (NSString *)password;
 + (void)deleteAllCredentials;
