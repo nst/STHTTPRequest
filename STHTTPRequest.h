@@ -39,6 +39,7 @@ typedef void (^errorBlock_t)(NSError *error);
 - (NSString *)startSynchronousWithError:(NSError **)error;
 - (void)startAsynchronous;
 
+- (NSString *)responseString;
 - (NSStringEncoding)responseStringEncoding;
 
 // Cookies

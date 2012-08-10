@@ -22,6 +22,9 @@
 		03A07DDE15D5078300B2D5B6 /* STHTTPRequestDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 03A07DDD15D5078300B2D5B6 /* STHTTPRequestDemoTests.m */; };
 		03A07DE915D5079700B2D5B6 /* STHTTPRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 03A07DE815D5079700B2D5B6 /* STHTTPRequest.m */; };
 		03A07DEA15D5079700B2D5B6 /* STHTTPRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 03A07DE815D5079700B2D5B6 /* STHTTPRequest.m */; };
+		03A07DFB15D5124C00B2D5B6 /* STHTTPRequest+UnitTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 03A07DF615D5124C00B2D5B6 /* STHTTPRequest+UnitTests.m */; };
+		03A07DFC15D5124C00B2D5B6 /* STHTTPRequestTestResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 03A07DF815D5124C00B2D5B6 /* STHTTPRequestTestResponse.m */; };
+		03A07DFD15D5124C00B2D5B6 /* STHTTPRequestTestResponseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 03A07DFA15D5124C00B2D5B6 /* STHTTPRequestTestResponseQueue.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +59,12 @@
 		03A07DDD15D5078300B2D5B6 /* STHTTPRequestDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = STHTTPRequestDemoTests.m; sourceTree = "<group>"; };
 		03A07DE715D5079700B2D5B6 /* STHTTPRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = STHTTPRequest.h; path = ../STHTTPRequest.h; sourceTree = "<group>"; };
 		03A07DE815D5079700B2D5B6 /* STHTTPRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = STHTTPRequest.m; path = ../STHTTPRequest.m; sourceTree = "<group>"; };
+		03A07DF515D5124C00B2D5B6 /* STHTTPRequest+UnitTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "STHTTPRequest+UnitTests.h"; sourceTree = "<group>"; };
+		03A07DF615D5124C00B2D5B6 /* STHTTPRequest+UnitTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "STHTTPRequest+UnitTests.m"; sourceTree = "<group>"; };
+		03A07DF715D5124C00B2D5B6 /* STHTTPRequestTestResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STHTTPRequestTestResponse.h; sourceTree = "<group>"; };
+		03A07DF815D5124C00B2D5B6 /* STHTTPRequestTestResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STHTTPRequestTestResponse.m; sourceTree = "<group>"; };
+		03A07DF915D5124C00B2D5B6 /* STHTTPRequestTestResponseQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STHTTPRequestTestResponseQueue.h; sourceTree = "<group>"; };
+		03A07DFA15D5124C00B2D5B6 /* STHTTPRequestTestResponseQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STHTTPRequestTestResponseQueue.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,9 +94,9 @@
 		03A07DA315D5078300B2D5B6 = {
 			isa = PBXGroup;
 			children = (
-				03A07DE715D5079700B2D5B6 /* STHTTPRequest.h */,
-				03A07DE815D5079700B2D5B6 /* STHTTPRequest.m */,
+				03A07DEB15D511F700B2D5B6 /* STHTTPRequest */,
 				03A07DB815D5078300B2D5B6 /* STHTTPRequestDemo */,
+				03A07DF415D5124B00B2D5B6 /* UnitTestAdditions */,
 				03A07DD615D5078300B2D5B6 /* STHTTPRequestDemoTests */,
 				03A07DB115D5078300B2D5B6 /* Frameworks */,
 				03A07DAF15D5078300B2D5B6 /* Products */,
@@ -155,6 +164,29 @@
 				03A07DD915D5078300B2D5B6 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		03A07DEB15D511F700B2D5B6 /* STHTTPRequest */ = {
+			isa = PBXGroup;
+			children = (
+				03A07DE715D5079700B2D5B6 /* STHTTPRequest.h */,
+				03A07DE815D5079700B2D5B6 /* STHTTPRequest.m */,
+			);
+			name = STHTTPRequest;
+			sourceTree = "<group>";
+		};
+		03A07DF415D5124B00B2D5B6 /* UnitTestAdditions */ = {
+			isa = PBXGroup;
+			children = (
+				03A07DF515D5124C00B2D5B6 /* STHTTPRequest+UnitTests.h */,
+				03A07DF615D5124C00B2D5B6 /* STHTTPRequest+UnitTests.m */,
+				03A07DF715D5124C00B2D5B6 /* STHTTPRequestTestResponse.h */,
+				03A07DF815D5124C00B2D5B6 /* STHTTPRequestTestResponse.m */,
+				03A07DF915D5124C00B2D5B6 /* STHTTPRequestTestResponseQueue.h */,
+				03A07DFA15D5124C00B2D5B6 /* STHTTPRequestTestResponseQueue.m */,
+			);
+			name = UnitTestAdditions;
+			path = ../UnitTestAdditions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -277,6 +309,9 @@
 			files = (
 				03A07DDE15D5078300B2D5B6 /* STHTTPRequestDemoTests.m in Sources */,
 				03A07DEA15D5079700B2D5B6 /* STHTTPRequest.m in Sources */,
+				03A07DFB15D5124C00B2D5B6 /* STHTTPRequest+UnitTests.m in Sources */,
+				03A07DFC15D5124C00B2D5B6 /* STHTTPRequestTestResponse.m in Sources */,
+				03A07DFD15D5124C00B2D5B6 /* STHTTPRequestTestResponseQueue.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
