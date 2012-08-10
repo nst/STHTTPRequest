@@ -13,6 +13,8 @@
 
 @dynamic responseStatus;
 
+// TODO: swizzle instead of using a category
+
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wobjc-protocol-method-implementation"
 - (void)startAsynchronous {

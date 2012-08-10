@@ -35,6 +35,7 @@
 
     STHTTPRequestTestResponse *tr = [STHTTPRequestTestResponse testResponseWithBlock:^(STHTTPRequest *r) {
         r.responseStatus = 200;
+        // TODO: make other fields also settable
     }];
     
     [queue enqueue:tr];
