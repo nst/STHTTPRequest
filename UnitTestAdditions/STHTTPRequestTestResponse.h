@@ -2,14 +2,14 @@
 #import "STHTTPRequest.h"
 
 // placeholder to simulate server responses
-// to be used in a SQServerTestResponseQueue
+// to be used in a STHTTPRequestTestResponseQueue
 
-typedef void(^MyBlock)(STHTTPRequest *r);
+typedef void(^FillResponseBlock)(STHTTPRequest *r);
 
 @interface STHTTPRequestTestResponse : NSObject
 
-@property (nonatomic, copy) MyBlock block;
+@property (nonatomic, copy) FillResponseBlock block;
 
-+ (STHTTPRequestTestResponse *)testResponseWithBlock:(MyBlock)block;
++ (STHTTPRequestTestResponse *)testResponseWithBlock:(FillResponseBlock)block;
 
 @end

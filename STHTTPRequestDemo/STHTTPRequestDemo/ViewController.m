@@ -14,12 +14,12 @@
 - (IBAction)buttonClicked:(id)sender {
     
     [_activityIndicator startAnimating];
-
+    
     _fetchButton.enabled = NO;
     _statusLabel.text = @"";
     _headersTextView.text = @"";
     _imageView.image = nil;
-
+    
     STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"https://assets.github.com/images/modules/about_page/octocat.png"];
     
     r.completionBlock = ^(NSDictionary *headers, NSString *body) {

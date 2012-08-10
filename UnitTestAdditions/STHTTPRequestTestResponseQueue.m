@@ -19,9 +19,7 @@ static STHTTPRequestTestResponseQueue *sharedInstance = nil;
 
 - (id)init {
     self = [super init];
-    
     responses = [[NSMutableArray alloc] init];
-    
     return self;
 }
 
@@ -32,7 +30,7 @@ static STHTTPRequestTestResponseQueue *sharedInstance = nil;
 
 /**/
 
-- (NSUInteger)numberOfQueuedResponses {
+- (NSUInteger)numberOfResponsesInQueue {
     return [responses count];
 }
 

@@ -33,17 +33,19 @@
     
     STHTTPRequestTestResponseQueue *queue = [STHTTPRequestTestResponseQueue sharedInstance];
 
-    STHTTPRequestTestResponse *tr = [STHTTPRequestTestResponse testResponseWithBlock:^(STHTTPRequest *r){
+    STHTTPRequestTestResponse *tr = [STHTTPRequestTestResponse testResponseWithBlock:^(STHTTPRequest *r) {
         r.responseStatus = 200;
     }];
     
     [queue enqueue:tr];
     
+    /**/
+    
     STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"http://www.google.com"];
 
     [r startAsynchronous]; // will actually get executed sychronously for tests
 
-    STAssertEquals(r.responseStatus, 200, @"bad response status");
+    STAssertEquals(r.responseStatus, 200, [NSString stringWithFormat:@"bad response status: %d", r.responseStatus]);
     
     [queue release];
 }
