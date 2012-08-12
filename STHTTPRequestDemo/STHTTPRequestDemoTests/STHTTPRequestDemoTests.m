@@ -35,6 +35,8 @@
 
     STHTTPRequestTestResponse *tr = [STHTTPRequestTestResponse testResponseWithBlock:^(STHTTPRequest *r) {
         r.responseStatus = 200;
+        r.responseString = @"OK";
+        r.responseHeaders = @{ @"key" : @"value" };
         // TODO: make other fields also settable
     }];
     
@@ -47,6 +49,8 @@
     [r startAsynchronous]; // will actually get executed sychronously for tests
 
     STAssertEquals(r.responseStatus, 200, [NSString stringWithFormat:@"bad response status: %d", r.responseStatus]);
+    STAssertEqualObjects(r.responseString, @"OK", [NSString stringWithFormat:@"bad response: %@", r.responseString]);
+    STAssertEqualObjects(r.responseHeaders, @{ @"key" : @"value" }, [NSString stringWithFormat:@"bad headers: %@", [r responseHeaders]]);
     
     [queue release];
 }

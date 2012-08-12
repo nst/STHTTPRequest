@@ -28,6 +28,8 @@
         _statusLabel.text = [NSString stringWithFormat:@"HTTP status %d", r.responseStatus];
         _headersTextView.text = [headers description];
         
+//        NSLog(@"-- %@", r.responseString);
+        
         _fetchButton.enabled = YES;
         [_activityIndicator stopAnimating];
     };

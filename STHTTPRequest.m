@@ -16,6 +16,7 @@ static NSMutableDictionary *sharedCredentialsStorage;
 @property (nonatomic, retain) NSString *responseStringEncodingName;
 @property (nonatomic, retain) NSDictionary *responseHeaders;
 @property (nonatomic, retain) NSURL *url;
+@property (nonatomic, retain) NSError *error;
 @end
 
 @implementation STHTTPRequest
@@ -32,6 +33,8 @@ static NSMutableDictionary *sharedCredentialsStorage;
 @synthesize responseStringEncodingName;
 @synthesize postDataEncoding;
 @synthesize requestHeaders;
+@synthesize responseString;
+@synthesize error;
 
 #pragma mark Initializers
 
@@ -68,11 +71,13 @@ static NSMutableDictionary *sharedCredentialsStorage;
     [url release];
     [responseData release];
     [responseHeaders release];
+    [responseString release];
     [completionBlock release];
     [errorBlock release];
     [credential release];
     [proxyCredential release];
     [POSTDictionary release];
+    [error release];
     [super dealloc];
 }
 
@@ -262,24 +267,22 @@ static NSMutableDictionary *sharedCredentialsStorage;
 
 #pragma mark Response
 
-- (NSStringEncoding)responseStringEncoding {
-    if(responseStringEncodingName == nil) return NSUTF8StringEncoding; // by default
+//- (NSString *)responseString {
++ (NSString *)stringWithData:(NSData *)data encodingName:(NSString *)encodingName {
+    if(data == nil) return nil;
     
-    return CFStringConvertEncodingToNSStringEncoding(CFStringConvertIANACharSetNameToEncoding((CFStringRef)responseStringEncodingName));
-}
-
-- (NSString *)responseString {
-    if(responseData == nil) return nil;
+    NSStringEncoding encoding = NSUTF8StringEncoding;
     
-    NSStringEncoding responseEncoding = NSUTF8StringEncoding; // by default
-    
-    NSStringEncoding encoding = [self responseStringEncoding];
-    
-    if(encoding != kCFStringEncodingInvalidId) {
-        responseEncoding = encoding;
+    if(encodingName != nil) {
+        
+        encoding = CFStringConvertEncodingToNSStringEncoding(CFStringConvertIANACharSetNameToEncoding((CFStringRef)encodingName));
+        
+        if(encoding == kCFStringEncodingInvalidId) {
+            encoding = NSUTF8StringEncoding; // by default
+        }
     }
-    
-    return [[[NSString alloc] initWithData:responseData encoding:responseEncoding] autorelease];
+        
+    return [[[NSString alloc] initWithData:data encoding:encoding] autorelease];
 }
 
 - (void)logRequest:(NSURLRequest *)request {
@@ -321,12 +324,12 @@ static NSMutableDictionary *sharedCredentialsStorage;
     if(connection == nil) {
         NSString *s = @"can't create connection";
         NSDictionary *userInfo = [NSDictionary dictionaryWithObject:s forKey:NSLocalizedDescriptionKey];
-        NSError *error = [NSError errorWithDomain:NSStringFromClass([self class]) code:0 userInfo:userInfo];
+        self.error = [NSError errorWithDomain:NSStringFromClass([self class]) code:0 userInfo:userInfo];
         errorBlock(error);
     }
 }
 
-- (NSString *)startSynchronousWithError:(NSError **)error {
+- (NSString *)startSynchronousWithError:(NSError **)e {
     
     self.responseHeaders = nil;
     self.responseStatus = 0;
@@ -335,7 +338,7 @@ static NSMutableDictionary *sharedCredentialsStorage;
     
     NSURLResponse *urlResponse = nil;
     
-    NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&urlResponse error:error];
+    NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&urlResponse error:e];
     if(data == nil) return nil;
 
     self.responseData = [NSMutableData dataWithData:data];
@@ -349,7 +352,7 @@ static NSMutableDictionary *sharedCredentialsStorage;
         self.responseStringEncodingName = [httpResponse textEncodingName];
     }
     
-    return [self responseString];
+    return [[self class] stringWithData:responseData encodingName:responseStringEncodingName];
 }
 
 #pragma mark NSURLConnectionDelegate
@@ -393,11 +396,14 @@ static NSMutableDictionary *sharedCredentialsStorage;
     [responseData appendData:theData];
 }
 
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection {   
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
+    self.responseString = [[self class] stringWithData:responseData encodingName:responseStringEncodingName];
+    
     completionBlock(responseHeaders, [self responseString]);
 }
 
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {    
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)e {
+    self.error = e;
     errorBlock(error);
 }
 

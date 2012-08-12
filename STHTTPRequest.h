@@ -32,15 +32,14 @@ typedef void (^errorBlock_t)(NSError *error);
 @property (nonatomic, retain, readonly) NSDictionary *responseHeaders;
 @property (nonatomic, retain, readonly) NSURL *url;
 @property (nonatomic, retain, readonly) NSMutableData *responseData;
+@property (nonatomic, retain, readonly) NSError *error;
+@property (nonatomic, retain) NSString *responseString;
 
 + (STHTTPRequest *)requestWithURL:(NSURL *)url;
 + (STHTTPRequest *)requestWithURLString:(NSString *)urlString;
 
 - (NSString *)startSynchronousWithError:(NSError **)error;
 - (void)startAsynchronous;
-
-- (NSString *)responseString;
-- (NSStringEncoding)responseStringEncoding;
 
 // Cookies
 + (void)addCookieWithName:(NSString *)name value:(NSString *)value url:(NSURL *)url;

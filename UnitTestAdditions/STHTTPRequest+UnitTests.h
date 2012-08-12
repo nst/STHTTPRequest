@@ -9,6 +9,10 @@
 
 @interface STHTTPRequest (UnitTests)
 
+// expose private properties
 @property (nonatomic) NSUInteger responseStatus;
+@property (nonatomic, retain) NSString *responseString;
+@property (nonatomic, retain) NSDictionary *responseHeaders;
+@property (nonatomic, retain) NSMutableData *reponseData;
 
 @end
