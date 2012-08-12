@@ -16,6 +16,10 @@ _A NSURLConnection wrapper for humans_
 -   easy to get response status, headers and encoding
 -   supports HTTP and proxy authentication
 
+##### Usable in unit tests
+
+You can fill a queue with fake responses to be consumed by requests started from unit tests.
+
 ##### Typical usage
 
     STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"http://google.com"];
