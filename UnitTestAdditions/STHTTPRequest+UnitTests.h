@@ -9,9 +9,6 @@
 
 @interface STHTTPRequest (UnitTests)
 
-- (void)startAsynchronous;
-- (NSString *)startSynchronousWithError:(NSError **)error;
-
 @property (nonatomic) NSUInteger responseStatus;
 
 @end

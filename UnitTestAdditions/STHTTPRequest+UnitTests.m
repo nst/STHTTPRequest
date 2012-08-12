@@ -9,15 +9,28 @@
 #import "STHTTPRequestTestResponse.h"
 #import "STHTTPRequestTestResponseQueue.h"
 
+#import <objc/runtime.h>
+#import <objc/message.h>
+
+void Swizzle(Class c, SEL orig, SEL new) {
+    Method origMethod = class_getInstanceMethod(c, orig);
+    Method newMethod = class_getInstanceMethod(c, new);
+    if(class_addMethod(c, orig, method_getImplementation(newMethod), method_getTypeEncoding(newMethod)))
+        class_replaceMethod(c, new, method_getImplementation(origMethod), method_getTypeEncoding(origMethod));
+    else
+        method_exchangeImplementations(origMethod, newMethod);
+}
+
 @implementation STHTTPRequest (UnitTests)
 
 @dynamic responseStatus;
 
-// TODO: swizzle instead of using a category
++ (void)initialize {
+    Swizzle([STHTTPRequest class], @selector(startAsynchronous), @selector(unitTests_startAsynchronous));
+    Swizzle([STHTTPRequest class], @selector(unitTests_startSynchronousWithError:), @selector(startSynchronousWithError:));
+}
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wobjc-protocol-method-implementation"
-- (void)startAsynchronous {
+- (void)unitTests_startAsynchronous {
     
     STHTTPRequestTestResponse *tr = [[STHTTPRequestTestResponseQueue sharedInstance] dequeue];
     
@@ -26,7 +39,7 @@
     tr.block(self);
 }
 
-- (NSString *)startSynchronousWithError:(NSError **)error {
+- (NSString *)unitTests_startSynchronousWithError:(NSError **)error {
     
     NSAssert(self.completionBlock != nil, @"completion block is nil");
     NSAssert(self.errorBlock != nil, @"error block is nil");
@@ -37,7 +50,5 @@
     
     return [self responseString];
 }
-
-#pragma clang diagnostic pop
 
 @end

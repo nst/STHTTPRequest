@@ -12,6 +12,6 @@
 - (void)enqueue:(STHTTPRequestTestResponse *)response;
 - (STHTTPRequestTestResponse *)dequeue;
 
-- (NSUInteger)numberOfQueuedResponses;
+- (NSUInteger)numberOfResponsesInQueue;
 
 @end
