@@ -19,13 +19,21 @@
 
 - (void)setUp {
     [super setUp];
-    
+        
     // Set-up code here.
+
+    STHTTPRequestTestResponseQueue *sharedInstance = [STHTTPRequestTestResponseQueue sharedInstance];
+    sharedInstance.responses = [NSMutableArray array];
 }
 
 - (void)tearDown {
     // Tear-down code here.
     
+    STHTTPRequestTestResponseQueue *sharedInstance = [STHTTPRequestTestResponseQueue sharedInstance];
+    NSUInteger numberOfReponsesLeft = [sharedInstance.responses count];
+    
+    STAssertTrue(numberOfReponsesLeft == 0, @"still %d responses in queue", numberOfReponsesLeft);
+
     [super tearDown];
 }
 
@@ -35,9 +43,8 @@
 
     STHTTPRequestTestResponse *tr = [STHTTPRequestTestResponse testResponseWithBlock:^(STHTTPRequest *r) {
         r.responseStatus = 200;
-        r.responseString = @"OK";
         r.responseHeaders = @{ @"key" : @"value" };
-        // TODO: make other fields also settable
+        r.responseString = @"OK";
     }];
     
     [queue enqueue:tr];
@@ -49,8 +56,8 @@
     [r startAsynchronous]; // will actually get executed sychronously for tests
 
     STAssertEquals(r.responseStatus, 200, [NSString stringWithFormat:@"bad response status: %d", r.responseStatus]);
-    STAssertEqualObjects(r.responseString, @"OK", [NSString stringWithFormat:@"bad response: %@", r.responseString]);
     STAssertEqualObjects(r.responseHeaders, @{ @"key" : @"value" }, [NSString stringWithFormat:@"bad headers: %@", [r responseHeaders]]);
+    STAssertEqualObjects(r.responseString, @"OK", [NSString stringWithFormat:@"bad response: %@", r.responseString]);
     
     [queue release];
 }

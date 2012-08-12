@@ -58,7 +58,7 @@ void Swizzle(Class c, SEL orig, SEL new) {
     
     tr.block(self);
     
-    return [self responseString];
+    return self.responseString;
 }
 
 @end

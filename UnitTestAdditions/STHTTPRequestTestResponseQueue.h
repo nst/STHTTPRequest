@@ -2,16 +2,13 @@
 
 @class STHTTPRequestTestResponse;
 
-@interface STHTTPRequestTestResponseQueue : NSObject {
-    NSMutableArray *responses;
-}
+@interface STHTTPRequestTestResponseQueue : NSObject
+
+@property (nonatomic, retain) NSMutableArray *responses;
 
 + (STHTTPRequestTestResponseQueue *)sharedInstance;
-+ (void)reset;
 
 - (void)enqueue:(STHTTPRequestTestResponse *)response;
 - (STHTTPRequestTestResponse *)dequeue;
-
-- (NSUInteger)numberOfResponsesInQueue;
 
 @end
