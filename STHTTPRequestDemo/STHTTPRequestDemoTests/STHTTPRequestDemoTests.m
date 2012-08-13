@@ -58,8 +58,6 @@
     STAssertEquals(r.responseStatus, 200, [NSString stringWithFormat:@"bad response status: %d", r.responseStatus]);
     STAssertEqualObjects(r.responseHeaders, @{ @"key" : @"value" }, [NSString stringWithFormat:@"bad headers: %@", [r responseHeaders]]);
     STAssertEqualObjects(r.responseString, @"OK", [NSString stringWithFormat:@"bad response: %@", r.responseString]);
-    
-    [queue release];
 }
 
 @end
