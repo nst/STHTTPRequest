@@ -22,15 +22,13 @@
         
     // Set-up code here.
 
-    STHTTPRequestTestResponseQueue *sharedInstance = [STHTTPRequestTestResponseQueue sharedInstance];
-    sharedInstance.responses = [NSMutableArray array];
+    [STHTTPRequestTestResponseQueue sharedInstance].responses = [NSMutableArray array];
 }
 
 - (void)tearDown {
     // Tear-down code here.
     
-    STHTTPRequestTestResponseQueue *sharedInstance = [STHTTPRequestTestResponseQueue sharedInstance];
-    NSUInteger numberOfReponsesLeft = [sharedInstance.responses count];
+    NSUInteger numberOfReponsesLeft = [[STHTTPRequestTestResponseQueue sharedInstance].responses count];
     
     STAssertTrue(numberOfReponsesLeft == 0, @"still %d responses in queue", numberOfReponsesLeft);
 
