@@ -19,6 +19,10 @@ static NSMutableDictionary *sharedCredentialsStorage;
 @property (nonatomic, retain) NSError *error;
 @end
 
+@interface NSData (Base64)
+- (NSString *)base64Encoding; // private API
+@end
+
 @implementation STHTTPRequest
 
 @synthesize completionBlock;
