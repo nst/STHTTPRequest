@@ -112,18 +112,18 @@ static NSMutableDictionary *sharedCredentialsStorage;
 
 - (void)setUsername:(NSString *)username password:(NSString *)password {
     NSURLCredential *c = [NSURLCredential credentialWithUser:username
-                                                             password:password
-                                                          persistence:NSURLCredentialPersistenceNone];
+                                                    password:password
+                                                 persistence:NSURLCredentialPersistenceNone];
     
     [self setCredential:c];
 }
 
 - (void)setProxyUsername:(NSString *)username password:(NSString *)password {
     NSURLCredential *c = [NSURLCredential credentialWithUser:username
-                                                             password:password
-                                                          persistence:NSURLCredentialPersistenceNone];
+                                                    password:password
+                                                 persistence:NSURLCredentialPersistenceNone];
     
-    [self setProxyCredential:c];    
+    [self setProxyCredential:c];
 }
 
 - (NSString *)username {
@@ -158,7 +158,7 @@ static NSMutableDictionary *sharedCredentialsStorage;
 + (void)addCookie:(NSHTTPCookie *)cookie forURL:(NSURL *)url {
     NSArray *cookies = [NSArray arrayWithObject:cookie];
 	
-    [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookies:cookies forURL:url mainDocumentURL:nil];    
+    [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookies:cookies forURL:url mainDocumentURL:nil];
 }
 
 + (void)addCookieWithName:(NSString *)name value:(NSString *)value url:(NSURL *)url {
@@ -228,7 +228,7 @@ static NSMutableDictionary *sharedCredentialsStorage;
     return [NSURL URLWithString:urlString];
 }
 
-- (NSURLRequest *)requestByAddingCredentialsToURL:(BOOL)credentialsInRequest {
+- (NSURLRequest *)requestByAddingCredentialsToURL:(BOOL)credentialsInRequest sendBasicAuthenticationHeaders:(BOOL)sendBasicAuthenticationHeaders {
     
     NSURL *theURL = credentialsInRequest ? [self urlWithCredentials] : url;
     
@@ -242,7 +242,7 @@ static NSMutableDictionary *sharedCredentialsStorage;
             NSString *kv = [NSString stringWithFormat:@"%@=%@", k, [POSTDictionary objectForKey:k]];
             [ma addObject:kv];
         }
-                
+        
         NSString *s = [ma componentsJoinedByString:@"&"];
         NSData *data = [s dataUsingEncoding:postDataEncoding allowLossyConversion:YES];
         
@@ -253,21 +253,29 @@ static NSMutableDictionary *sharedCredentialsStorage;
     [requestHeaders enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
         [request addValue:obj forHTTPHeaderField:key];
     }];
+        
+    NSURLCredential *credentialForHost = [self credential];
+            
+    if(sendBasicAuthenticationHeaders && credentialsInRequest && credentialForHost) {
+        NSString *authString = [NSString stringWithFormat:@"%@:%@", credentialForHost.user, credentialForHost.password];
+        NSData *authData = [authString dataUsingEncoding:NSASCIIStringEncoding];
+        NSString *authValue = [NSString stringWithFormat:@"Basic %@", [authData base64Encoding]];
+        [request addValue:authValue forHTTPHeaderField:@"Authorization"];
+    }
     
     return request;
 }
 
 - (NSURLRequest *)request {
-    return [self requestByAddingCredentialsToURL:NO];
+    return [self requestByAddingCredentialsToURL:NO sendBasicAuthenticationHeaders:YES];
 }
 
 - (NSURLRequest *)requestByAddingCredentialsToURL {
-    return [self requestByAddingCredentialsToURL:YES];
+    return [self requestByAddingCredentialsToURL:YES sendBasicAuthenticationHeaders:YES];
 }
 
 #pragma mark Response
 
-//- (NSString *)responseString {
 + (NSString *)stringWithData:(NSData *)data encodingName:(NSString *)encodingName {
     if(data == nil) return nil;
     
@@ -281,7 +289,7 @@ static NSMutableDictionary *sharedCredentialsStorage;
             encoding = NSUTF8StringEncoding; // by default
         }
     }
-        
+    
     return [[[NSString alloc] initWithData:data encoding:encoding] autorelease];
 }
 
@@ -306,22 +314,21 @@ static NSMutableDictionary *sharedCredentialsStorage;
     [d enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
         NSLog(@"\t %@ = %@", key, obj);
     }];
-
+    
     NSLog(@"--------------------------------------");
 }
 
 #pragma mark Start Request
 
 - (void)startAsynchronous {
-    NSURLRequest *request = [self request];
-//    NSURLRequest *request = [self requestByAddingCredentialsToURL];
-
+    NSURLRequest *request = [self requestByAddingCredentialsToURL];
+    
 #if DEBUG
     [self logRequest:request];
 #endif
     
     NSURLConnection *connection = [NSURLConnection connectionWithRequest:request delegate:self];
-
+    
     if(connection == nil) {
         NSString *s = @"can't create connection";
         NSDictionary *userInfo = [NSDictionary dictionaryWithObject:s forKey:NSLocalizedDescriptionKey];
@@ -341,7 +348,7 @@ static NSMutableDictionary *sharedCredentialsStorage;
     
     NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&urlResponse error:e];
     if(data == nil) return nil;
-
+    
     self.responseData = [NSMutableData dataWithData:data];
     
     if([urlResponse isKindOfClass:[NSHTTPURLResponse class]]) {
@@ -416,7 +423,7 @@ static NSMutableDictionary *sharedCredentialsStorage;
 
 - (BOOL)st_isAuthenticationError {
     if([[self domain] isEqualToString:NSURLErrorDomain] == NO) return NO;
-
+    
     return ([self code] == kCFURLErrorUserCancelledAuthentication || [self code] == kCFURLErrorUserAuthenticationRequired);
 }
 
