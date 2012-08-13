@@ -314,6 +314,7 @@ static NSMutableDictionary *sharedCredentialsStorage;
 
 - (void)startAsynchronous {
     NSURLRequest *request = [self request];
+//    NSURLRequest *request = [self requestByAddingCredentialsToURL];
 
 #if DEBUG
     [self logRequest:request];
