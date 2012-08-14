@@ -14,5 +14,6 @@
 @property (nonatomic, retain) NSString *responseString;
 @property (nonatomic, retain) NSDictionary *responseHeaders;
 @property (nonatomic, retain) NSMutableData *reponseData;
+@property (nonatomic, retain) NSError *error;
 
 @end

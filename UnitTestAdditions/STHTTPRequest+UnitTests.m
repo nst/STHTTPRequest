@@ -27,6 +27,7 @@ void Swizzle(Class c, SEL orig, SEL new) {
 @dynamic responseString;
 @dynamic responseHeaders;
 @dynamic reponseData;
+@dynamic error;
 
 + (void)initialize {
     Swizzle([STHTTPRequest class], @selector(startAsynchronous), @selector(unitTests_startAsynchronous));
@@ -34,9 +35,6 @@ void Swizzle(Class c, SEL orig, SEL new) {
 }
 
 - (void)unitTests_startAsynchronous {
-
-//    NSAssert(self.completionBlock != nil, @"completion block is nil");
-//    NSAssert(self.errorBlock != nil, @"error block is nil");
 
     STHTTPRequestTestResponse *tr = [[STHTTPRequestTestResponseQueue sharedInstance] dequeue];
     
@@ -47,17 +45,16 @@ void Swizzle(Class c, SEL orig, SEL new) {
 
 - (NSString *)unitTests_startSynchronousWithError:(NSError **)error {
     
-//    NSAssert(self.completionBlock != nil, @"completion block is nil");
-//    NSAssert(self.errorBlock != nil, @"error block is nil");
-    
     STHTTPRequestTestResponse *tr = [[STHTTPRequestTestResponseQueue sharedInstance] dequeue];
     
     NSAssert(tr.block != nil, @"block needed");
-
-    *error = self.error;
     
     tr.block(self);
-    
+
+    if(error) {
+        *error = self.error;
+    }
+
     return self.responseString;
 }
 
