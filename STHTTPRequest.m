@@ -25,20 +25,7 @@ static NSMutableDictionary *sharedCredentialsStorage;
 
 @implementation STHTTPRequest
 
-@synthesize completionBlock;
-@synthesize errorBlock;
-@synthesize responseHeaders;
-@synthesize credential;
-@synthesize proxyCredential;
-@synthesize POSTDictionary;
-@synthesize responseData;
-@synthesize url;
-@synthesize responseStatus;
-@synthesize responseStringEncodingName;
-@synthesize postDataEncoding;
-@synthesize requestHeaders;
-@synthesize responseString;
-@synthesize error;
+@synthesize credential=_credential;
 
 #pragma mark Initializers
 
@@ -55,10 +42,10 @@ static NSMutableDictionary *sharedCredentialsStorage;
 - (STHTTPRequest *)initWithURL:(NSURL *)theURL {
     
     if (self = [super init]) {
-        url = [theURL retain];
-        responseData = [[NSMutableData alloc] init];
-        requestHeaders = [[NSMutableDictionary dictionary] retain];
-        postDataEncoding = NSUTF8StringEncoding;
+        _url = [theURL retain];
+        _responseData = [[NSMutableData alloc] init];
+        _requestHeaders = [[NSMutableDictionary dictionary] retain];
+        _postDataEncoding = NSUTF8StringEncoding;
     }
     
     return self;
@@ -70,18 +57,18 @@ static NSMutableDictionary *sharedCredentialsStorage;
 }
 
 - (void)dealloc {
-    [responseStringEncodingName release];
-    [requestHeaders release];
-    [url release];
-    [responseData release];
-    [responseHeaders release];
-    [responseString release];
-    [completionBlock release];
-    [errorBlock release];
-    [credential release];
-    [proxyCredential release];
-    [POSTDictionary release];
-    [error release];
+    [_responseStringEncodingName release];
+    [_requestHeaders release];
+    [_url release];
+    [_responseData release];
+    [_responseHeaders release];
+    [_responseString release];
+    [_completionBlock release];
+    [_errorBlock release];
+    [_credential release];
+    [_proxyCredential release];
+    [_POSTDictionary release];
+    [_error release];
     [super dealloc];
 }
 
@@ -105,13 +92,13 @@ static NSMutableDictionary *sharedCredentialsStorage;
 
 - (void)setCredential:(NSURLCredential *)c {
 #if DEBUG
-    NSAssert(url, @"missing url to set credential");
+    NSAssert(_url, @"missing url to set credential");
 #endif
-    [[[self class] sharedCredentialsStorage] setObject:c forKey:[url host]];
+    [[[self class] sharedCredentialsStorage] setObject:c forKey:[_url host]];
 }
 
 - (NSURLCredential *)credential {
-    return [[[self class] sharedCredentialsStorage] valueForKey:[url host]];
+    return [[[self class] sharedCredentialsStorage] valueForKey:[_url host]];
 }
 
 - (void)setUsername:(NSString *)username password:(NSString *)password {
@@ -184,15 +171,15 @@ static NSMutableDictionary *sharedCredentialsStorage;
 }
 
 - (NSArray *)requestCookies {
-    return [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookiesForURL:[url absoluteURL]];
+    return [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookiesForURL:[_url absoluteURL]];
 }
 
 - (void)addCookie:(NSHTTPCookie *)cookie {
-    [[self class] addCookie:cookie forURL:url];
+    [[self class] addCookie:cookie forURL:_url];
 }
 
 - (void)addCookieWithName:(NSString *)name value:(NSString *)value {
-    [[self class] addCookieWithName:name value:value url:url];
+    [[self class] addCookieWithName:name value:value url:_url];
 }
 
 #pragma mark Headers
@@ -211,15 +198,15 @@ static NSMutableDictionary *sharedCredentialsStorage;
     
     NSURLCredential *credentialForHost = [self credential];
     
-    if(credentialForHost == nil) return url; // no credentials to add
+    if(credentialForHost == nil) return _url; // no credentials to add
     
-    NSString *scheme = [url scheme];
-    NSString *host = [url host];
+    NSString *scheme = [_url scheme];
+    NSString *host = [_url host];
     
     BOOL hostAlreadyContainsCredentials = [host rangeOfString:@"@"].location != NSNotFound;
-    if(hostAlreadyContainsCredentials) return url;
+    if(hostAlreadyContainsCredentials) return _url;
     
-    NSMutableString *resourceSpecifier = [[[url resourceSpecifier] mutableCopy] autorelease];
+    NSMutableString *resourceSpecifier = [[[_url resourceSpecifier] mutableCopy] autorelease];
     
     if([resourceSpecifier hasPrefix:@"//"] == NO) return nil;
     
@@ -234,27 +221,27 @@ static NSMutableDictionary *sharedCredentialsStorage;
 
 - (NSURLRequest *)requestByAddingCredentialsToURL:(BOOL)credentialsInRequest sendBasicAuthenticationHeaders:(BOOL)sendBasicAuthenticationHeaders {
     
-    NSURL *theURL = credentialsInRequest ? [self urlWithCredentials] : url;
+    NSURL *theURL = credentialsInRequest ? [self urlWithCredentials] : _url;
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:theURL];
     
-    if([POSTDictionary count] > 0) {
+    if([_POSTDictionary count] > 0) {
         
-        NSMutableArray *ma = [NSMutableArray arrayWithCapacity:[POSTDictionary count]];
+        NSMutableArray *ma = [NSMutableArray arrayWithCapacity:[_POSTDictionary count]];
         
-        for(NSString *k in POSTDictionary) {
-            NSString *kv = [NSString stringWithFormat:@"%@=%@", k, [POSTDictionary objectForKey:k]];
+        for(NSString *k in _POSTDictionary) {
+            NSString *kv = [NSString stringWithFormat:@"%@=%@", k, [_POSTDictionary objectForKey:k]];
             [ma addObject:kv];
         }
         
         NSString *s = [ma componentsJoinedByString:@"&"];
-        NSData *data = [s dataUsingEncoding:postDataEncoding allowLossyConversion:YES];
+        NSData *data = [s dataUsingEncoding:_postDataEncoding allowLossyConversion:YES];
         
         [request setHTTPMethod:@"POST"];
         [request setHTTPBody:data];
     }
     
-    [requestHeaders enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+    [_requestHeaders enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
         [request addValue:obj forHTTPHeaderField:key];
     }];
         
@@ -337,7 +324,7 @@ static NSMutableDictionary *sharedCredentialsStorage;
         NSString *s = @"can't create connection";
         NSDictionary *userInfo = [NSDictionary dictionaryWithObject:s forKey:NSLocalizedDescriptionKey];
         self.error = [NSError errorWithDomain:NSStringFromClass([self class]) code:0 userInfo:userInfo];
-        errorBlock(error);
+        _errorBlock(_error);
     }
 }
 
@@ -364,7 +351,7 @@ static NSMutableDictionary *sharedCredentialsStorage;
         self.responseStringEncodingName = [httpResponse textEncodingName];
     }
     
-    return [[self class] stringWithData:responseData encodingName:responseStringEncodingName];
+    return [[self class] stringWithData:_responseData encodingName:_responseStringEncodingName];
 }
 
 #pragma mark NSURLConnectionDelegate
@@ -375,8 +362,8 @@ static NSMutableDictionary *sharedCredentialsStorage;
         
         NSURLCredential *currentCredential = nil;
         
-        if ([[challenge protectionSpace] isProxy] && proxyCredential != nil) {
-            currentCredential = proxyCredential;
+        if ([[challenge protectionSpace] isProxy] && _proxyCredential != nil) {
+            currentCredential = _proxyCredential;
         } else {
             currentCredential = [self credential];
         }
@@ -401,22 +388,22 @@ static NSMutableDictionary *sharedCredentialsStorage;
         self.responseStringEncodingName = [r textEncodingName];
     }
     
-    [responseData setLength:0];
+    [_responseData setLength:0];
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)theData {
-    [responseData appendData:theData];
+    [_responseData appendData:theData];
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
-    self.responseString = [[self class] stringWithData:responseData encodingName:responseStringEncodingName];
+    self.responseString = [[self class] stringWithData:_responseData encodingName:_responseStringEncodingName];
     
-    completionBlock(responseHeaders, [self responseString]);
+    _completionBlock(_responseHeaders, [self responseString]);
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)e {
     self.error = e;
-    errorBlock(error);
+    _errorBlock(_error);
 }
 
 @end
