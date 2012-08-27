@@ -318,7 +318,11 @@ static NSMutableDictionary *sharedCredentialsStorage;
     [self logRequest:request];
 #endif
     
-    NSURLConnection *connection = [NSURLConnection connectionWithRequest:request delegate:self];
+    // NSURLConnection *connection = [NSURLConnection connectionWithRequest:request delegate:self];
+    // http://www.pixeldock.com/blog/how-to-avoid-blocked-downloads-during-scrolling/
+    NSURLConnection *connection = [[[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:NO] autorelease];
+    [connection scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
+    [connection start];
     
     if(connection == nil) {
         NSString *s = @"can't create connection";
