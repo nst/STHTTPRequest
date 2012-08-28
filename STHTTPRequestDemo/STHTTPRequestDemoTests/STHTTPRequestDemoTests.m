@@ -52,6 +52,14 @@
     /**/
     
     STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"http://www.google.com"];
+    
+    r.completionBlock = ^(NSDictionary *headers, NSString *responseString) {
+        // use response
+    };
+
+    r.errorBlock = ^(NSError *error) {
+        // use error
+    };
 
     [r startAsynchronous]; // will actually get executed sychronously for tests
     
