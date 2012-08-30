@@ -26,7 +26,7 @@ void Swizzle(Class c, SEL orig, SEL new) {
 @dynamic responseStatus;
 @dynamic responseString;
 @dynamic responseHeaders;
-@dynamic reponseData;
+@dynamic responseData;
 @dynamic error;
 
 + (void)initialize {

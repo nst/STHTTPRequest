@@ -432,5 +432,6 @@ static NSMutableDictionary *sharedCredentialsStorage;
 + (BOOL)allowsAnyHTTPSCertificateForHost:(NSString *)host {
     return NO;
 }
+
 @end
 #endif
