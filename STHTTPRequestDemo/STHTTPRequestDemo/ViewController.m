@@ -20,7 +20,8 @@
     _headersTextView.text = @"";
     _imageView.image = nil;
     
-    STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"https://assets.github.com/images/modules/about_page/octocat.png"];
+    // avoid retain cycle since we are accessing the request in the completion block
+    __block STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"https://assets.github.com/images/modules/about_page/octocat.png"];
     
     r.completionBlock = ^(NSDictionary *headers, NSString *body) {
         
