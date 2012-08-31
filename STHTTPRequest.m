@@ -12,6 +12,7 @@ static NSMutableDictionary *sharedCredentialsStorage;
 
 @interface STHTTPRequest ()
 @property (nonatomic) NSInteger responseStatus;
+@property (nonatomic, retain) NSURLConnection *connection;
 @property (nonatomic, retain) NSMutableData *responseData;
 @property (nonatomic, retain) NSString *responseStringEncodingName;
 @property (nonatomic, retain) NSDictionary *responseHeaders;
@@ -320,11 +321,11 @@ static NSMutableDictionary *sharedCredentialsStorage;
     
     // NSURLConnection *connection = [NSURLConnection connectionWithRequest:request delegate:self];
     // http://www.pixeldock.com/blog/how-to-avoid-blocked-downloads-during-scrolling/
-    NSURLConnection *connection = [[[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:NO] autorelease];
-    [connection scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
-    [connection start];
+    self.connection = [[[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:NO] autorelease];
+    [_connection scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
+    [_connection start];
     
-    if(connection == nil) {
+    if(_connection == nil) {
         NSString *s = @"can't create connection";
         NSDictionary *userInfo = [NSDictionary dictionaryWithObject:s forKey:NSLocalizedDescriptionKey];
         self.error = [NSError errorWithDomain:NSStringFromClass([self class]) code:0 userInfo:userInfo];
@@ -356,6 +357,15 @@ static NSMutableDictionary *sharedCredentialsStorage;
     }
     
     return [[self class] stringWithData:_responseData encodingName:_responseStringEncodingName];
+}
+
+- (void)cancel {
+    [_connection cancel];
+
+    NSString *s = @"Connection was cancelled.";
+    NSDictionary *userInfo = [NSDictionary dictionaryWithObject:s forKey:NSLocalizedDescriptionKey];
+    self.error = [NSError errorWithDomain:NSStringFromClass([self class]) code:0 userInfo:userInfo];
+    _errorBlock(_error);
 }
 
 #pragma mark NSURLConnectionDelegate
