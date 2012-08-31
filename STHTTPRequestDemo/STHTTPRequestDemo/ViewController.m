@@ -20,7 +20,7 @@
     _headersTextView.text = @"";
     _imageView.image = nil;
     
-    // avoid retain cycle since we are accessing the request in the completion block
+    // declared as __block to avoid retain cycle since we are accessing the request in a block
     __block STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"https://assets.github.com/images/modules/about_page/octocat.png"];
     
     r.completionBlock = ^(NSDictionary *headers, NSString *body) {
@@ -28,8 +28,6 @@
         _imageView.image = [UIImage imageWithData:r.responseData];
         _statusLabel.text = [NSString stringWithFormat:@"HTTP status %d", r.responseStatus];
         _headersTextView.text = [headers description];
-        
-//        NSLog(@"-- %@", r.responseString);
         
         _fetchButton.enabled = YES;
         [_activityIndicator stopAnimating];
