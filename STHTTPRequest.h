@@ -13,6 +13,8 @@
 
 #import <Foundation/Foundation.h>
 
+extern NSUInteger const kSTHTTPRequestCancellationError;
+
 @class STHTTPRequest;
 
 typedef void (^completionBlock_t)(NSDictionary *headers, NSString *body);
@@ -68,4 +70,5 @@ typedef void (^errorBlock_t)(NSError *error);
 
 @interface NSError (STHTTPRequest)
 - (BOOL)st_isAuthenticationError;
+- (BOOL)st_isCancellationError;
 @end

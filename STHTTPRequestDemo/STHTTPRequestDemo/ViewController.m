@@ -37,11 +37,14 @@
     r.errorBlock = ^(NSError *error) {
         _statusLabel.text = [error localizedDescription];
         
+        NSLog(@"-- isCancellationError: %d", [error st_isCancellationError]);
+        
         _fetchButton.enabled = YES;
         [_activityIndicator stopAnimating];
     };
     
     [r startAsynchronous];
+//    [r cancel];
 }
 
 - (void)dealloc {

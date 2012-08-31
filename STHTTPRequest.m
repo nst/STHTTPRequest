@@ -8,6 +8,8 @@
 
 #import "STHTTPRequest.h"
 
+NSUInteger const kSTHTTPRequestCancellationError = 1;
+
 static NSMutableDictionary *sharedCredentialsStorage;
 
 @interface STHTTPRequest ()
@@ -328,7 +330,9 @@ static NSMutableDictionary *sharedCredentialsStorage;
     if(_connection == nil) {
         NSString *s = @"can't create connection";
         NSDictionary *userInfo = [NSDictionary dictionaryWithObject:s forKey:NSLocalizedDescriptionKey];
-        self.error = [NSError errorWithDomain:NSStringFromClass([self class]) code:0 userInfo:userInfo];
+        self.error = [NSError errorWithDomain:NSStringFromClass([self class])
+                                         code:0
+                                     userInfo:userInfo];
         _errorBlock(_error);
     }
 }
@@ -364,7 +368,9 @@ static NSMutableDictionary *sharedCredentialsStorage;
 
     NSString *s = @"Connection was cancelled.";
     NSDictionary *userInfo = [NSDictionary dictionaryWithObject:s forKey:NSLocalizedDescriptionKey];
-    self.error = [NSError errorWithDomain:NSStringFromClass([self class]) code:0 userInfo:userInfo];
+    self.error = [NSError errorWithDomain:NSStringFromClass([self class])
+                                     code:kSTHTTPRequestCancellationError
+                                 userInfo:userInfo];
     _errorBlock(_error);
 }
 
@@ -430,6 +436,12 @@ static NSMutableDictionary *sharedCredentialsStorage;
     if([[self domain] isEqualToString:NSURLErrorDomain] == NO) return NO;
     
     return ([self code] == kCFURLErrorUserCancelledAuthentication || [self code] == kCFURLErrorUserAuthenticationRequired);
+}
+
+- (BOOL)st_isCancellationError {
+    if([[self domain] isEqualToString:@"STHTTPRequest"] == NO) return NO;
+        
+    return ([self code] == kSTHTTPRequestCancellationError);
 }
 
 @end
