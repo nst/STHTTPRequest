@@ -270,10 +270,16 @@ static NSMutableDictionary *sharedCredentialsStorage;
 
 #pragma mark Response
 
-+ (NSString *)stringWithData:(NSData *)data encodingName:(NSString *)encodingName {
+- (NSString *)stringWithData:(NSData *)data encodingName:(NSString *)encodingName {
     if(data == nil) return nil;
+
+    if(_forcedResponseEncoding > 0) {
+        return [[[NSString alloc] initWithData:data encoding:_forcedResponseEncoding] autorelease];
+    }
     
     NSStringEncoding encoding = NSUTF8StringEncoding;
+    
+    /* try to use encoding declared in HTTP response headers */
     
     if(encodingName != nil) {
         
@@ -360,7 +366,7 @@ static NSMutableDictionary *sharedCredentialsStorage;
         self.responseStringEncodingName = [httpResponse textEncodingName];
     }
     
-    return [[self class] stringWithData:_responseData encodingName:_responseStringEncodingName];
+    return [self stringWithData:_responseData encodingName:_responseStringEncodingName];
 }
 
 - (void)cancel {
@@ -416,7 +422,7 @@ static NSMutableDictionary *sharedCredentialsStorage;
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
-    self.responseString = [[self class] stringWithData:_responseData encodingName:_responseStringEncodingName];
+    self.responseString = [self stringWithData:_responseData encodingName:_responseStringEncodingName];
     
     _completionBlock(_responseHeaders, [self responseString]);
 }

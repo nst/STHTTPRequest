@@ -36,6 +36,7 @@ typedef void (^errorBlock_t)(NSError *error);
 @property (nonatomic, retain, readonly) NSMutableData *responseData;
 @property (nonatomic, retain, readonly) NSError *error;
 @property (nonatomic, retain) NSString *responseString;
+@property (nonatomic) NSStringEncoding forcedResponseEncoding;
 
 + (STHTTPRequest *)requestWithURL:(NSURL *)url;
 + (STHTTPRequest *)requestWithURLString:(NSString *)urlString;
