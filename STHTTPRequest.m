@@ -247,9 +247,9 @@ static NSMutableDictionary *sharedCredentialsStorage;
     [_requestHeaders enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
         [request addValue:obj forHTTPHeaderField:key];
     }];
-        
+    
     NSURLCredential *credentialForHost = [self credential];
-            
+    
     if(sendBasicAuthenticationHeaders && credentialsInRequest && credentialForHost) {
         NSString *authString = [NSString stringWithFormat:@"%@:%@", credentialForHost.user, credentialForHost.password];
         NSData *authData = [authString dataUsingEncoding:NSASCIIStringEncoding];
@@ -272,7 +272,7 @@ static NSMutableDictionary *sharedCredentialsStorage;
 
 - (NSString *)stringWithData:(NSData *)data encodingName:(NSString *)encodingName {
     if(data == nil) return nil;
-
+    
     if(_forcedResponseEncoding > 0) {
         return [[[NSString alloc] initWithData:data encoding:_forcedResponseEncoding] autorelease];
     }
@@ -366,12 +366,18 @@ static NSMutableDictionary *sharedCredentialsStorage;
         self.responseStringEncodingName = [httpResponse textEncodingName];
     }
     
-    return [self stringWithData:_responseData encodingName:_responseStringEncodingName];
+    self.responseString = [self stringWithData:_responseData encodingName:_responseStringEncodingName];
+    
+    if(_responseStatus >= 400) {
+        *e = [NSError errorWithDomain:NSStringFromClass([self class]) code:_responseStatus userInfo:nil];
+    }
+    
+    return _responseString;
 }
 
 - (void)cancel {
     [_connection cancel];
-
+    
     NSString *s = @"Connection was cancelled.";
     NSDictionary *userInfo = [NSDictionary dictionaryWithObject:s forKey:NSLocalizedDescriptionKey];
     self.error = [NSError errorWithDomain:NSStringFromClass([self class])
@@ -424,6 +430,12 @@ static NSMutableDictionary *sharedCredentialsStorage;
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
     self.responseString = [self stringWithData:_responseData encodingName:_responseStringEncodingName];
     
+    if(_responseStatus >= 400) {
+        self.error = [NSError errorWithDomain:NSStringFromClass([self class]) code:_responseStatus userInfo:nil];
+        _errorBlock(_error);
+        return;
+    }
+    
     _completionBlock(_responseHeaders, [self responseString]);
 }
 
@@ -446,7 +458,7 @@ static NSMutableDictionary *sharedCredentialsStorage;
 
 - (BOOL)st_isCancellationError {
     if([[self domain] isEqualToString:@"STHTTPRequest"] == NO) return NO;
-        
+    
     return ([self code] == kSTHTTPRequestCancellationError);
 }
 
