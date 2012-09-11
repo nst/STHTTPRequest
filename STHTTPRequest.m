@@ -228,7 +228,7 @@ static NSMutableDictionary *sharedCredentialsStorage;
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:theURL];
     
-    if([_POSTDictionary count] > 0) {
+    if(_POSTDictionary != nil) { // may be empty (POST request without body)
         
         NSMutableArray *ma = [NSMutableArray arrayWithCapacity:[_POSTDictionary count]];
         
@@ -297,8 +297,18 @@ static NSMutableDictionary *sharedCredentialsStorage;
     
     NSLog(@"--------------------------------------");
     
-    NSLog(@"%@", [request URL]);
+    NSString *method = _POSTDictionary ? @"POST" : @"GET";
     
+    NSLog(@"%@ %@", method, [request URL]);
+    
+    NSDictionary *headers = [self requestHeaders];
+    
+    if([headers count]) NSLog(@"HEADERS");
+    
+    [headers enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+        NSLog(@"\t %@ = %@", key, obj);
+    }];
+
     NSArray *cookies = [self requestCookies];
     
     if([cookies count]) NSLog(@"COOKIES");
@@ -369,7 +379,7 @@ static NSMutableDictionary *sharedCredentialsStorage;
     self.responseString = [self stringWithData:_responseData encodingName:_responseStringEncodingName];
     
     if(_responseStatus >= 400) {
-        *e = [NSError errorWithDomain:NSStringFromClass([self class]) code:_responseStatus userInfo:nil];
+        if(e) *e = [NSError errorWithDomain:NSStringFromClass([self class]) code:_responseStatus userInfo:nil];
     }
     
     return _responseString;
