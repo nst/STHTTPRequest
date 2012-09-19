@@ -40,22 +40,22 @@
 /* Begin PBXFileReference section */
 		038F67D615F0C795009E6CAE /* STHTTPRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = STHTTPRequest.h; path = ../STHTTPRequest.h; sourceTree = "<group>"; };
 		038F67D715F0C795009E6CAE /* STHTTPRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = STHTTPRequest.m; path = ../STHTTPRequest.m; sourceTree = "<group>"; };
-		03A07DAE15D5078300B2D5B6 /* STHTTPRequestDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = STHTTPRequestDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		03A07DAE15D5078300B2D5B6 /* STHTTPRequest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = STHTTPRequest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		03A07DB215D5078300B2D5B6 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		03A07DB415D5078300B2D5B6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		03A07DB615D5078300B2D5B6 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		03A07DBA15D5078300B2D5B6 /* STHTTPRequestDemo-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "STHTTPRequestDemo-Info.plist"; sourceTree = "<group>"; };
+		03A07DBA15D5078300B2D5B6 /* STHTTPRequest-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "STHTTPRequest-Info.plist"; sourceTree = "<group>"; };
 		03A07DBC15D5078300B2D5B6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		03A07DBE15D5078300B2D5B6 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		03A07DC015D5078300B2D5B6 /* STHTTPRequestDemo-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "STHTTPRequestDemo-Prefix.pch"; sourceTree = "<group>"; };
+		03A07DC015D5078300B2D5B6 /* STHTTPRequest-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "STHTTPRequest-Prefix.pch"; sourceTree = "<group>"; };
 		03A07DC115D5078300B2D5B6 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		03A07DC215D5078300B2D5B6 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		03A07DC415D5078300B2D5B6 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		03A07DC515D5078300B2D5B6 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		03A07DC815D5078300B2D5B6 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ViewController.xib; sourceTree = "<group>"; };
-		03A07DCF15D5078300B2D5B6 /* STHTTPRequestDemoTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = STHTTPRequestDemoTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		03A07DCF15D5078300B2D5B6 /* STHTTPRequestTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = STHTTPRequestTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		03A07DD015D5078300B2D5B6 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
-		03A07DD815D5078300B2D5B6 /* STHTTPRequestDemoTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "STHTTPRequestDemoTests-Info.plist"; sourceTree = "<group>"; };
+		03A07DD815D5078300B2D5B6 /* STHTTPRequestTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "STHTTPRequestTests-Info.plist"; sourceTree = "<group>"; };
 		03A07DDA15D5078300B2D5B6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		03A07DDC15D5078300B2D5B6 /* STHTTPRequestDemoTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = STHTTPRequestDemoTests.h; sourceTree = "<group>"; };
 		03A07DDD15D5078300B2D5B6 /* STHTTPRequestDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = STHTTPRequestDemoTests.m; sourceTree = "<group>"; };
@@ -106,8 +106,8 @@
 		03A07DAF15D5078300B2D5B6 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				03A07DAE15D5078300B2D5B6 /* STHTTPRequestDemo.app */,
-				03A07DCF15D5078300B2D5B6 /* STHTTPRequestDemoTests.octest */,
+				03A07DAE15D5078300B2D5B6 /* STHTTPRequest.app */,
+				03A07DCF15D5078300B2D5B6 /* STHTTPRequestTests.octest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -139,10 +139,10 @@
 		03A07DB915D5078300B2D5B6 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				03A07DBA15D5078300B2D5B6 /* STHTTPRequestDemo-Info.plist */,
+				03A07DBA15D5078300B2D5B6 /* STHTTPRequest-Info.plist */,
 				03A07DBB15D5078300B2D5B6 /* InfoPlist.strings */,
 				03A07DBE15D5078300B2D5B6 /* main.m */,
-				03A07DC015D5078300B2D5B6 /* STHTTPRequestDemo-Prefix.pch */,
+				03A07DC015D5078300B2D5B6 /* STHTTPRequest-Prefix.pch */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -160,7 +160,7 @@
 		03A07DD715D5078300B2D5B6 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				03A07DD815D5078300B2D5B6 /* STHTTPRequestDemoTests-Info.plist */,
+				03A07DD815D5078300B2D5B6 /* STHTTPRequestTests-Info.plist */,
 				03A07DD915D5078300B2D5B6 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
@@ -192,9 +192,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		03A07DAD15D5078300B2D5B6 /* STHTTPRequestDemo */ = {
+		03A07DAD15D5078300B2D5B6 /* STHTTPRequest */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 03A07DE115D5078300B2D5B6 /* Build configuration list for PBXNativeTarget "STHTTPRequestDemo" */;
+			buildConfigurationList = 03A07DE115D5078300B2D5B6 /* Build configuration list for PBXNativeTarget "STHTTPRequest" */;
 			buildPhases = (
 				03A07DAA15D5078300B2D5B6 /* Sources */,
 				03A07DAB15D5078300B2D5B6 /* Frameworks */,
@@ -204,14 +204,14 @@
 			);
 			dependencies = (
 			);
-			name = STHTTPRequestDemo;
+			name = STHTTPRequest;
 			productName = STHTTPRequestDemo;
-			productReference = 03A07DAE15D5078300B2D5B6 /* STHTTPRequestDemo.app */;
+			productReference = 03A07DAE15D5078300B2D5B6 /* STHTTPRequest.app */;
 			productType = "com.apple.product-type.application";
 		};
-		03A07DCE15D5078300B2D5B6 /* STHTTPRequestDemoTests */ = {
+		03A07DCE15D5078300B2D5B6 /* STHTTPRequestTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 03A07DE415D5078300B2D5B6 /* Build configuration list for PBXNativeTarget "STHTTPRequestDemoTests" */;
+			buildConfigurationList = 03A07DE415D5078300B2D5B6 /* Build configuration list for PBXNativeTarget "STHTTPRequestTests" */;
 			buildPhases = (
 				03A07DCA15D5078300B2D5B6 /* Sources */,
 				03A07DCB15D5078300B2D5B6 /* Frameworks */,
@@ -223,9 +223,9 @@
 			dependencies = (
 				03A07DD515D5078300B2D5B6 /* PBXTargetDependency */,
 			);
-			name = STHTTPRequestDemoTests;
+			name = STHTTPRequestTests;
 			productName = STHTTPRequestDemoTests;
-			productReference = 03A07DCF15D5078300B2D5B6 /* STHTTPRequestDemoTests.octest */;
+			productReference = 03A07DCF15D5078300B2D5B6 /* STHTTPRequestTests.octest */;
 			productType = "com.apple.product-type.bundle";
 		};
 /* End PBXNativeTarget section */
@@ -237,7 +237,7 @@
 				LastUpgradeCheck = 0440;
 				ORGANIZATIONNAME = "Nicolas Seriot";
 			};
-			buildConfigurationList = 03A07DA815D5078300B2D5B6 /* Build configuration list for PBXProject "STHTTPRequestDemo" */;
+			buildConfigurationList = 03A07DA815D5078300B2D5B6 /* Build configuration list for PBXProject "STHTTPRequest" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -249,8 +249,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				03A07DAD15D5078300B2D5B6 /* STHTTPRequestDemo */,
-				03A07DCE15D5078300B2D5B6 /* STHTTPRequestDemoTests */,
+				03A07DAD15D5078300B2D5B6 /* STHTTPRequest */,
+				03A07DCE15D5078300B2D5B6 /* STHTTPRequestTests */,
 			);
 		};
 /* End PBXProject section */
@@ -320,7 +320,7 @@
 /* Begin PBXTargetDependency section */
 		03A07DD515D5078300B2D5B6 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 03A07DAD15D5078300B2D5B6 /* STHTTPRequestDemo */;
+			target = 03A07DAD15D5078300B2D5B6 /* STHTTPRequest */;
 			targetProxy = 03A07DD415D5078300B2D5B6 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -404,9 +404,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "STHTTPRequestDemo/STHTTPRequestDemo-Prefix.pch";
-				INFOPLIST_FILE = "STHTTPRequestDemo/STHTTPRequestDemo-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				GCC_PREFIX_HEADER = "STHTTPRequestDemo/STHTTPRequest-Prefix.pch";
+				INFOPLIST_FILE = "STHTTPRequestDemo/STHTTPRequest-Info.plist";
+				PRODUCT_NAME = STHTTPRequest;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -415,9 +415,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "STHTTPRequestDemo/STHTTPRequestDemo-Prefix.pch";
-				INFOPLIST_FILE = "STHTTPRequestDemo/STHTTPRequestDemo-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				GCC_PREFIX_HEADER = "STHTTPRequestDemo/STHTTPRequest-Prefix.pch";
+				INFOPLIST_FILE = "STHTTPRequestDemo/STHTTPRequest-Info.plist";
+				PRODUCT_NAME = STHTTPRequest;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -432,8 +432,8 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "STHTTPRequestDemo/STHTTPRequestDemo-Prefix.pch";
-				INFOPLIST_FILE = "STHTTPRequestDemoTests/STHTTPRequestDemoTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				INFOPLIST_FILE = "STHTTPRequestDemoTests/STHTTPRequestTests-Info.plist";
+				PRODUCT_NAME = STHTTPRequestTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = octest;
 			};
@@ -449,8 +449,8 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "STHTTPRequestDemo/STHTTPRequestDemo-Prefix.pch";
-				INFOPLIST_FILE = "STHTTPRequestDemoTests/STHTTPRequestDemoTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				INFOPLIST_FILE = "STHTTPRequestDemoTests/STHTTPRequestTests-Info.plist";
+				PRODUCT_NAME = STHTTPRequestTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = octest;
 			};
@@ -459,7 +459,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		03A07DA815D5078300B2D5B6 /* Build configuration list for PBXProject "STHTTPRequestDemo" */ = {
+		03A07DA815D5078300B2D5B6 /* Build configuration list for PBXProject "STHTTPRequest" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				03A07DDF15D5078300B2D5B6 /* Debug */,
@@ -468,7 +468,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		03A07DE115D5078300B2D5B6 /* Build configuration list for PBXNativeTarget "STHTTPRequestDemo" */ = {
+		03A07DE115D5078300B2D5B6 /* Build configuration list for PBXNativeTarget "STHTTPRequest" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				03A07DE215D5078300B2D5B6 /* Debug */,
@@ -477,7 +477,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		03A07DE415D5078300B2D5B6 /* Build configuration list for PBXNativeTarget "STHTTPRequestDemoTests" */ = {
+		03A07DE415D5078300B2D5B6 /* Build configuration list for PBXNativeTarget "STHTTPRequestTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				03A07DE515D5078300B2D5B6 /* Debug */,

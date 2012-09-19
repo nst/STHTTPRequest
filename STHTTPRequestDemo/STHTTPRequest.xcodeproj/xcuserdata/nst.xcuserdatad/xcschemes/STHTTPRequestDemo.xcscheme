@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "03A07DAD15D5078300B2D5B6"
-               BuildableName = "STHTTPRequestDemo.app"
-               BlueprintName = "STHTTPRequestDemo"
-               ReferencedContainer = "container:STHTTPRequestDemo.xcodeproj">
+               BuildableName = "STHTTPRequest.app"
+               BlueprintName = "STHTTPRequest"
+               ReferencedContainer = "container:STHTTPRequest.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "03A07DCE15D5078300B2D5B6"
-               BuildableName = "STHTTPRequestDemoTests.octest"
-               BlueprintName = "STHTTPRequestDemoTests"
-               ReferencedContainer = "container:STHTTPRequestDemo.xcodeproj">
+               BuildableName = "STHTTPRequestTests.octest"
+               BlueprintName = "STHTTPRequestTests"
+               ReferencedContainer = "container:STHTTPRequest.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -43,9 +43,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "03A07DAD15D5078300B2D5B6"
-            BuildableName = "STHTTPRequestDemo.app"
-            BlueprintName = "STHTTPRequestDemo"
-            ReferencedContainer = "container:STHTTPRequestDemo.xcodeproj">
+            BuildableName = "STHTTPRequest.app"
+            BlueprintName = "STHTTPRequest"
+            ReferencedContainer = "container:STHTTPRequest.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -57,14 +57,15 @@
       buildConfiguration = "Debug"
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
+      enableOpenGLFrameCaptureMode = "0"
       allowLocationSimulation = "YES">
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "03A07DAD15D5078300B2D5B6"
-            BuildableName = "STHTTPRequestDemo.app"
-            BlueprintName = "STHTTPRequestDemo"
-            ReferencedContainer = "container:STHTTPRequestDemo.xcodeproj">
+            BuildableName = "STHTTPRequest.app"
+            BlueprintName = "STHTTPRequest"
+            ReferencedContainer = "container:STHTTPRequest.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -80,9 +81,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "03A07DAD15D5078300B2D5B6"
-            BuildableName = "STHTTPRequestDemo.app"
-            BlueprintName = "STHTTPRequestDemo"
-            ReferencedContainer = "container:STHTTPRequestDemo.xcodeproj">
+            BuildableName = "STHTTPRequest.app"
+            BlueprintName = "STHTTPRequest"
+            ReferencedContainer = "container:STHTTPRequest.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
