@@ -20,11 +20,11 @@
 		03A07DD115D5078300B2D5B6 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03A07DD015D5078300B2D5B6 /* SenTestingKit.framework */; };
 		03A07DD215D5078300B2D5B6 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03A07DB215D5078300B2D5B6 /* UIKit.framework */; };
 		03A07DD315D5078300B2D5B6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03A07DB415D5078300B2D5B6 /* Foundation.framework */; };
-		03A07DDB15D5078300B2D5B6 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 03A07DD915D5078300B2D5B6 /* InfoPlist.strings */; };
-		03A07DDE15D5078300B2D5B6 /* STHTTPRequestDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 03A07DDD15D5078300B2D5B6 /* STHTTPRequestDemoTests.m */; };
 		03A07DFB15D5124C00B2D5B6 /* STHTTPRequest+UnitTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 03A07DF615D5124C00B2D5B6 /* STHTTPRequest+UnitTests.m */; };
 		03A07DFC15D5124C00B2D5B6 /* STHTTPRequestTestResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 03A07DF815D5124C00B2D5B6 /* STHTTPRequestTestResponse.m */; };
 		03A07DFD15D5124C00B2D5B6 /* STHTTPRequestTestResponseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 03A07DFA15D5124C00B2D5B6 /* STHTTPRequestTestResponseQueue.m */; };
+		03B2A33A1609BD1300A22E18 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 03B2A3351609BD1300A22E18 /* InfoPlist.strings */; };
+		03B2A33B1609BD1300A22E18 /* STHTTPRequestTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 03B2A3381609BD1300A22E18 /* STHTTPRequestTests.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,16 +55,16 @@
 		03A07DC815D5078300B2D5B6 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ViewController.xib; sourceTree = "<group>"; };
 		03A07DCF15D5078300B2D5B6 /* STHTTPRequestTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = STHTTPRequestTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		03A07DD015D5078300B2D5B6 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
-		03A07DD815D5078300B2D5B6 /* STHTTPRequestTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "STHTTPRequestTests-Info.plist"; sourceTree = "<group>"; };
-		03A07DDA15D5078300B2D5B6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		03A07DDC15D5078300B2D5B6 /* STHTTPRequestDemoTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = STHTTPRequestDemoTests.h; sourceTree = "<group>"; };
-		03A07DDD15D5078300B2D5B6 /* STHTTPRequestDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = STHTTPRequestDemoTests.m; sourceTree = "<group>"; };
 		03A07DF515D5124C00B2D5B6 /* STHTTPRequest+UnitTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "STHTTPRequest+UnitTests.h"; sourceTree = "<group>"; };
 		03A07DF615D5124C00B2D5B6 /* STHTTPRequest+UnitTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "STHTTPRequest+UnitTests.m"; sourceTree = "<group>"; };
 		03A07DF715D5124C00B2D5B6 /* STHTTPRequestTestResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STHTTPRequestTestResponse.h; sourceTree = "<group>"; };
 		03A07DF815D5124C00B2D5B6 /* STHTTPRequestTestResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STHTTPRequestTestResponse.m; sourceTree = "<group>"; };
 		03A07DF915D5124C00B2D5B6 /* STHTTPRequestTestResponseQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STHTTPRequestTestResponseQueue.h; sourceTree = "<group>"; };
 		03A07DFA15D5124C00B2D5B6 /* STHTTPRequestTestResponseQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STHTTPRequestTestResponseQueue.m; sourceTree = "<group>"; };
+		03B2A3361609BD1300A22E18 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		03B2A3381609BD1300A22E18 /* STHTTPRequestTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STHTTPRequestTests.m; sourceTree = "<group>"; };
+		03B2A3391609BD1300A22E18 /* STHTTPRequestTests-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "STHTTPRequestTests-Info.plist"; sourceTree = "<group>"; };
+		03B2A33D1609BD7D00A22E18 /* STHTTPRequestTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STHTTPRequestTests.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,8 +96,8 @@
 			children = (
 				03A07DEB15D511F700B2D5B6 /* STHTTPRequest */,
 				03A07DB815D5078300B2D5B6 /* STHTTPRequestDemo */,
+				03B2A3341609BD1300A22E18 /* STHTTPRequestTests */,
 				03A07DF415D5124B00B2D5B6 /* UnitTestAdditions */,
-				03A07DD615D5078300B2D5B6 /* STHTTPRequestDemoTests */,
 				03A07DB115D5078300B2D5B6 /* Frameworks */,
 				03A07DAF15D5078300B2D5B6 /* Products */,
 			);
@@ -147,25 +147,6 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		03A07DD615D5078300B2D5B6 /* STHTTPRequestDemoTests */ = {
-			isa = PBXGroup;
-			children = (
-				03A07DDC15D5078300B2D5B6 /* STHTTPRequestDemoTests.h */,
-				03A07DDD15D5078300B2D5B6 /* STHTTPRequestDemoTests.m */,
-				03A07DD715D5078300B2D5B6 /* Supporting Files */,
-			);
-			path = STHTTPRequestDemoTests;
-			sourceTree = "<group>";
-		};
-		03A07DD715D5078300B2D5B6 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				03A07DD815D5078300B2D5B6 /* STHTTPRequestTests-Info.plist */,
-				03A07DD915D5078300B2D5B6 /* InfoPlist.strings */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
 		03A07DEB15D511F700B2D5B6 /* STHTTPRequest */ = {
 			isa = PBXGroup;
 			children = (
@@ -187,6 +168,17 @@
 			);
 			name = UnitTestAdditions;
 			path = ../UnitTestAdditions;
+			sourceTree = "<group>";
+		};
+		03B2A3341609BD1300A22E18 /* STHTTPRequestTests */ = {
+			isa = PBXGroup;
+			children = (
+				03B2A3351609BD1300A22E18 /* InfoPlist.strings */,
+				03B2A3391609BD1300A22E18 /* STHTTPRequestTests-Info.plist */,
+				03B2A33D1609BD7D00A22E18 /* STHTTPRequestTests.h */,
+				03B2A3381609BD1300A22E18 /* STHTTPRequestTests.m */,
+			);
+			path = STHTTPRequestTests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -269,7 +261,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				03A07DDB15D5078300B2D5B6 /* InfoPlist.strings in Resources */,
+				03B2A33A1609BD1300A22E18 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -307,11 +299,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				03A07DDE15D5078300B2D5B6 /* STHTTPRequestDemoTests.m in Sources */,
 				03A07DFB15D5124C00B2D5B6 /* STHTTPRequest+UnitTests.m in Sources */,
 				03A07DFC15D5124C00B2D5B6 /* STHTTPRequestTestResponse.m in Sources */,
 				03A07DFD15D5124C00B2D5B6 /* STHTTPRequestTestResponseQueue.m in Sources */,
 				038F67D915F0C795009E6CAE /* STHTTPRequest.m in Sources */,
+				03B2A33B1609BD1300A22E18 /* STHTTPRequestTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -342,10 +334,10 @@
 			name = ViewController.xib;
 			sourceTree = "<group>";
 		};
-		03A07DD915D5078300B2D5B6 /* InfoPlist.strings */ = {
+		03B2A3351609BD1300A22E18 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				03A07DDA15D5078300B2D5B6 /* en */,
+				03B2A3361609BD1300A22E18 /* en */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -434,7 +426,7 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "STHTTPRequestDemo/STHTTPRequest-Prefix.pch";
-				INFOPLIST_FILE = "STHTTPRequestDemoTests/STHTTPRequestTests-Info.plist";
+				INFOPLIST_FILE = "STHTTPRequestTests/STHTTPRequestTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				PRODUCT_NAME = STHTTPRequestTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
@@ -452,7 +444,7 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "STHTTPRequestDemo/STHTTPRequest-Prefix.pch";
-				INFOPLIST_FILE = "STHTTPRequestDemoTests/STHTTPRequestTests-Info.plist";
+				INFOPLIST_FILE = "STHTTPRequestTests/STHTTPRequestTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				PRODUCT_NAME = STHTTPRequestTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
