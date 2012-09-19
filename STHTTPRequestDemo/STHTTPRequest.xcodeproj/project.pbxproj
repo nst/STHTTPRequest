@@ -431,7 +431,7 @@
 					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "STHTTPRequestDemo/STHTTPRequestDemo-Prefix.pch";
+				GCC_PREFIX_HEADER = "STHTTPRequestDemo/STHTTPRequest-Prefix.pch";
 				INFOPLIST_FILE = "STHTTPRequestDemoTests/STHTTPRequestTests-Info.plist";
 				PRODUCT_NAME = STHTTPRequestTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
@@ -448,7 +448,7 @@
 					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "STHTTPRequestDemo/STHTTPRequestDemo-Prefix.pch";
+				GCC_PREFIX_HEADER = "STHTTPRequestDemo/STHTTPRequest-Prefix.pch";
 				INFOPLIST_FILE = "STHTTPRequestDemoTests/STHTTPRequestTests-Info.plist";
 				PRODUCT_NAME = STHTTPRequestTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
