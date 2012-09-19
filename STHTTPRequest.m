@@ -237,7 +237,13 @@ static NSMutableDictionary *sharedCredentialsStorage;
             [ma addObject:kv];
         }
         
+        // we sort POST parameters in order to get deterministric requests, hence unit testable
+        [ma sortUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
+            return [obj1 compare:obj2];
+        }];
+        
         NSString *s = [ma componentsJoinedByString:@"&"];
+        
         NSData *data = [s dataUsingEncoding:_postDataEncoding allowLossyConversion:YES];
         
         [request setHTTPMethod:@"POST"];
