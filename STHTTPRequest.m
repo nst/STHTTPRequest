@@ -308,6 +308,7 @@ static NSMutableDictionary *sharedCredentialsStorage;
         
         NSData *data = [s dataUsingEncoding:_postDataEncoding allowLossyConversion:YES];
         
+        [request setHTTPMethod:@"POST"];
         [request setHTTPBody:data];
     }
     
@@ -518,7 +519,9 @@ static NSMutableDictionary *sharedCredentialsStorage;
 
 - (void)connection:(NSURLConnection *)connection didSendBodyData:(NSInteger)bytesWritten totalBytesWritten:(NSInteger)totalBytesWritten totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite
 {
-    _progressBlock(bytesWritten, totalBytesWritten, totalBytesExpectedToWrite);
+    if (_progressBlock) {
+        _progressBlock(bytesWritten, totalBytesWritten, totalBytesExpectedToWrite);
+    }
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
