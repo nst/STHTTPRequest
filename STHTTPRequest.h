@@ -67,6 +67,7 @@ typedef void (^errorBlock_t)(NSError *error);
 
 // Upload
 - (void)setFileToUpload:(NSString *)path parameterName:(NSString *)param;
+- (void)setDataToUpload:(NSData *)data parameterName:(NSString *)param;
 
 // Session
 + (void)clearSession; // delete all credentials and cookies

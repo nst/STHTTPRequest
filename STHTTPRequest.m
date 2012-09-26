@@ -21,6 +21,7 @@ static NSMutableDictionary *sharedCredentialsStorage;
 @property (nonatomic, retain) NSURL *url;
 @property (nonatomic, retain) NSError *error;
 @property (nonatomic, retain) NSString *POSTFilePath;
+@property (nonatomic, retain) NSData *POSTFileData;
 @property (nonatomic, retain) NSString *POSTFileParameter;
 @end
 
@@ -74,6 +75,7 @@ static NSMutableDictionary *sharedCredentialsStorage;
     [_proxyCredential release];
     [_POSTDictionary release];
     [_POSTFilePath release];
+    [_POSTFileData release];
     [_error release];
     [super dealloc];
 }
@@ -231,15 +233,24 @@ static NSMutableDictionary *sharedCredentialsStorage;
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:theURL];
     
-    if(_POSTFileParameter && _POSTFilePath) {
-        NSError *readingError = nil;
-        NSData *fileData = [NSData dataWithContentsOfFile:_POSTFilePath options:0 error:&readingError];
-        if(fileData == nil ) {
-            NSLog(@"-- %@", [readingError localizedDescription]);
-            return nil;
+    if(_POSTFileParameter && (_POSTFilePath || _POSTFileData)) {
+
+        NSData *fileData = nil;
+        NSString *fileName = nil;
+
+        if (_POSTFilePath) {
+            
+            NSError *readingError = nil;
+            fileData = [NSData dataWithContentsOfFile:_POSTFilePath options:0 error:&readingError];
+            if(fileData == nil ) {
+                NSLog(@"-- %@", [readingError localizedDescription]);
+                return nil;
+            }
+            
+            fileName = [_POSTFilePath lastPathComponent];
+        } else {
+            fileData = _POSTFileData;
         }
-        
-        NSString *fileName = [_POSTFilePath lastPathComponent];
         
         [request setHTTPMethod:@"POST"];
 
@@ -252,7 +263,10 @@ static NSMutableDictionary *sharedCredentialsStorage;
         
         [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
         
-        [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"; filename=\"%@\"\r\n", _POSTFileParameter, fileName] dataUsingEncoding:NSUTF8StringEncoding]];
+        NSString *fileNameContentDisposition = fileName ? [NSString stringWithFormat:@"filename=\"%@\"", fileName] : @"";
+        NSString *contentDisposition = [NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"; %@\r\n", _POSTFileParameter, fileNameContentDisposition];
+        
+        [body appendData:[contentDisposition dataUsingEncoding:NSUTF8StringEncoding]];
         [body appendData:[@"Content-Type: application/octet-stream\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
         [body appendData:fileData];
         
@@ -314,8 +328,13 @@ static NSMutableDictionary *sharedCredentialsStorage;
 #pragma mark Upload
 
 - (void)setFileToUpload:(NSString *)path parameterName:(NSString *)param {
-    _POSTFilePath = path;
-    _POSTFileParameter = param;
+    self.POSTFilePath = path;
+    self.POSTFileParameter = param;
+}
+
+- (void)setDataToUpload:(NSData *)data parameterName:(NSString *)param {
+    self.POSTFileData = data;
+    self.POSTFileParameter = param;
 }
 
 #pragma mark Response
@@ -378,6 +397,9 @@ static NSMutableDictionary *sharedCredentialsStorage;
     if(_POSTFileParameter && _POSTFilePath) {
         NSLog(@"UPLOAD FILE");
         NSLog(@"\t %@ = %@", _POSTFileParameter, _POSTFilePath);
+    } else if(_POSTFileParameter && _POSTFileData) {
+        NSLog(@"UPLOAD DATA");
+        NSLog(@"\t %@ = [%d bytes]", _POSTFileParameter, [_POSTFileData length]);
     }
     
     NSLog(@"--------------------------------------");

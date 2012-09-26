@@ -49,9 +49,11 @@
     
     __block STHTTPRequest *up = [STHTTPRequest requestWithURLString:@"http://127.0.0.1/"];
     
-    up.POSTDictionary = @{@"asd":@"sdf", @"sdf":@"dfg"};
+    up.POSTDictionary = @{@"asd":@"sdf", @"dfg":@"fgh"};
     
-    [up setFileToUpload:@"/tmp/photo.jpg" parameterName:@"photo"];
+    NSData *data = [[[NSData alloc] initWithContentsOfFile:@"/tmp/photo.jpg"] autorelease];
+    
+    [up setDataToUpload:data parameterName:@"XXX"];
     
     up.completionBlock = ^(NSDictionary *headers, NSString *body) {
         NSLog(@"-- body: %@", body);
@@ -64,7 +66,7 @@
     };
     
     [up startAsynchronous];
-     
+
      */
 }
 
