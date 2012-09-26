@@ -44,6 +44,7 @@ typedef void (^errorBlock_t)(NSError *error);
 - (NSString *)startSynchronousWithError:(NSError **)error;
 - (void)startAsynchronous;
 - (void)cancel;
+
 // Cookies
 + (void)addCookieWithName:(NSString *)name value:(NSString *)value url:(NSURL *)url;
 - (void)addCookieWithName:(NSString *)name value:(NSString *)value;
@@ -63,6 +64,9 @@ typedef void (^errorBlock_t)(NSError *error);
 - (void)setHeaderWithName:(NSString *)name value:(NSString *)value;
 - (void)removeHeaderWithName:(NSString *)name;
 - (NSDictionary *)responseHeaders;
+
+// Upload
+- (void)setFileToUpload:(NSString *)path parameterName:(NSString *)param;
 
 // Session
 + (void)clearSession; // delete all credentials and cookies

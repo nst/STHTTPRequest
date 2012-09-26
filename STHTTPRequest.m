@@ -20,6 +20,8 @@ static NSMutableDictionary *sharedCredentialsStorage;
 @property (nonatomic, retain) NSDictionary *responseHeaders;
 @property (nonatomic, retain) NSURL *url;
 @property (nonatomic, retain) NSError *error;
+@property (nonatomic, retain) NSString *POSTFilePath;
+@property (nonatomic, retain) NSString *POSTFileParameter;
 @end
 
 @interface NSData (Base64)
@@ -71,6 +73,7 @@ static NSMutableDictionary *sharedCredentialsStorage;
     [_credential release];
     [_proxyCredential release];
     [_POSTDictionary release];
+    [_POSTFilePath release];
     [_error release];
     [super dealloc];
 }
@@ -228,7 +231,42 @@ static NSMutableDictionary *sharedCredentialsStorage;
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:theURL];
     
-    if(_POSTDictionary != nil) { // may be empty (POST request without body)
+    if(_POSTFileParameter && _POSTFilePath) {
+        NSError *readingError = nil;
+        NSData *fileData = [NSData dataWithContentsOfFile:_POSTFilePath options:0 error:&readingError];
+        if(fileData == nil ) {
+            NSLog(@"-- %@", [readingError localizedDescription]);
+            return nil;
+        }
+        
+        NSString *fileName = [_POSTFilePath lastPathComponent];
+        
+        [request setHTTPMethod:@"POST"];
+
+        NSString *boundary = @"----------kStHtTpReQuEsTbOuNdArY";
+        
+        NSString *contentType = [NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundary];
+        [request addValue:contentType forHTTPHeaderField:@"Content-Type"];
+        
+        NSMutableData *body = [NSMutableData data];
+        
+        [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+        
+        [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"; filename=\"%@\"\r\n", _POSTFileParameter, fileName] dataUsingEncoding:NSUTF8StringEncoding]];
+        [body appendData:[@"Content-Type: application/octet-stream\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
+        [body appendData:fileData];
+        
+        [_POSTDictionary enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+            [body appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+            [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"\r\n\r\n", key] dataUsingEncoding:NSUTF8StringEncoding]];
+            [body appendData:[[obj description] dataUsingEncoding:NSUTF8StringEncoding]];
+        }];
+        
+        [body appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+        
+        [request setHTTPBody:body];
+
+    } else if(_POSTDictionary != nil) { // may be empty (POST request without body)
         
         NSMutableArray *ma = [NSMutableArray arrayWithCapacity:[_POSTDictionary count]];
         
@@ -246,7 +284,6 @@ static NSMutableDictionary *sharedCredentialsStorage;
         
         NSData *data = [s dataUsingEncoding:_postDataEncoding allowLossyConversion:YES];
         
-        [request setHTTPMethod:@"POST"];
         [request setHTTPBody:data];
     }
     
@@ -272,6 +309,13 @@ static NSMutableDictionary *sharedCredentialsStorage;
 
 - (NSURLRequest *)requestByAddingCredentialsToURL {
     return [self requestByAddingCredentialsToURL:YES sendBasicAuthenticationHeaders:YES];
+}
+
+#pragma mark Upload
+
+- (void)setFileToUpload:(NSString *)path parameterName:(NSString *)param {
+    _POSTFilePath = path;
+    _POSTFileParameter = param;
 }
 
 #pragma mark Response
@@ -330,6 +374,11 @@ static NSMutableDictionary *sharedCredentialsStorage;
     [d enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
         NSLog(@"\t %@ = %@", key, obj);
     }];
+        
+    if(_POSTFileParameter && _POSTFilePath) {
+        NSLog(@"UPLOAD FILE");
+        NSLog(@"\t %@ = %@", _POSTFileParameter, _POSTFilePath);
+    }
     
     NSLog(@"--------------------------------------");
 }

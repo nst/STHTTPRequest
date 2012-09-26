@@ -44,6 +44,28 @@
     
     [r startAsynchronous];
 //    [r cancel];
+    
+    /*
+    
+    __block STHTTPRequest *up = [STHTTPRequest requestWithURLString:@"http://127.0.0.1/"];
+    
+    up.POSTDictionary = @{@"asd":@"sdf", @"sdf":@"dfg"};
+    
+    [up setFileToUpload:@"/tmp/photo.jpg" parameterName:@"photo"];
+    
+    up.completionBlock = ^(NSDictionary *headers, NSString *body) {
+        NSLog(@"-- body: %@", body);
+        [_activityIndicator stopAnimating];
+    };
+    
+    up.errorBlock = ^(NSError *error) {
+        NSLog(@"-- %@", [error localizedDescription]);
+        [_activityIndicator stopAnimating];
+    };
+    
+    [up startAsynchronous];
+     
+     */
 }
 
 - (void)dealloc {
