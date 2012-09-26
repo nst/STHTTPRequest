@@ -17,11 +17,13 @@ extern NSUInteger const kSTHTTPRequestCancellationError;
 
 @class STHTTPRequest;
 
+typedef void (^progressBlock_t)(NSInteger bytesWritten, NSInteger totalBytesWritten, NSInteger totalBytesExpectedToWrite);
 typedef void (^completionBlock_t)(NSDictionary *headers, NSString *body);
 typedef void (^errorBlock_t)(NSError *error);
 
 @interface STHTTPRequest : NSObject
 
+@property (copy) progressBlock_t progressBlock;
 @property (copy) completionBlock_t completionBlock;
 @property (copy) errorBlock_t errorBlock;
 @property (nonatomic) NSStringEncoding postDataEncoding;
@@ -68,6 +70,7 @@ typedef void (^errorBlock_t)(NSError *error);
 // Upload
 - (void)setFileToUpload:(NSString *)path parameterName:(NSString *)param;
 - (void)setDataToUpload:(NSData *)data parameterName:(NSString *)param;
+- (void)setDataToUpload:(NSData *)data parameterName:(NSString *)param mimeType:(NSString *)mimeType fileName:(NSString *)fileName;
 
 // Session
 + (void)clearSession; // delete all credentials and cookies
