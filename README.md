@@ -4,7 +4,7 @@ _A NSURLConnection wrapper for humans_
 
 ##### Simple...
 
--   400 lines of Objective-C you can understand
+-   600 lines of Objective-C you can understand
 -   runs on iOS 4+ and Mac OS X 10.6+
 -   just drag-and-drop .h and .m in your project
 -   new BSD license
@@ -14,8 +14,8 @@ _A NSURLConnection wrapper for humans_
 -   synchronous and asynchronous (block based) calls
 -   easy to set request headers, cookies and POST data
 -   easy to get response status, headers and encoding
+-   file upload with progress block
 -   HTTP and proxy authentication
--   file upload
 
 ##### Usable in unit tests
 
