@@ -240,7 +240,7 @@ static NSMutableDictionary *sharedCredentialsStorage;
     
     if(_POSTFileParameter && (_POSTFilePath || _POSTFileData)) {
 
-        _POSTDictionary = _POSTDictionary ? @{};
+        if(_POSTDictionary == nil) self.POSTDictionary = @{};
         
         NSData *fileData = nil;
         NSString *mimeType = nil;
@@ -263,8 +263,6 @@ static NSMutableDictionary *sharedCredentialsStorage;
         }
         
         mimeType = _POSTFileMimeType ? _POSTFileMimeType : @"application/octet-stream";
-        
-        [request setHTTPMethod:@"POST"];
 
         NSString *boundary = @"----------kStHtTpReQuEsTbOuNdArY";
         
@@ -290,6 +288,7 @@ static NSMutableDictionary *sharedCredentialsStorage;
         
         [body appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
         
+        [request setHTTPMethod:@"POST"];
         [request setHTTPBody:body];
 
     } else if(_POSTDictionary != nil) { // may be empty (POST request without body)

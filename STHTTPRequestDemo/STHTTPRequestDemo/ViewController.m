@@ -12,7 +12,8 @@
 @implementation ViewController
 
 - (IBAction)buttonClicked:(id)sender {
-    
+
+#if 1
     [_activityIndicator startAnimating];
     
     _fetchButton.enabled = NO;
@@ -45,8 +46,7 @@
     [r startAsynchronous];
 //    [r cancel];
     
-    /*
-    
+#else
     __block STHTTPRequest *up = [STHTTPRequest requestWithURLString:@"http://127.0.0.1/"];
     
     up.POSTDictionary = @{@"asd":@"sdf", @"dfg":@"fgh"};
@@ -67,7 +67,7 @@
     
     [up startAsynchronous];
 
-     */
+#endif
 }
 
 - (void)dealloc {
