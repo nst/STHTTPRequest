@@ -65,13 +65,14 @@ static NSMutableDictionary *sharedCredentialsStorage;
 }
 
 - (void)dealloc {
+    if(_uploadProgressBlock) [_uploadProgressBlock release];
+    
     [_responseStringEncodingName release];
     [_requestHeaders release];
     [_url release];
     [_responseData release];
     [_responseHeaders release];
     [_responseString release];
-    [_progressBlock release];
     [_completionBlock release];
     [_errorBlock release];
     [_credential release];
@@ -81,7 +82,9 @@ static NSMutableDictionary *sharedCredentialsStorage;
     [_POSTFileData release];
     [_POSTFileMimeType release];
     [_POSTFileName release];
+    [_POSTFileParameter release];
     [_error release];
+    
     [super dealloc];
 }
 
@@ -518,10 +521,9 @@ static NSMutableDictionary *sharedCredentialsStorage;
     [[challenge sender] cancelAuthenticationChallenge:challenge];
 }
 
-- (void)connection:(NSURLConnection *)connection didSendBodyData:(NSInteger)bytesWritten totalBytesWritten:(NSInteger)totalBytesWritten totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite
-{
-    if (_progressBlock) {
-        _progressBlock(bytesWritten, totalBytesWritten, totalBytesExpectedToWrite);
+- (void)connection:(NSURLConnection *)connection didSendBodyData:(NSInteger)bytesWritten totalBytesWritten:(NSInteger)totalBytesWritten totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite {
+    if (_uploadProgressBlock) {
+        _uploadProgressBlock(bytesWritten, totalBytesWritten, totalBytesExpectedToWrite);
     }
 }
 
