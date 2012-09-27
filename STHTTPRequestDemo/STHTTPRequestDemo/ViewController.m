@@ -55,6 +55,10 @@
     
     [up setDataToUpload:data parameterName:@"XXX"];
     
+    up.uploadProgressBlock = ^(NSInteger bytesWritten, NSInteger totalBytesWritten, NSInteger totalBytesExpectedToWrite) {
+        NSLog(@"-- %d / %d / %d", bytesWritten, totalBytesWritten, totalBytesExpectedToWrite);
+    };
+    
     up.completionBlock = ^(NSDictionary *headers, NSString *body) {
         NSLog(@"-- body: %@", body);
         [_activityIndicator stopAnimating];
