@@ -22,6 +22,8 @@ static NSMutableDictionary *sharedCredentialsStorage;
 @property (nonatomic, retain) NSError *error;
 @property (nonatomic, retain) NSString *POSTFilePath;
 @property (nonatomic, retain) NSData *POSTFileData;
+@property (nonatomic, retain) NSString *POSTFileMimeType;
+@property (nonatomic, retain) NSString *POSTFileName;
 @property (nonatomic, retain) NSString *POSTFileParameter;
 @end
 
@@ -69,6 +71,7 @@ static NSMutableDictionary *sharedCredentialsStorage;
     [_responseData release];
     [_responseHeaders release];
     [_responseString release];
+    [_progressBlock release];
     [_completionBlock release];
     [_errorBlock release];
     [_credential release];
@@ -76,6 +79,8 @@ static NSMutableDictionary *sharedCredentialsStorage;
     [_POSTDictionary release];
     [_POSTFilePath release];
     [_POSTFileData release];
+    [_POSTFileMimeType release];
+    [_POSTFileName release];
     [_error release];
     [super dealloc];
 }
@@ -238,10 +243,10 @@ static NSMutableDictionary *sharedCredentialsStorage;
         _POSTDictionary = _POSTDictionary ? @{};
         
         NSData *fileData = nil;
+        NSString *mimeType = nil;
         NSString *fileName = nil;
 
         if (_POSTFilePath) {
-            
             NSError *readingError = nil;
             fileData = [NSData dataWithContentsOfFile:_POSTFilePath options:0 error:&readingError];
             if(fileData == nil ) {
@@ -252,7 +257,12 @@ static NSMutableDictionary *sharedCredentialsStorage;
             fileName = [_POSTFilePath lastPathComponent];
         } else {
             fileData = _POSTFileData;
+            if (_POSTFileName) {
+                fileName = _POSTFileName;
+            }
         }
+        
+        mimeType = _POSTFileMimeType ? _POSTFileMimeType : @"application/octet-stream";
         
         [request setHTTPMethod:@"POST"];
 
@@ -269,7 +279,7 @@ static NSMutableDictionary *sharedCredentialsStorage;
         NSString *contentDisposition = [NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"; %@\r\n", _POSTFileParameter, fileNameContentDisposition];
         
         [body appendData:[contentDisposition dataUsingEncoding:NSUTF8StringEncoding]];
-        [body appendData:[@"Content-Type: application/octet-stream\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
+        [body appendData:[[NSString stringWithFormat:@"Content-Type: %@\r\n\r\n", mimeType] dataUsingEncoding:NSUTF8StringEncoding]];
         [body appendData:fileData];
         
         [_POSTDictionary enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
@@ -300,6 +310,7 @@ static NSMutableDictionary *sharedCredentialsStorage;
         
         NSData *data = [s dataUsingEncoding:_postDataEncoding allowLossyConversion:YES];
         
+        [request setHTTPMethod:@"POST"];
         [request setHTTPBody:data];
     }
     
@@ -337,6 +348,14 @@ static NSMutableDictionary *sharedCredentialsStorage;
 - (void)setDataToUpload:(NSData *)data parameterName:(NSString *)param {
     self.POSTFileData = data;
     self.POSTFileParameter = param;
+}
+
+- (void)setDataToUpload:(NSData *)data parameterName:(NSString *)param mimeType:(NSString *)mimeType fileName:(NSString *)fileName
+{
+    self.POSTFileData = data;
+    self.POSTFileParameter = param;
+    self.POSTFileMimeType = mimeType;
+    self.POSTFileName = fileName;
 }
 
 #pragma mark Response
@@ -498,6 +517,13 @@ static NSMutableDictionary *sharedCredentialsStorage;
     [connection cancel];
     
     [[challenge sender] cancelAuthenticationChallenge:challenge];
+}
+
+- (void)connection:(NSURLConnection *)connection didSendBodyData:(NSInteger)bytesWritten totalBytesWritten:(NSInteger)totalBytesWritten totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite
+{
+    if (_progressBlock) {
+        _progressBlock(bytesWritten, totalBytesWritten, totalBytesExpectedToWrite);
+    }
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
