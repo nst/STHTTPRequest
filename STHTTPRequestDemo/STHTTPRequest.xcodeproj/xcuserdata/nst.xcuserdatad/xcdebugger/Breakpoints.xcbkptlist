@@ -13,7 +13,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "236"
          endingLineNumber = "236"
-         landmarkName = "-requestByAddingCredentialsToURL:sendBasicAuthenticationHeaders:"
+         landmarkName = "-urlWithCredentials"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

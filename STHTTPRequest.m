@@ -422,7 +422,7 @@ static NSMutableDictionary *sharedCredentialsStorage;
         NSLog(@"\t %@ = %@", _POSTFileParameter, _POSTFilePath);
     } else if(_POSTFileParameter && _POSTFileData) {
         NSLog(@"UPLOAD DATA");
-        NSLog(@"\t %@ = [%d bytes]", _POSTFileParameter, [_POSTFileData length]);
+        NSLog(@"\t %@ = [%ld bytes]", _POSTFileParameter, [_POSTFileData length]);
     }
     
     NSLog(@"--------------------------------------");
