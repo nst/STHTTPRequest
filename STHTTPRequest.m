@@ -235,6 +235,8 @@ static NSMutableDictionary *sharedCredentialsStorage;
     
     if(_POSTFileParameter && (_POSTFilePath || _POSTFileData)) {
 
+        _POSTDictionary = _POSTDictionary ? @{};
+        
         NSData *fileData = nil;
         NSString *fileName = nil;
 
