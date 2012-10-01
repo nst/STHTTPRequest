@@ -420,13 +420,16 @@ static NSMutableDictionary *sharedCredentialsStorage;
     [d enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
         NSLog(@"\t %@ = %@", key, obj);
     }];
-        
-    if(_POSTFileParameter && _POSTFilePath) {
+    
+    if (_POSTFileParameter && _POSTFilePath) {
         NSLog(@"UPLOAD FILE");
         NSLog(@"\t %@ = %@", _POSTFileParameter, _POSTFilePath);
-    } else if(_POSTFileParameter && _POSTFileData) {
+    } else if (_POSTFileParameter && _POSTFileData) {
         NSLog(@"UPLOAD DATA");
-        NSLog(@"\t %@ = [%ld bytes]", _POSTFileParameter, [_POSTFileData length]);
+        NSLog(@"\t %@ = [%ul bytes]", _POSTFileParameter, [_POSTFileData length]);
+    } else if (_POSTData) {
+        NSLog(@"UPLOAD DATA");
+        NSLog(@"\t [%ul bytes]", [_POSTData length]);
     }
     
     NSLog(@"--------------------------------------");
