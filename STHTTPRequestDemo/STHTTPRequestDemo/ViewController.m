@@ -74,13 +74,16 @@
     
 
 #if 0
-    __block STHTTPRequest *up = [STHTTPRequest requestWithURLString:@"http://127.0.0.1/"];
+    __block STHTTPRequest *up = [STHTTPRequest requestWithURLString:@"http://127.0.0.1:81/"];
     
-    up.POSTDictionary = @{@"asd":@"sdf", @"dfg":@"fgh"};
+//    NSString *s = [@"s&df" stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSLog(@"-- %@", [self urlEncodedString]);
     
-    NSData *data = [[[NSData alloc] initWithContentsOfFile:@"/tmp/photo.jpg"] autorelease];
+    up.POSTDictionary = @{@"asd":@"&&", @"dfg":@"fg&h"};
     
-    [up setDataToUpload:data parameterName:@"XXX"];
+//    NSData *data = [[[NSData alloc] initWithContentsOfFile:@"/tmp/photo.jpg"] autorelease];
+//    
+//    [up setDataToUpload:data parameterName:@"XXX"];
     
     up.uploadProgressBlock = ^(NSInteger bytesWritten, NSInteger totalBytesWritten, NSInteger totalBytesExpectedToWrite) {
         NSLog(@"-- %d / %d / %d", bytesWritten, totalBytesWritten, totalBytesExpectedToWrite);
@@ -100,6 +103,19 @@
 
 #endif
 }
+
+- (NSString *)urlEncodedString {
+    // https://dev.twitter.com/docs/auth/percent-encoding-parameters
+    
+    NSString *s = (NSString *)CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
+                                                                      (CFStringRef)@"a&d",
+                                                                      NULL,
+                                                                      CFSTR("!*'();:@&=+$,/?%#[]"),
+                                                                      kCFStringEncodingUTF8);
+    return [s autorelease];
+}
+
+
 
 - (void)dealloc {
     [_imageView release];
