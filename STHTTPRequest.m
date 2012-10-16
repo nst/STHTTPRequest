@@ -37,12 +37,6 @@ static NSMutableDictionary *sharedCredentialsStorage;
 
 #pragma mark Initializers
 
-- (id)init {
-    self = [super init];
-    self.encodePOSTDictionary = YES;
-    return self;
-}
-
 + (STHTTPRequest *)requestWithURL:(NSURL *)url {
     if(url == nil) return nil;
     return [[[self alloc] initWithURL:url] autorelease];
@@ -60,6 +54,7 @@ static NSMutableDictionary *sharedCredentialsStorage;
         _responseData = [[NSMutableData alloc] init];
         _requestHeaders = [[NSMutableDictionary dictionary] retain];
         _postDataEncoding = NSUTF8StringEncoding;
+        _encodePOSTDictionary = YES;
     }
     
     return self;
