@@ -247,8 +247,8 @@ static NSMutableDictionary *sharedCredentialsStorage;
     if(_encodePOSTDictionary) {
         NSMutableDictionary *escapedPOSTDictionary = _POSTDictionary ? [NSMutableDictionary dictionary] : nil;
         [_POSTDictionary enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-            NSString *k = [key stringByAddingRFC3875PercentEscapesUsingEncoding:NSUTF8StringEncoding];
-            NSString *v = [[obj description] stringByAddingRFC3875PercentEscapesUsingEncoding:NSUTF8StringEncoding];
+            NSString *k = [key stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+            NSString *v = [[obj description] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
             escapedPOSTDictionary[k] = v;
         }];
         self.POSTDictionary = escapedPOSTDictionary;
@@ -327,11 +327,11 @@ static NSMutableDictionary *sharedCredentialsStorage;
         NSData *data = [s dataUsingEncoding:_postDataEncoding allowLossyConversion:YES];
         
         [request setHTTPMethod:@"POST"];
-        [request setValue:[NSString stringWithFormat:@"%d", [data length]] forHTTPHeaderField:@"Content-Length"];
+        [request setValue:[NSString stringWithFormat:@"%ul", [data length]] forHTTPHeaderField:@"Content-Length"];
         [request setHTTPBody:data];
     } else if (_POSTData != nil) {
         [request setHTTPMethod:@"POST"];
-        [request setValue:[NSString stringWithFormat:@"%d", [_POSTData length]] forHTTPHeaderField:@"Content-Length"];
+        [request setValue:[NSString stringWithFormat:@"%ul", [_POSTData length]] forHTTPHeaderField:@"Content-Length"];
         [request setHTTPBody:_POSTData];
     }
     
@@ -602,15 +602,15 @@ static NSMutableDictionary *sharedCredentialsStorage;
 
 @end
 
-@implementation NSString (RFC3875)
-- (NSString *)stringByAddingRFC3875PercentEscapesUsingEncoding:(NSStringEncoding)encoding {
-    CFStringEncoding cfEncoding = CFStringConvertNSStringEncodingToEncoding(encoding);
-    NSString *rfcEscaped = (NSString *)CFURLCreateStringByAddingPercentEscapes(NULL,
-                                                                               (CFStringRef)self,
-                                                                               NULL,
-                                                                               (CFStringRef)@";/?:@&=$+{}<>,",
-                                                                               cfEncoding);
-    return [rfcEscaped autorelease];
+@implementation NSString (URLPercentEscape)
+- (NSString *)stringByAddingPercentEscapesUsingEncoding:(NSStringEncoding)encoding {
+
+    NSString *s = (NSString *)CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
+                                                                      (CFStringRef)self,
+                                                                      NULL,
+                                                                      CFSTR("!*'();:@&=+$,/?%#[]"),
+                                                                      kCFStringEncodingUTF8);
+    return [s autorelease];
 }
 @end
 
