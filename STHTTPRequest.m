@@ -66,16 +66,17 @@ static NSMutableDictionary *sharedCredentialsStorage;
 }
 
 - (void)dealloc {
+    if(_completionBlock) [_completionBlock release];
+    if(_errorBlock) [_errorBlock release];
     if(_uploadProgressBlock) [_uploadProgressBlock release];
-    
+
+    [_connection release];
     [_responseStringEncodingName release];
     [_requestHeaders release];
     [_url release];
     [_responseData release];
     [_responseHeaders release];
     [_responseString release];
-    [_completionBlock release];
-    [_errorBlock release];
     [_credential release];
     [_proxyCredential release];
     [_POSTDictionary release];
