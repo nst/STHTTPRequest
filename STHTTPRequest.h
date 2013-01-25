@@ -27,7 +27,6 @@ typedef void (^errorBlock_t)(NSError *error);
 @property (copy) completionBlock_t completionBlock;
 @property (copy) errorBlock_t errorBlock;
 @property (nonatomic) NSStringEncoding postDataEncoding;
-@property (nonatomic, retain) NSURLCredential *credential;
 @property (nonatomic, retain) NSURLCredential *proxyCredential;
 @property (nonatomic, retain) NSDictionary *POSTDictionary;
 @property (nonatomic, retain) NSData *POSTData;
@@ -41,7 +40,7 @@ typedef void (^errorBlock_t)(NSError *error);
 @property (nonatomic, retain) NSString *responseString;
 @property (nonatomic) NSStringEncoding forcedResponseEncoding;
 @property (nonatomic) BOOL encodePOSTDictionary; // default YES
-@property (nonatomic) BOOL addCredentialsToURL; // default YES
+@property (nonatomic) BOOL addCredentialsToURL; // default NO
 
 + (STHTTPRequest *)requestWithURL:(NSURL *)url;
 + (STHTTPRequest *)requestWithURLString:(NSString *)urlString;

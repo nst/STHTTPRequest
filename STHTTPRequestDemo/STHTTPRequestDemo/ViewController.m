@@ -12,7 +12,7 @@
 @implementation ViewController
 
 - (IBAction)buttonClicked:(id)sender {
-
+    
 #if 1
     [_activityIndicator startAnimating];
     
@@ -45,6 +45,39 @@
     
     [r startAsynchronous];
     //    [r cancel];
+#endif
+    
+#if 0
+    STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"http://localhost/"];
+    [r setUsername:@"user" password:@"pass_"];
+    
+    r.addCredentialsToURL = NO;
+    
+    r.completionBlock = ^(NSDictionary *headers, NSString *body) {
+        NSLog(@"-- success: %@", body);
+        
+    };
+    
+    r.errorBlock = ^(NSError *error) {
+        NSLog(@"-- error: %@", error);
+        
+        STHTTPRequest *r2 = [STHTTPRequest requestWithURLString:@"http://localhost/"];
+        //[r2 setUsername:@"user" password:@"pass_"];
+        
+        r2.addCredentialsToURL = NO;
+        
+        r2.completionBlock = ^(NSDictionary *headers, NSString *body) {
+            NSLog(@"-- success: %@", body);
+        };
+        
+        r2.errorBlock = ^(NSError *error) {
+            NSLog(@"-- error: %@", error);
+        };
+        
+        [r2 startAsynchronous];
+    };
+    
+    [r startAsynchronous];
 #endif
     
 #if 0
@@ -100,7 +133,6 @@
     
     [up startAsynchronous];
 
-#endif
 }
 
 - (NSString *)urlEncodedString {
@@ -112,9 +144,9 @@
                                                                       CFSTR("!*'();:@&=+$,/?%#[]"),
                                                                       kCFStringEncodingUTF8);
     return [s autorelease];
+#endif
+
 }
-
-
 
 - (void)dealloc {
     [_imageView release];
