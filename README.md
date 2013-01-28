@@ -15,7 +15,7 @@ _A NSURLConnection wrapper for humans_
 -   easy to set request headers, cookies and POST data
 -   easy to get response status, headers and encoding
 -   file upload with progress block
--   HTTP and proxy authentication
+-   fast and simple HTTP authentication
 
 ##### Usable in unit tests
 
@@ -62,10 +62,6 @@ You can fill a queue with fake responses to be consumed by requests started from
 ##### Setting credentials
 
     [r setUsername:@"test" password:@"1234"];
-
-##### Setting proxy credentials
-
-    [r setProxyUsername:@"test" password:@"1234"];
 
 ##### Uploading a file
 
