@@ -27,7 +27,6 @@ typedef void (^errorBlock_t)(NSError *error);
 @property (copy) completionBlock_t completionBlock;
 @property (copy) errorBlock_t errorBlock;
 @property (nonatomic) NSStringEncoding postDataEncoding;
-@property (nonatomic, retain) NSURLCredential *proxyCredential;
 @property (nonatomic, retain) NSDictionary *POSTDictionary;
 @property (nonatomic, retain) NSData *POSTData;
 @property (nonatomic, retain) NSMutableDictionary *requestHeaders;
@@ -59,7 +58,6 @@ typedef void (^errorBlock_t)(NSError *error);
 // Credentials
 + (NSURLCredential *)sessionAuthenticationCredentialsForURL:(NSURL *)requestURL;
 - (void)setUsername:(NSString *)username password:(NSString *)password;
-- (void)setProxyUsername:(NSString *)username password:(NSString *)password;
 - (NSString *)username;
 - (NSString *)password;
 + (void)deleteAllCredentials;
