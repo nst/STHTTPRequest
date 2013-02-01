@@ -14,6 +14,7 @@
 #import <Foundation/Foundation.h>
 
 extern NSUInteger const kSTHTTPRequestCancellationError;
+extern NSUInteger const kSTHTTPRequestDefaultTimeout;
 
 @class STHTTPRequest;
 

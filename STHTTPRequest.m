@@ -9,6 +9,7 @@
 #import "STHTTPRequest.h"
 
 NSUInteger const kSTHTTPRequestCancellationError = 1;
+NSUInteger const kSTHTTPRequestDefaultTimeout = 5;
 
 static NSMutableDictionary *sharedCredentialsStorage = nil;
 
@@ -54,7 +55,7 @@ static NSMutableDictionary *sharedCredentialsStorage = nil;
         _postDataEncoding = NSUTF8StringEncoding;
         _encodePOSTDictionary = YES;
         _addCredentialsToURL = NO;
-        _timeoutSeconds = 5;
+        _timeoutSeconds = kSTHTTPRequestDefaultTimeout;
     }
     
     return self;
@@ -236,7 +237,6 @@ static NSMutableDictionary *sharedCredentialsStorage = nil;
         theURL = [[self class] urlByAddingCredentials:credential toURL:_url];
         if(theURL == nil) return nil;
     } else {
-        NSLog(@"Will use credentials [%@], [%@]", self.username, self.password);
         theURL = _url;
     }
     
