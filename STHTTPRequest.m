@@ -54,6 +54,7 @@ static NSMutableDictionary *sharedCredentialsStorage = nil;
         _postDataEncoding = NSUTF8StringEncoding;
         _encodePOSTDictionary = YES;
         _addCredentialsToURL = NO;
+        _timeoutSeconds = 5;
     }
     
     return self;
@@ -235,10 +236,16 @@ static NSMutableDictionary *sharedCredentialsStorage = nil;
         theURL = [[self class] urlByAddingCredentials:credential toURL:_url];
         if(theURL == nil) return nil;
     } else {
+        NSLog(@"Will use credentials [%@], [%@]", self.username, self.password);
         theURL = _url;
     }
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:theURL];
+    
+    // Set properties
+    request.timeoutInterval = self.timeoutSeconds;
+    if (self.requestMethod)
+        request.HTTPMethod = self.requestMethod;
     
     // escape POST dictionary keys and values if needed
     if(_encodePOSTDictionary) {
@@ -531,21 +538,52 @@ static NSMutableDictionary *sharedCredentialsStorage = nil;
 
 #pragma mark NSURLConnectionDelegate
 
+-(BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)protectionSpace
+{
+    //return YES to say that we have the necessary credentials to access the requested resource
+    return YES;
+}
+
 - (void)connection:(NSURLConnection *)connection willSendRequestForAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
     
+    NSLog(@"Preparing challenge response for authentication method %@...!", [[challenge protectionSpace] authenticationMethod]);
+    
+    // Server Trust authentication
     if ([[[challenge protectionSpace] authenticationMethod] isEqualToString:NSURLAuthenticationMethodServerTrust]) {
         NSURLCredential *serverTrustCredential = [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust];
         [challenge.sender useCredential:serverTrustCredential forAuthenticationChallenge:challenge];
         return;
     }
-
-    // We proactively add authentication into headers.
-    // At this point, the credentials we provided are wrong,
-    // so we delete them and cancel the connection.
-    [[[self class] sharedCredentialsStorage] removeObjectForKey:[_url host]];
-    [connection cancel];
-    [[challenge sender] cancelAuthenticationChallenge:challenge];
+    
+    // Digest authentication
+    else if ([[[challenge protectionSpace] authenticationMethod] isEqualToString:NSURLAuthenticationMethodHTTPDigest]) {
+        
+        NSURLCredential *credential = [self credentialForCurrentHost];
+        [[challenge sender] useCredential:credential forAuthenticationChallenge:challenge];
+        
+    }
+    
+    // Basic authentication
+    else if ([[[challenge protectionSpace] authenticationMethod] isEqualToString:NSURLAuthenticationMethodHTTPBasic]) {
+        
+        // We proactively add authentication into headers.
+        // At this point, the credentials we provided are wrong,
+        // so we delete them and cancel the connection.
+        [[[self class] sharedCredentialsStorage] removeObjectForKey:[_url host]];
+        [connection cancel];
+        [[challenge sender] cancelAuthenticationChallenge:challenge];
+        
+    }
+    
+    // Unhandled
+    else
+    {
+        NSLog(@"Unhandled authentication challenge type - %@", [[challenge protectionSpace] authenticationMethod]);
+    }
+    
 }
+
+
 
 //- (BOOL)connectionShouldUseCredentialStorage:(NSURLConnection *)connection {
 //    return NO;
