@@ -32,7 +32,7 @@
     _imageView.image = nil;
     
     // declared as __block to avoid retain cycle since we are accessing the request in a block
-    __block STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"https://assets.github.com/images/modules/about_page/octocat.png"];
+    __block STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"https://raw.github.com/github/media/master/octocats/octocat.png"];
     
     r.completionBlock = ^(NSDictionary *headers, NSString *body) {
         
