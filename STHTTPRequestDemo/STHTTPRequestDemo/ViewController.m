@@ -6,6 +6,16 @@
 //  Copyright (c) 2012 Nicolas Seriot. All rights reserved.
 //
 
+/*
+ TEST Basic Authentication:
+ http://ericasadun.com/Private
+ PrivateAccess / tuR7!mZ#eh
+ 
+ TEST Digest Authentication:
+ http://jigsaw.w3.org/HTTP/Digest/
+ guest / guest
+ */
+
 #import "ViewController.h"
 #import "STHTTPRequest.h"
 
@@ -48,8 +58,8 @@
 #endif
     
 #if 0
-    STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"http://localhost/"];
-    [r setUsername:@"user" password:@"pass_"];
+    STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"http://jigsaw.w3.org/HTTP/Digest/"];
+    [r setUsername:@"guest" password:@"guest_"];
     
     r.addCredentialsToURL = NO;
     
@@ -61,8 +71,9 @@
     r.errorBlock = ^(NSError *error) {
         NSLog(@"-- error: %@", error);
         
-        STHTTPRequest *r2 = [STHTTPRequest requestWithURLString:@"http://localhost/"];
-        //[r2 setUsername:@"user" password:@"pass_"];
+        STHTTPRequest *r2 = [STHTTPRequest requestWithURLString:@"http://jigsaw.w3.org/HTTP/Digest/"];
+        
+        [r2 setUsername:@"guest" password:@"guest"];
         
         r2.addCredentialsToURL = NO;
         

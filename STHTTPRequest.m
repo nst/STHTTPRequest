@@ -244,8 +244,8 @@ static NSMutableDictionary *sharedCredentialsStorage = nil;
     
     // Set properties
     request.timeoutInterval = self.timeoutSeconds;
-    if (self.requestMethod)
-        request.HTTPMethod = self.requestMethod;
+//    if (self.requestMethod)
+//        request.HTTPMethod = self.requestMethod;
     
     // escape POST dictionary keys and values if needed
     if(_encodePOSTDictionary) {
@@ -546,8 +546,6 @@ static NSMutableDictionary *sharedCredentialsStorage = nil;
 
 - (void)connection:(NSURLConnection *)connection willSendRequestForAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
     
-    NSLog(@"Preparing challenge response for authentication method %@...!", [[challenge protectionSpace] authenticationMethod]);
-    
     // Server Trust authentication
     if ([[[challenge protectionSpace] authenticationMethod] isEqualToString:NSURLAuthenticationMethodServerTrust]) {
         NSURLCredential *serverTrustCredential = [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust];
@@ -558,9 +556,14 @@ static NSMutableDictionary *sharedCredentialsStorage = nil;
     // Digest authentication
     else if ([[[challenge protectionSpace] authenticationMethod] isEqualToString:NSURLAuthenticationMethodHTTPDigest]) {
         
-        NSURLCredential *credential = [self credentialForCurrentHost];
-        [[challenge sender] useCredential:credential forAuthenticationChallenge:challenge];
-        
+        if([challenge previousFailureCount] == 0) {
+            NSURLCredential *credential = [self credentialForCurrentHost];
+            [[challenge sender] useCredential:credential forAuthenticationChallenge:challenge];
+        } else {
+            [[[self class] sharedCredentialsStorage] removeObjectForKey:[_url host]];
+            [connection cancel];
+            [[challenge sender] cancelAuthenticationChallenge:challenge];
+        }
     }
     
     // Basic authentication
@@ -579,6 +582,8 @@ static NSMutableDictionary *sharedCredentialsStorage = nil;
     else
     {
         NSLog(@"Unhandled authentication challenge type - %@", [[challenge protectionSpace] authenticationMethod]);
+        [connection cancel];
+        [[challenge sender] cancelAuthenticationChallenge:challenge];
     }
     
 }

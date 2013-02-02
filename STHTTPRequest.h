@@ -22,7 +22,7 @@ typedef void (^uploadProgressBlock_t)(NSInteger bytesWritten, NSInteger totalByt
 typedef void (^completionBlock_t)(NSDictionary *headers, NSString *body);
 typedef void (^errorBlock_t)(NSError *error);
 
-@interface STHTTPRequest : NSObject<NSURLConnectionDelegate>
+@interface STHTTPRequest : NSObject <NSURLConnectionDelegate>
 
 @property (copy) uploadProgressBlock_t uploadProgressBlock;
 @property (copy) completionBlock_t completionBlock;
@@ -42,7 +42,7 @@ typedef void (^errorBlock_t)(NSError *error);
 @property (nonatomic) BOOL encodePOSTDictionary; // default YES
 @property (nonatomic, assign) NSUInteger timeoutSeconds;
 @property (nonatomic) BOOL addCredentialsToURL; // default NO
-@property (nonatomic, strong) NSString *requestMethod;
+//@property (nonatomic, strong) NSString *requestMethod;
 
 + (STHTTPRequest *)requestWithURL:(NSURL *)url;
 + (STHTTPRequest *)requestWithURLString:(NSString *)urlString;
