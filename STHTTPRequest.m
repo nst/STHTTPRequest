@@ -8,7 +8,7 @@
 
 #import "STHTTPRequest.h"
 
-#define DEBUG 0
+#define DEBUG 1
 
 NSUInteger const kSTHTTPRequestCancellationError = 1;
 NSUInteger const kSTHTTPRequestDefaultTimeout = 5;
@@ -485,7 +485,9 @@ static NSMutableDictionary *sharedCredentialsStorage = nil;
         [headersStrings addObject:s];
     }];
     
-    [ma addObject:[headersStrings componentsJoinedByString:@" \\\n"]];
+    if([headersStrings count] > 0) {
+        [ma addObject:[headersStrings componentsJoinedByString:@" \\\n"]];
+    }
     
     // url
     
