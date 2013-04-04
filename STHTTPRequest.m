@@ -443,7 +443,7 @@ static NSMutableDictionary *sharedCredentialsStorage = nil;
             [postParameters addObject:s];
         }];
         NSString *ss = [postParameters componentsJoinedByString:@"&"];
-        [ma addObject:ss];
+        [ma addObject:[NSString stringWithFormat:@"-d \"%@\"", ss]];
     }
     
     // -F "coolfiles=@fil1.gif;type=image/gif,fil2.txt,fil3.html"   // file upload
