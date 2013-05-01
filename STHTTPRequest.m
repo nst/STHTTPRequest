@@ -6,6 +6,11 @@
 //  Copyright (c) 2011 __MyCompanyName__. All rights reserved.
 //
 
+#if __has_feature(objc_arc)
+// see http://www.codeography.com/2011/10/10/making-arc-and-non-arc-play-nice.html
+#error This file cannot be compiled with ARC. Either turn off ARC for the project or use -fno-objc-arc flag
+#endif
+
 #import "STHTTPRequest.h"
 
 NSUInteger const kSTHTTPRequestCancellationError = 1;
