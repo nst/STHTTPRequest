@@ -4,8 +4,8 @@ _A NSURLConnection wrapper for humans_
 
 ##### Simple...
 
--   600 lines of Objective-C you can understand
--   runs on iOS 4+ and Mac OS X 10.6+
+-   700 lines of Objective-C you can understand
+-   runs on iOS 5+ and Mac OS X 10.7+
 -   just drag-and-drop .h and .m in your project
 -   new BSD license
 
