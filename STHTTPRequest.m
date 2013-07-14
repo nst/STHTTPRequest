@@ -26,6 +26,8 @@ static NSMutableDictionary *sharedCredentialsStorage = nil;
 @property (nonatomic, retain) NSMutableData *responseData;
 @property (nonatomic, retain) NSString *responseStringEncodingName;
 @property (nonatomic, retain) NSDictionary *responseHeaders;
+@property (nonatomic) NSInteger responseExpectedContentLength; // set by didReceiveResponse delegate method; web server must send the Content-Length header for accurate value
+@property (nonatomic) NSInteger responseTotalBytesReceived; // incrementally updated by didReceiveData delegate method 
 @property (nonatomic, retain) NSURL *url;
 @property (nonatomic, retain) NSError *error;
 @property (nonatomic, retain) NSString *POSTFilePath;
@@ -77,6 +79,7 @@ static NSMutableDictionary *sharedCredentialsStorage = nil;
     if(_completionBlock) [_completionBlock release];
     if(_errorBlock) [_errorBlock release];
     if(_uploadProgressBlock) [_uploadProgressBlock release];
+    if(_downloadProgressBlock) [_downloadProgressBlock release];
     
     [_connection release];
     [_responseStringEncodingName release];
@@ -677,13 +680,23 @@ static NSMutableDictionary *sharedCredentialsStorage = nil;
         self.responseHeaders = [r allHeaderFields];
         self.responseStatus = [r statusCode];
         self.responseStringEncodingName = [r textEncodingName];
+        self.responseExpectedContentLength = [r expectedContentLength];
     }
     
     [_responseData setLength:0];
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)theData {
+
     [_responseData appendData:theData];
+
+    NSInteger bytesReceived = [theData length];
+
+    self.responseTotalBytesReceived += bytesReceived;
+
+    if (_downloadProgressBlock) {
+        _downloadProgressBlock(bytesReceived, self.responseTotalBytesReceived, self.responseExpectedContentLength);
+    } 
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
