@@ -688,11 +688,9 @@ static NSMutableDictionary *sharedCredentialsStorage = nil;
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)theData {
 
     [_responseData appendData:theData];
-
-    NSInteger bytesReceived = [theData length];
     
     if (_downloadProgressBlock) {
-        _downloadProgressBlock(bytesReceived, [_responseData length], self.responseExpectedContentLength);
+        _downloadProgressBlock([theData length], [_responseData length], self.responseExpectedContentLength);
     } 
 }
 
