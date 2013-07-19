@@ -66,3 +66,11 @@ You can fill a queue with fake responses to be consumed by requests started from
 ##### Uploading a file
 
     [r setFileToUpload:@"/tmp/photo.jpg" parameterName:@"photo"];
+    
+##### Setting a download progress block
+
+    r.downloadProgressBlock = ^(NSInteger bytesReceived,
+                                NSInteger totalBytesReceived,
+                                NSInteger totalBytesExpectedToReceive) {
+        // notify user of download progress
+    }
