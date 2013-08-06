@@ -117,46 +117,35 @@
 #endif
     
 #if 0
-    __block STHTTPRequest *up = [STHTTPRequest requestWithURLString:@"http://127.0.0.1:81/"];
-    
-//    NSString *s = [@"s&df" stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    NSLog(@"-- %@", [self urlEncodedString]);
-    
-    up.POSTDictionary = @{@"asd":@"&&", @"dfg":@"fg&h"};
-    
-//    NSData *data = [[[NSData alloc] initWithContentsOfFile:@"/tmp/photo.jpg"] autorelease];
-//    
-//    [up setDataToUpload:data parameterName:@"XXX"];
-    
-    up.uploadProgressBlock = ^(NSInteger bytesWritten, NSInteger totalBytesWritten, NSInteger totalBytesExpectedToWrite) {
-        NSLog(@"-- %d / %d / %d", bytesWritten, totalBytesWritten, totalBytesExpectedToWrite);
+    __block STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"http://cgi-lib.berkeley.edu/ex/fup.cgi"];
+
+    [r addFileToUpload:@"/Users/nst/Desktop/asd.txt" parameterName:@"upfile"];
+    //    [r addFileToUpload:@"/Users/nst/Desktop/photo2.png" parameterName:@"myPix2"];
+    //
+//    NSData *data = [[NSData alloc] initWithContentsOfFile:@"/Users/nst/Desktop/photo.png"];
+//    [r addDataToUpload:data parameterName:@"upfile" mimeType:@"multipart/form-data" fileName:@"photo.png"];
+//
+    r.POSTDictionary = @{@"note":@"myNote"};
+
+    r.forcedResponseEncoding = NSASCIIStringEncoding;
+
+    r.uploadProgressBlock = ^(NSInteger bytesWritten, NSInteger totalBytesWritten, NSInteger totalBytesExpectedToWrite) {
+        NSLog(@"-- uploadProgressBlock: received %d bytes, total %d bytes, %d bytes expected", bytesWritten, totalBytesWritten, totalBytesExpectedToWrite);
     };
-    
-    up.completionBlock = ^(NSDictionary *headers, NSString *body) {
+
+    r.completionBlock = ^(NSDictionary *headers, NSString *body) {
         NSLog(@"-- body: %@", body);
         [_activityIndicator stopAnimating];
     };
-    
-    up.errorBlock = ^(NSError *error) {
+
+    r.errorBlock = ^(NSError *error) {
         NSLog(@"-- %@", [error localizedDescription]);
         [_activityIndicator stopAnimating];
     };
-    
-    [up startAsynchronous];
 
-}
-
-- (NSString *)urlEncodedString {
-    // https://dev.twitter.com/docs/auth/percent-encoding-parameters
-    
-    NSString *s = (NSString *)CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
-                                                                      (CFStringRef)@"a&d",
-                                                                      NULL,
-                                                                      CFSTR("!*'();:@&=+$,/?%#[]"),
-                                                                      kCFStringEncodingUTF8);
-    return [s autorelease];
+    [r startAsynchronous];
 #endif
-
+    
 }
 
 - (void)dealloc {
