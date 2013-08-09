@@ -71,7 +71,7 @@ _A NSURLConnection wrapper for humans_
         // notify user of download progress
     }
 
-#### Use STHTTPRequest in Unit Tests
+##### Using STHTTPRequest in Unit Tests
 
 You can fill a queue with fake responses to be consumed by requests started from unit tests.
 
