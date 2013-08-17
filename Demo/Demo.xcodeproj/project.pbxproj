@@ -71,6 +71,7 @@
 		03191F1917BF752E0001C06D /* STHTTPRequestTestResponseQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STHTTPRequestTestResponseQueue.m; sourceTree = "<group>"; };
 		03191F2017BF75DC0001C06D /* STHTTPRequestTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STHTTPRequestTests.h; sourceTree = "<group>"; };
 		03191F2117BF75DC0001C06D /* STHTTPRequestTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STHTTPRequestTests.m; sourceTree = "<group>"; };
+		03606B3F17BF796B00105D85 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = text; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,6 +101,7 @@
 		03191EC817BF75060001C06D = {
 			isa = PBXGroup;
 			children = (
+				03606B3F17BF796B00105D85 /* README.md */,
 				03191F0F17BF75260001C06D /* STHTTPRequest.h */,
 				03191F1017BF75260001C06D /* STHTTPRequest.m */,
 				03191EDA17BF75060001C06D /* Demo */,
@@ -419,6 +421,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Demo/Demo-Prefix.pch";
 				INFOPLIST_FILE = "Demo/Demo-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -430,6 +433,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Demo/Demo-Prefix.pch";
 				INFOPLIST_FILE = "Demo/Demo-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -488,6 +492,7 @@
 				03191F0B17BF75070001C06D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		03191F0C17BF75070001C06D /* Build configuration list for PBXNativeTarget "DemoTests" */ = {
 			isa = XCConfigurationList;
@@ -496,6 +501,7 @@
 				03191F0E17BF75070001C06D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
