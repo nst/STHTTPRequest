@@ -1,5 +1,5 @@
 //
-// Prefix header for all source files of the 'STHTTPRequestDemo' target in the 'STHTTPRequestDemo' project
+// Prefix header for all source files of the 'Demo' target in the 'Demo' project
 //
 
 #import <Availability.h>

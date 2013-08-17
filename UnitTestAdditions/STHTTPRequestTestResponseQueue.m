@@ -18,11 +18,6 @@ static STHTTPRequestTestResponseQueue *sharedInstance = nil;
     return self;
 }
 
-- (void)dealloc {
-    [_responses release];
-    [super dealloc];
-}
-
 /**/
 
 - (void)enqueue:(STHTTPRequestTestResponse *)response {

@@ -1,9 +1,9 @@
 //
 //  AppDelegate.h
-//  STHTTPRequestDemo
+//  Demo
 //
-//  Created by Nicolas Seriot on 8/10/12.
-//  Copyright (c) 2012 Nicolas Seriot. All rights reserved.
+//  Created by Nicolas Seriot on 8/17/13.
+//  Copyright (c) 2013 Nicolas Seriot. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>

@@ -44,7 +44,7 @@ void Swizzle(Class c, SEL orig, SEL new) {
     NSAssert(tr.block != nil, @"block needed");
     
     tr.block(self); // simulate network response
-    
+        
     BOOL success = self.responseStatus < 400;
     
     if(success) {
