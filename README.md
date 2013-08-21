@@ -35,6 +35,11 @@ You can fill a queue with fake responses to be consumed by requests started from
     
     [r startAsynchronous];
 
+Notes:
+
+- STHTTPRequest must be used from the main thread
+- success block and error block are called on main thread
+
 ##### Starting a synchronous request
 
     NSError *error = nil;
