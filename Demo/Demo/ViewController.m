@@ -31,13 +31,13 @@
     _headersTextView.text = @"";
     _imageView.image = nil;
     
-    // declared as __block to avoid retain cycle since we are accessing the request in a block
-    __weak __block STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"https://raw.github.com/github/media/master/octocats/octocat.png"];
+    __block STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"https://raw.github.com/github/media/master/octocats/octocat.png"];
+    __weak STHTTPRequest *wr = r; // so that we can access the request from within the callback blocks but without creating a retain cycle
     
     r.completionBlock = ^(NSDictionary *headers, NSString *body) {
         
-        _imageView.image = [UIImage imageWithData:r.responseData];
-        _statusLabel.text = [NSString stringWithFormat:@"HTTP status %d", r.responseStatus];
+        _imageView.image = [UIImage imageWithData:wr.responseData];
+        _statusLabel.text = [NSString stringWithFormat:@"HTTP status %d", wr.responseStatus];
         _headersTextView.text = [headers description];
         
         _fetchButton.enabled = YES;
