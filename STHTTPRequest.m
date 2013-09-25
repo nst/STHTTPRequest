@@ -76,15 +76,16 @@ static NSMutableDictionary *sharedCredentialsStorage = nil;
 - (STHTTPRequest *)initWithURL:(NSURL *)theURL {
     
     if (self = [super init]) {
-        _url = theURL;
-        _responseData = [[NSMutableData alloc] init];
-        _requestHeaders = [NSMutableDictionary dictionary];
-        _postDataEncoding = NSUTF8StringEncoding;
-        _encodePOSTDictionary = YES;
-        _addCredentialsToURL = NO;
-        _timeoutSeconds = kSTHTTPRequestDefaultTimeout;
-        _filesToUpload = [NSMutableArray array];
-        _dataToUpload = [NSMutableArray array];
+        self.url = theURL;
+        self.responseData = [[NSMutableData alloc] init];
+        self.requestHeaders = [NSMutableDictionary dictionary];
+        self.postDataEncoding = NSUTF8StringEncoding;
+        self.encodePOSTDictionary = YES;
+        self.addCredentialsToURL = NO;
+        self.timeoutSeconds = kSTHTTPRequestDefaultTimeout;
+        self.filesToUpload = [NSMutableArray array];
+        self.dataToUpload = [NSMutableArray array];
+//        self.HTTPMethod = @"GET"; // default
     }
     
     return self;
@@ -287,6 +288,7 @@ static NSMutableDictionary *sharedCredentialsStorage = nil;
     }
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:theURL];
+    [request setHTTPMethod:_HTTPMethod];
     
     request.timeoutInterval = self.timeoutSeconds;
     
@@ -357,7 +359,7 @@ static NSMutableDictionary *sharedCredentialsStorage = nil;
         
         [body appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
         
-        [request setHTTPMethod:@"POST"];
+        if([request HTTPMethod] == nil) [request setHTTPMethod:@"POST"];
         [request setValue:[NSString stringWithFormat:@"%u", (unsigned int)[body length]] forHTTPHeaderField:@"Content-Length"];
         [request setHTTPBody:body];
         
@@ -389,9 +391,12 @@ static NSMutableDictionary *sharedCredentialsStorage = nil;
         
         NSData *data = [s dataUsingEncoding:_postDataEncoding allowLossyConversion:YES];
         
-        [request setHTTPMethod:@"POST"];
+        if([request HTTPMethod] == nil) [request setHTTPMethod:@"POST"];
+            
         [request setValue:[NSString stringWithFormat:@"%u", (unsigned int)[data length]] forHTTPHeaderField:@"Content-Length"];
         [request setHTTPBody:data];
+    } else {
+        if([request HTTPMethod] == nil) [request setHTTPMethod:@"GET"];        
     }
     
     [_requestHeaders enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
