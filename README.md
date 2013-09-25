@@ -54,7 +54,7 @@ Notes:
 
 ##### Adding a request header
 
-    [r addHeaderWithName:@"test" value:@"1234"];
+    [r setHeaderWithName:@"test" value:@"1234"];
 
 ##### Adding a request cookie
 
