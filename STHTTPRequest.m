@@ -172,18 +172,32 @@ static NSMutableDictionary *sharedCredentialsStorage = nil;
 }
 
 + (void)addCookie:(NSHTTPCookie *)cookie forURL:(NSURL *)url {
+
+    NSParameterAssert(cookie);
+    if(cookie == nil) return;
+
+    NSParameterAssert(url);
+    if(url == nil) return;
+
     NSArray *cookies = [NSArray arrayWithObject:cookie];
 	
     [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookies:cookies forURL:url mainDocumentURL:nil];
+
+#if DEBUG
+    NSHTTPCookie *readCookie = [[[NSHTTPCookieStorage sharedHTTPCookieStorage] cookiesForURL:url] lastObject];
+    NSAssert(readCookie, @"cannot read cookie for url %@", url);
+#endif
 }
 
 + (void)addCookieWithName:(NSString *)name value:(NSString *)value url:(NSURL *)url {
+
+    NSParameterAssert(url);
+    if(url == nil) return;
     
     NSMutableDictionary *cookieProperties = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                                              name, NSHTTPCookieName,
                                              value, NSHTTPCookieValue,
-                                             [url host], NSHTTPCookieDomain,
-                                             [url host], NSHTTPCookieOriginURL,
+                                             url, NSHTTPCookieOriginURL,
                                              @"FALSE", NSHTTPCookieDiscard,
                                              @"/", NSHTTPCookiePath,
                                              @"0", NSHTTPCookieVersion,
