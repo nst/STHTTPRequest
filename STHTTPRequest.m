@@ -53,6 +53,7 @@ static NSMutableDictionary *sharedCredentialsStorage = nil;
 @property (nonatomic, retain) NSError *error;
 @property (nonatomic, retain) NSMutableArray *filesToUpload; // STHTTPRequestFileUpload instances
 @property (nonatomic, retain) NSMutableArray *dataToUpload; // STHTTPRequestDataUpload instances
+@property (nonatomic, retain) NSString *responseString;
 @end
 
 @interface NSData (Base64)
