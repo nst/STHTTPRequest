@@ -79,7 +79,7 @@ static NSMutableDictionary *sharedCredentialsStorage = nil;
         self.url = theURL;
         self.responseData = [[NSMutableData alloc] init];
         self.requestHeaders = [NSMutableDictionary dictionary];
-        self.postDataEncoding = NSUTF8StringEncoding;
+        self.POSTDataEncoding = NSUTF8StringEncoding;
         self.encodePOSTDictionary = YES;
         self.addCredentialsToURL = NO;
         self.timeoutSeconds = kSTHTTPRequestDefaultTimeout;
@@ -310,8 +310,8 @@ static NSMutableDictionary *sharedCredentialsStorage = nil;
     if(_encodePOSTDictionary) {
         NSMutableDictionary *escapedPOSTDictionary = _POSTDictionary ? [NSMutableDictionary dictionary] : nil;
         [_POSTDictionary enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-            NSString *k = [key st_stringByAddingRFC3986PercentEscapesUsingEncoding:_postDataEncoding];
-            NSString *v = [[obj description] st_stringByAddingRFC3986PercentEscapesUsingEncoding:_postDataEncoding];
+            NSString *k = [key st_stringByAddingRFC3986PercentEscapesUsingEncoding:_POSTDataEncoding];
+            NSString *v = [[obj description] st_stringByAddingRFC3986PercentEscapesUsingEncoding:_POSTDataEncoding];
             [escapedPOSTDictionary setValue:v forKey:k];
         }];
         self.POSTDictionary = escapedPOSTDictionary;
@@ -377,11 +377,18 @@ static NSMutableDictionary *sharedCredentialsStorage = nil;
         [request setValue:[NSString stringWithFormat:@"%u", (unsigned int)[body length]] forHTTPHeaderField:@"Content-Length"];
         [request setHTTPBody:body];
         
-    } else if(_POSTDictionary != nil) { // may be empty (POST request without body)
+    } else if (_rawPOSTData) {
+        
+        if([request HTTPMethod] == nil) [request setHTTPMethod:@"POST"];
+
+        [request setValue:[NSString stringWithFormat:@"%u", (unsigned int)[_rawPOSTData length]] forHTTPHeaderField:@"Content-Length"];
+        [request setHTTPBody:_rawPOSTData];
+        
+    } else if (_POSTDictionary != nil) { // may be empty (POST request without body)
         
         if(_encodePOSTDictionary) {
             
-            CFStringEncoding cfStringEncoding = CFStringConvertNSStringEncodingToEncoding(_postDataEncoding);
+            CFStringEncoding cfStringEncoding = CFStringConvertNSStringEncodingToEncoding(_POSTDataEncoding);
             NSString *encodingName = (NSString *)CFStringConvertEncodingToIANACharSetName(cfStringEncoding);
             
             if(encodingName) {
@@ -403,7 +410,7 @@ static NSMutableDictionary *sharedCredentialsStorage = nil;
         
         NSString *s = [ma componentsJoinedByString:@"&"];
         
-        NSData *data = [s dataUsingEncoding:_postDataEncoding allowLossyConversion:YES];
+        NSData *data = [s dataUsingEncoding:_POSTDataEncoding allowLossyConversion:YES];
         
         if([request HTTPMethod] == nil) [request setHTTPMethod:@"POST"];
             

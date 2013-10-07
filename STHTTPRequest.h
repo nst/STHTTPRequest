@@ -29,8 +29,9 @@ typedef void (^errorBlock_t)(NSError *error);
 @property (copy) downloadProgressBlock_t downloadProgressBlock;
 @property (copy) completionBlock_t completionBlock;
 @property (copy) errorBlock_t errorBlock;
-@property (nonatomic) NSStringEncoding postDataEncoding;
+@property (nonatomic) NSStringEncoding POSTDataEncoding;
 @property (nonatomic, retain) NSDictionary *POSTDictionary; // keys and values are NSString objects
+@property (nonatomic, retain) NSData *rawPOSTData;
 @property (nonatomic, retain) NSMutableDictionary *requestHeaders;
 @property (nonatomic, readonly) NSInteger responseStatus;
 @property (nonatomic, retain, readonly) NSString *responseStringEncodingName;
