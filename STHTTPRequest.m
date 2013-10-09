@@ -86,7 +86,7 @@ static NSMutableDictionary *sharedCredentialsStorage = nil;
         self.timeoutSeconds = kSTHTTPRequestDefaultTimeout;
         self.filesToUpload = [NSMutableArray array];
         self.dataToUpload = [NSMutableArray array];
-//        self.HTTPMethod = @"GET"; // default
+        // self.HTTPMethod = @"GET"; // default
     }
     
     return self;
@@ -172,26 +172,21 @@ static NSMutableDictionary *sharedCredentialsStorage = nil;
     }
 }
 
-+ (void)addCookie:(NSHTTPCookie *)cookie forURL:(NSURL *)url {
-
++ (void)addCookie:(NSHTTPCookie *)cookie {
+    
     NSParameterAssert(cookie);
     if(cookie == nil) return;
-
-    NSParameterAssert(url);
-    if(url == nil) return;
-
-    NSArray *cookies = [NSArray arrayWithObject:cookie];
-	
-    [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookies:cookies forURL:url mainDocumentURL:nil];
-
+    
+    [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:cookie];
+    
 #if DEBUG
-    NSHTTPCookie *readCookie = [[[NSHTTPCookieStorage sharedHTTPCookieStorage] cookiesForURL:url] lastObject];
-    NSAssert(readCookie, @"cannot read cookie for url %@", url);
+    NSHTTPCookie *readCookie = [[[NSHTTPCookieStorage sharedHTTPCookieStorage] cookies] lastObject];
+    NSAssert(readCookie, @"cannot read any cookie after adding one");
 #endif
 }
 
 + (void)addCookieWithName:(NSString *)name value:(NSString *)value url:(NSURL *)url {
-
+    
     NSParameterAssert(url);
     if(url == nil) return;
     
@@ -207,7 +202,7 @@ static NSMutableDictionary *sharedCredentialsStorage = nil;
     
     NSHTTPCookie *cookie = [NSHTTPCookie cookieWithProperties:cookieProperties];
     
-    [[self class] addCookie:cookie forURL:url];
+    [[self class] addCookie:cookie];
 }
 
 - (NSArray *)requestCookies {
@@ -215,7 +210,7 @@ static NSMutableDictionary *sharedCredentialsStorage = nil;
 }
 
 - (void)addCookie:(NSHTTPCookie *)cookie {
-    [[self class] addCookie:cookie forURL:_url];
+    [[self class] addCookie:cookie];
 }
 
 - (void)addCookieWithName:(NSString *)name value:(NSString *)value {
@@ -381,7 +376,7 @@ static NSMutableDictionary *sharedCredentialsStorage = nil;
     } else if (_rawPOSTData) {
         
         if([request HTTPMethod] == nil) [request setHTTPMethod:@"POST"];
-
+        
         [request setValue:[NSString stringWithFormat:@"%u", (unsigned int)[_rawPOSTData length]] forHTTPHeaderField:@"Content-Length"];
         [request setHTTPBody:_rawPOSTData];
         
@@ -414,11 +409,11 @@ static NSMutableDictionary *sharedCredentialsStorage = nil;
         NSData *data = [s dataUsingEncoding:_POSTDataEncoding allowLossyConversion:YES];
         
         if([request HTTPMethod] == nil) [request setHTTPMethod:@"POST"];
-            
+        
         [request setValue:[NSString stringWithFormat:@"%u", (unsigned int)[data length]] forHTTPHeaderField:@"Content-Length"];
         [request setHTTPBody:data];
     } else {
-        if([request HTTPMethod] == nil) [request setHTTPMethod:@"GET"];        
+        if([request HTTPMethod] == nil) [request setHTTPMethod:@"GET"];
     }
     
     [_requestHeaders enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
