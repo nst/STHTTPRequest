@@ -53,6 +53,7 @@ static NSMutableDictionary *sharedCredentialsStorage = nil;
 @property (nonatomic, retain) NSError *error;
 @property (nonatomic, retain) NSMutableArray *filesToUpload; // STHTTPRequestFileUpload instances
 @property (nonatomic, retain) NSMutableArray *dataToUpload; // STHTTPRequestDataUpload instances
+@property (nonatomic, retain) NSURLRequest *request;
 @property (nonatomic, retain) NSString *responseString;
 @end
 
@@ -284,7 +285,7 @@ static NSMutableDictionary *sharedCredentialsStorage = nil;
     return data;
 }
 
-- (NSURLRequest *)requestByAddingCredentialsToURL:(BOOL)useCredentialsInURL {
+- (NSMutableURLRequest *)requestByAddingCredentialsToURL:(BOOL)useCredentialsInURL {
     
     NSURL *theURL = nil;
     
@@ -553,55 +554,61 @@ static NSMutableDictionary *sharedCredentialsStorage = nil;
     return [ma componentsJoinedByString:@" \\\n"];
 }
 
-- (void)logRequest:(NSURLRequest *)request {
+- (NSString *)debugDescription {
     
-    NSLog(@"--------------------------------------");
+    NSMutableString *ms = [NSMutableString string];
+    
+    [ms appendString:(@"--------------------------------------\n")];
     
     NSString *method = (self.POSTDictionary || [self.filesToUpload count] || [self.dataToUpload count]) ? @"POST" : @"GET";
     
-    NSLog(@"%@ %@", method, [request URL]);
+    [ms appendFormat:@"%@ %@\n", method, [_request URL]];
     
     NSMutableDictionary *headers = [[self requestHeaders] mutableCopy];
     
-    [headers addEntriesFromDictionary:[request allHTTPHeaderFields]];
+    [headers addEntriesFromDictionary:[_request allHTTPHeaderFields]];
     
-    if([headers count]) NSLog(@"HEADERS");
+    if([headers count]) [ms appendString:@"HEADERS\n"];
     
     [headers enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-        NSLog(@"\t %@ = %@", key, obj);
+        [ms appendFormat:@"\t %@ = %@\n", key, obj];
     }];
     
-    NSArray *cookies = [self requestCookies];
-    
-    if([cookies count]) NSLog(@"COOKIES");
-    
-    for(NSHTTPCookie *cookie in cookies) {
-        NSLog(@"\t %@ = %@", [cookie name], [cookie value]);
+    if(_ignoreCookieStorage == NO && [_request HTTPShouldHandleCookies]) {
+        
+        NSArray *cookies = [self requestCookies];
+        
+        if([cookies count]) [ms appendString:@"COOKIES\n"];
+        
+        for(NSHTTPCookie *cookie in cookies) {
+            [ms appendFormat:@"\t %@ = %@\n", [cookie name], [cookie value]];
+        }
     }
     
     NSArray *kvDictionaries = [[self class] dictionariesSortedByKey:_POSTDictionary];
     
-    if([kvDictionaries count]) NSLog(@"POST DATA");
+    if([kvDictionaries count]) [ms appendString:@"POST DATA\n"];
     
     for(NSDictionary *kv in kvDictionaries) {
         NSString *k = [[kv allKeys] lastObject];
         NSString *v = [[kv allValues] lastObject];
-        NSLog(@"\t %@ = %@", k, v);
+        [ms appendFormat:@"\t %@ = %@\n", k, v];
     }
     
     for(STHTTPRequestFileUpload *f in self.filesToUpload) {
-        NSLog(@"UPLOAD FILE");
-        NSLog(@"\t %@ = %@", f.parameterName, f.path);
+        [ms appendString:@"UPLOAD FILE\n"];
+        [ms appendFormat:@"\t %@ = %@\n", f.parameterName, f.path];
     }
     
     for(STHTTPRequestDataUpload *d in self.dataToUpload) {
-        NSLog(@"UPLOAD DATA");
-        NSLog(@"\t %@ = [%u bytes]", d.parameterName, (unsigned int)[d.data length]);
+        [ms appendString:@"UPLOAD DATA\n"];
+        [ms appendFormat:@"\t %@ = [%u bytes]\n", d.parameterName, (unsigned int)[d.data length]];
     }
     
-    NSLog(@"--");
-    NSLog(@"%@", [self curlDescription]);
-    NSLog(@"--------------------------------------");
+    [ms appendString:@"--\n"];
+    [ms appendFormat:@"%@\n", [self curlDescription]];
+    [ms appendString:@"--------------------------------------\n"];
+    return ms;
 }
 #endif
 
@@ -609,15 +616,19 @@ static NSMutableDictionary *sharedCredentialsStorage = nil;
 
 - (void)startAsynchronous {
     
-    NSURLRequest *request = [self requestByAddingCredentialsToURL:_addCredentialsToURL];
-    
-#if DEBUG
-    [self logRequest:request];
-#endif
+    NSMutableURLRequest *request = [self requestByAddingCredentialsToURL:_addCredentialsToURL];
     
     self.connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:NO];
     [_connection scheduleInRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
     [_connection start];
+    
+    self.request = [_connection currentRequest];
+    
+    self.requestHeaders = [[_request allHTTPHeaderFields] mutableCopy];
+    
+#if DEBUG
+    NSLog(@"%@", [self debugDescription]);
+#endif
     
     if(_connection == nil) {
         NSString *s = @"can't create connection";
