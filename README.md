@@ -79,3 +79,23 @@ Notes:
                                 NSInteger totalBytesExpectedToReceive) {
         // notify user of download progress
     }
+
+##### Log the requests
+
+To log human readable debug description, add launch argument `-STHTTPRequestShowDebugDescription 1`.
+
+    GET https://raw.github.com/github/media/master/octocats/octocat.png
+    HEADERS
+        Cookie = asd=sdf; xxx=yyy
+    COOKIES
+        asd = sdf
+        xxx = yyy
+
+To log curl description, add launch argument `-STHTTPRequestShowCurlDescription 1`.
+
+    $ curl -i \
+    -b "asd=sdf;xxx=yyy" \
+    -H "Cookie: asd=sdf; xxx=yyy,asd=sdf; xxx=yyy" \
+    "https://raw.github.com/github/media/master/octocats/octocat.png"
+
+(Curl is a command-line tool shipped with OS X that can craft and send HTTP requests.)
