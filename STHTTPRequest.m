@@ -195,12 +195,12 @@ static NSMutableArray *localCookiesStorage = nil;
     
     NSParameterAssert(cookie);
     if(cookie == nil) return;
-
+    
     if(_ignoreSharedCookiesStorage) {
         [[[self class] localCookiesStorage] addObject:cookie];
     } else {
         [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:cookie];
-
+        
 #if DEBUG
         NSHTTPCookie *readCookie = [[[NSHTTPCookieStorage sharedHTTPCookieStorage] cookies] lastObject];
         NSAssert(readCookie, @"cannot read any cookie after adding one");
@@ -235,7 +235,7 @@ static NSMutableArray *localCookiesStorage = nil;
             NSHTTPCookie *cookie = (NSHTTPCookie *)evaluatedObject;
             return [[cookie domain] isEqualToString:[_url host]];
         }]];
-                                           return filteredCookies;
+        return filteredCookies;
     } else {
         return [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookiesForURL:[_url absoluteURL]];
     }
@@ -666,23 +666,23 @@ static NSMutableArray *localCookiesStorage = nil;
     if(showDebugDescription) {
         [logString appendString:[self debugDescription]];
     }
-
+    
     if(showDebugDescription && showCurlDescription) {
         [logString appendString:@"\n"];
     }
-
+    
     if(showCurlDescription) {
         [logString appendString:[self curlDescription]];
     }
-
+    
     if(showDebugDescription || showCurlDescription) {
         [logString appendString:@"\n----------\n"];
     }
-         
+    
     if(logString) NSLog(@"%@", logString);
     
     /**/
-
+    
     if(_connection == nil) {
         NSString *s = @"can't create connection";
         NSDictionary *userInfo = [NSDictionary dictionaryWithObject:s forKey:NSLocalizedDescriptionKey];
