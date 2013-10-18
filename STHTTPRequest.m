@@ -565,9 +565,7 @@ static NSMutableArray *localCookiesStorage = nil;
     
     // -H "X-you-and-me: yes"                                       // extra headers
     
-    NSMutableDictionary *headers = [[self requestHeaders] mutableCopy];
-    
-    [headers addEntriesFromDictionary:[self.request allHTTPHeaderFields]];
+    NSDictionary *headers = [self.request allHTTPHeaderFields];
     
     NSMutableArray *headersStrings = [NSMutableArray array];
     [headers enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
@@ -594,9 +592,7 @@ static NSMutableArray *localCookiesStorage = nil;
     
     [ms appendFormat:@"%@ %@\n", method, [_request URL]];
     
-    NSMutableDictionary *headers = [[self requestHeaders] mutableCopy];
-    
-    [headers addEntriesFromDictionary:[_request allHTTPHeaderFields]];
+    NSDictionary *headers = [self.request allHTTPHeaderFields];
     
     if([headers count]) [ms appendString:@"HEADERS\n"];
     
