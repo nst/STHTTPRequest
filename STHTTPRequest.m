@@ -640,6 +640,8 @@ static NSMutableArray *localCookiesStorage = nil;
     
     NSMutableURLRequest *request = [self requestByAddingCredentialsToURL:_addCredentialsToURL];
     
+    [request setHTTPShouldHandleCookies:(_ignoreSharedCookiesStorage == NO)];
+    
     self.connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:NO];
     [_connection scheduleInRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
     [_connection start];
