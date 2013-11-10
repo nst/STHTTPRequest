@@ -21,6 +21,7 @@ extern NSUInteger const kSTHTTPRequestDefaultTimeout;
 typedef void (^uploadProgressBlock_t)(NSInteger bytesWritten, NSInteger totalBytesWritten, NSInteger totalBytesExpectedToWrite);
 typedef void (^downloadProgressBlock_t)(NSData *data, NSInteger totalBytesReceived, NSInteger totalBytesExpectedToReceive);
 typedef void (^completionBlock_t)(NSDictionary *headers, NSString *body);
+typedef void (^completionDataBlock_t)(NSDictionary *headers, NSData *body);
 typedef void (^errorBlock_t)(NSError *error);
 
 @interface STHTTPRequest : NSObject <NSURLConnectionDelegate>
@@ -29,6 +30,7 @@ typedef void (^errorBlock_t)(NSError *error);
 @property (copy) downloadProgressBlock_t downloadProgressBlock;
 @property (copy) completionBlock_t completionBlock;
 @property (copy) errorBlock_t errorBlock;
+@property (copy) completionDataBlock_t completionDataBlock;
 
 // request
 @property (nonatomic, retain) NSString *HTTPMethod; // default: GET, or POST if POSTDictionary or files to upload

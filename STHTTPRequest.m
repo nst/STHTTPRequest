@@ -815,7 +815,15 @@ static NSMutableArray *localCookiesStorage = nil;
         return;
     }
     
-    _completionBlock(_responseHeaders, [self responseString]);
+    if(_completionDataBlock)
+    {
+        _completionDataBlock(_responseHeaders,_responseData);
+    }
+    
+    if(_completionBlock)
+    {
+        _completionBlock(_responseHeaders, [self responseString]);
+    }
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)e {
