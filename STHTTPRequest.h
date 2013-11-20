@@ -64,10 +64,14 @@ typedef void (^errorBlock_t)(NSError *error);
 - (void)cancel;
 
 // Cookies
++ (void)addCookieToSharedCookiesStorage:(NSHTTPCookie *)cookie;
++ (void)addCookieToSharedCookiesStorageWithName:(NSString *)name value:(NSString *)value url:(NSURL *)url;
 - (void)addCookieWithName:(NSString *)name value:(NSString *)value url:(NSURL *)url;
 - (void)addCookieWithName:(NSString *)name value:(NSString *)value;
 - (NSArray *)requestCookies;
 - (NSArray *)sessionCookies;
++ (NSArray *)sessionCookiesInSharedCookiesStorage;
++ (void)deleteAllCookiesFromSharedCookieStorage;
 - (void)deleteSessionCookies;
 
 // Credentials
@@ -88,7 +92,7 @@ typedef void (^errorBlock_t)(NSError *error);
 - (void)addDataToUpload:(NSData *)data parameterName:(NSString *)param mimeType:(NSString *)mimeType fileName:(NSString *)fileName;
 
 // Session
-- (void)clearSession; // delete all credentials and cookies
++ (void)clearSession; // delete all credentials and cookies
 
 @end
 

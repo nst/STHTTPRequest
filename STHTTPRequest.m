@@ -91,8 +91,8 @@ static NSMutableArray *localCookiesStorage = nil;
     return self;
 }
 
-- (void)clearSession {
-    [self deleteAllCookies];
++ (void)clearSession {
+    [[self class] deleteAllCookiesFromSharedCookieStorage];
     [[self class] deleteAllCredentials];
 }
 
@@ -149,6 +149,17 @@ static NSMutableArray *localCookiesStorage = nil;
     return localCookiesStorage;
 }
 
++ (NSArray *)sessionCookiesInSharedCookiesStorage {
+    NSArray *allCookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookies];
+    
+    NSArray *sessionCookies = [allCookies filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
+        NSHTTPCookie *cookie = (NSHTTPCookie *)evaluatedObject;
+        return [cookie isSessionOnly];
+    }]];
+    
+    return sessionCookies;
+}
+
 - (NSArray *)sessionCookies {
     
     NSArray *allCookies = nil;
@@ -178,16 +189,29 @@ static NSMutableArray *localCookiesStorage = nil;
     }
 }
 
++ (void)deleteAllCookiesFromSharedCookieStorage {
+    NSHTTPCookieStorage *sharedCookieStorage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
+    NSArray *cookies = [sharedCookieStorage cookies];
+    for (NSHTTPCookie *cookie in cookies) {
+        [sharedCookieStorage deleteCookie:cookie];
+    }
+}
+
 - (void)deleteAllCookies {
     if(_ignoreSharedCookiesStorage) {
         [[[self class] localCookiesStorage] removeAllObjects];
     } else {
-        NSHTTPCookieStorage *sharedCookieStorage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
-        NSArray *cookies = [sharedCookieStorage cookies];
-        for (NSHTTPCookie *cookie in cookies) {
-            [sharedCookieStorage deleteCookie:cookie];
-        }
+        [[self class] deleteAllCookiesFromSharedCookieStorage];
     }
+}
+
++ (void)addCookieToSharedCookiesStorage:(NSHTTPCookie *)cookie {
+    [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:cookie];
+    
+#if DEBUG
+    NSHTTPCookie *readCookie = [[[NSHTTPCookieStorage sharedHTTPCookieStorage] cookies] lastObject];
+    NSAssert(readCookie, @"cannot read any cookie after adding one");
+#endif
 }
 
 - (void)addCookie:(NSHTTPCookie *)cookie {
@@ -198,19 +222,19 @@ static NSMutableArray *localCookiesStorage = nil;
     if(_ignoreSharedCookiesStorage) {
         [[[self class] localCookiesStorage] addObject:cookie];
     } else {
-        [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:cookie];
-        
-#if DEBUG
-        NSHTTPCookie *readCookie = [[[NSHTTPCookieStorage sharedHTTPCookieStorage] cookies] lastObject];
-        NSAssert(readCookie, @"cannot read any cookie after adding one");
-#endif
+        [[self class] addCookieToSharedCookiesStorage:cookie];
     }
 }
 
-- (void)addCookieWithName:(NSString *)name value:(NSString *)value url:(NSURL *)url {
-    
++ (void)addCookieToSharedCookiesStorageWithName:(NSString *)name value:(NSString *)value url:(NSURL *)url {
+    NSHTTPCookie *cookie = [[self class] createCookieWithName:name value:value url:url];
+
+    [self addCookieToSharedCookiesStorage:cookie];
+}
+
++ (NSHTTPCookie *)createCookieWithName:(NSString *)name value:(NSString *)value url:(NSURL *)url {
     NSParameterAssert(url);
-    if(url == nil) return;
+    if(url == nil) return nil;
     
     NSMutableDictionary *cookieProperties = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                                              name, NSHTTPCookieName,
@@ -223,6 +247,12 @@ static NSMutableArray *localCookiesStorage = nil;
                                              nil];
     
     NSHTTPCookie *cookie = [NSHTTPCookie cookieWithProperties:cookieProperties];
+    
+    return cookie;
+}
+
+- (void)addCookieWithName:(NSString *)name value:(NSString *)value url:(NSURL *)url {
+    NSHTTPCookie *cookie = [[self class] createCookieWithName:name value:value url:url];
     
     [self addCookie:cookie];
 }
