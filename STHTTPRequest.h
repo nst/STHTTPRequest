@@ -43,6 +43,7 @@ typedef void (^errorBlock_t)(NSError *error);
 @property (nonatomic) BOOL encodePOSTDictionary; // default YES
 @property (nonatomic, retain, readonly) NSURL *url;
 @property (nonatomic) BOOL ignoreSharedCookiesStorage;
+@property (nonatomic) BOOL preventRedirections;
 
 // response
 @property (nonatomic) NSStringEncoding forcedResponseEncoding;

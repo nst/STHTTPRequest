@@ -766,6 +766,13 @@ static NSMutableArray *localCookiesStorage = nil;
 
 #pragma mark NSURLConnectionDelegate
 
+- (NSURLRequest *)connection:(NSURLConnection *)connection willSendRequest:(NSURLRequest *)request redirectResponse:(NSURLResponse *)redirectResponse {
+
+    if(_preventRedirections && redirectResponse) return nil;
+    
+    return request;
+}
+
 -(BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)protectionSpace
 {
     //return YES to say that we have the necessary credentials to access the requested resource
