@@ -228,7 +228,7 @@ static NSMutableArray *localCookiesStorage = nil;
 
 + (void)addCookieToSharedCookiesStorageWithName:(NSString *)name value:(NSString *)value url:(NSURL *)url {
     NSHTTPCookie *cookie = [[self class] createCookieWithName:name value:value url:url];
-
+    
     [self addCookieToSharedCookiesStorage:cookie];
 }
 
@@ -519,6 +519,10 @@ static NSMutableArray *localCookiesStorage = nil;
 
 #pragma mark Response
 
+- (NSString *)responseString {
+    return [self stringWithData:_responseData encodingName:_responseStringEncodingName];
+}
+
 - (NSString *)stringWithData:(NSData *)data encodingName:(NSString *)encodingName {
     if(data == nil) return nil;
     
@@ -592,7 +596,7 @@ static NSMutableArray *localCookiesStorage = nil;
     
     NSMutableDictionary *headers = [[_request allHTTPHeaderFields] mutableCopy];
     [headers removeObjectForKey:@"Cookie"];
-
+    
     NSMutableArray *headersStrings = [NSMutableArray array];
     [headers enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
         NSString *s = [NSString stringWithFormat:@"-H \"%@: %@\"", key, obj];
@@ -673,7 +677,7 @@ static NSMutableArray *localCookiesStorage = nil;
     self.request = [_connection currentRequest];
     
     self.requestHeaders = [[_request allHTTPHeaderFields] mutableCopy];
-        
+    
     /**/
     
     BOOL showDebugDescription = [[NSUserDefaults standardUserDefaults] boolForKey:@"STHTTPRequestShowDebugDescription"];
@@ -767,7 +771,7 @@ static NSMutableArray *localCookiesStorage = nil;
 #pragma mark NSURLConnectionDelegate
 
 - (NSURLRequest *)connection:(NSURLConnection *)connection willSendRequest:(NSURLRequest *)request redirectResponse:(NSURLResponse *)redirectResponse {
-
+    
     if(_preventRedirections && redirectResponse) return nil;
     
     return request;
@@ -844,8 +848,6 @@ static NSMutableArray *localCookiesStorage = nil;
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
     
-    self.responseString = [self stringWithData:_responseData encodingName:_responseStringEncodingName];
-    
     if(_responseStatus >= 400) {
         self.error = [NSError errorWithDomain:NSStringFromClass([self class]) code:_responseStatus userInfo:nil];
         _errorBlock(_error);
@@ -859,7 +861,8 @@ static NSMutableArray *localCookiesStorage = nil;
     
     if(_completionBlock)
     {
-        _completionBlock(_responseHeaders, [self responseString]);
+        NSString *responseString = [self stringWithData:_responseData encodingName:_responseStringEncodingName];
+        _completionBlock(_responseHeaders, responseString);
     }
 }
 
