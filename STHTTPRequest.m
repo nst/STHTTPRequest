@@ -520,7 +520,10 @@ static NSMutableArray *localCookiesStorage = nil;
 #pragma mark Response
 
 - (NSString *)responseString {
-    return [self stringWithData:_responseData encodingName:_responseStringEncodingName];
+    if(_responseString == nil) {
+        self.responseString = [self stringWithData:_responseData encodingName:_responseStringEncodingName];
+    }
+    return _responseString;
 }
 
 - (NSString *)stringWithData:(NSData *)data encodingName:(NSString *)encodingName {
