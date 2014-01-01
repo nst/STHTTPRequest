@@ -451,7 +451,7 @@ static NSMutableArray *localCookiesStorage = nil;
             NSString *encodingName = (NSString *)CFStringConvertEncodingToIANACharSetName(cfStringEncoding);
             
             if(encodingName) {
-                NSString *contentTypeValue = [NSString stringWithFormat:@"application/x-www-form-urlencoded ; charset=%@", encodingName];
+                NSString *contentTypeValue = [NSString stringWithFormat:@"application/x-www-form-urlencoded; charset=%@", encodingName];
                 [self setHeaderWithName:@"Content-Type" value:contentTypeValue];
             }
         }
