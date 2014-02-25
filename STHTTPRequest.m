@@ -793,7 +793,6 @@ static NSMutableArray *localCookiesStorage = nil;
             [[challenge sender] useCredential:credential forAuthenticationChallenge:challenge];
         } else {
             [[[self class] sharedCredentialsStorage] removeObjectForKey:[_url host]];
-            [connection cancel];
             [[challenge sender] continueWithoutCredentialForAuthenticationChallenge:challenge];
         }
     } else if ([authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust]) {
