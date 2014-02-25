@@ -6,7 +6,7 @@ _A NSURLConnection wrapper for humans_
 
 -   700 lines of Objective-C you can understand
 -   runs on iOS 5+ and Mac OS X 10.7+
--   drag and drop .h and .m in your project, add Security.framework
+-   just drag and drop .h and .m in your project
 -   new BSD license
 
 ##### ... yet powerful

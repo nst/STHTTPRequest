@@ -28,7 +28,6 @@
 		03191F1B17BF752E0001C06D /* STHTTPRequestTestResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 03191F1717BF752E0001C06D /* STHTTPRequestTestResponse.m */; };
 		03191F1C17BF752E0001C06D /* STHTTPRequestTestResponseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 03191F1917BF752E0001C06D /* STHTTPRequestTestResponseQueue.m */; };
 		03191F2217BF75DC0001C06D /* STHTTPRequestTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 03191F2117BF75DC0001C06D /* STHTTPRequestTests.m */; };
-		036F2BFB18BB58B900E1FD48 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 036F2BFA18BB58B900E1FD48 /* Security.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,7 +72,6 @@
 		03191F2017BF75DC0001C06D /* STHTTPRequestTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STHTTPRequestTests.h; sourceTree = "<group>"; };
 		03191F2117BF75DC0001C06D /* STHTTPRequestTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STHTTPRequestTests.m; sourceTree = "<group>"; };
 		03606B3F17BF796B00105D85 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = text; name = README.md; path = ../README.md; sourceTree = "<group>"; };
-		036F2BFA18BB58B900E1FD48 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,7 +79,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				036F2BFB18BB58B900E1FD48 /* Security.framework in Frameworks */,
 				03191ED517BF75060001C06D /* UIKit.framework in Frameworks */,
 				03191ED717BF75060001C06D /* Foundation.framework in Frameworks */,
 				03191ED917BF75060001C06D /* CoreGraphics.framework in Frameworks */,
@@ -126,7 +123,6 @@
 		03191ED317BF75060001C06D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				036F2BFA18BB58B900E1FD48 /* Security.framework */,
 				03191ED417BF75060001C06D /* UIKit.framework */,
 				03191ED617BF75060001C06D /* Foundation.framework */,
 				03191ED817BF75060001C06D /* CoreGraphics.framework */,
