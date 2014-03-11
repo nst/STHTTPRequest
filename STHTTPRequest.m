@@ -860,15 +860,16 @@ static NSMutableArray *localCookiesStorage = nil;
 @implementation NSError (STHTTPRequest)
 
 - (BOOL)st_isAuthenticationError {
-    if([[self domain] isEqualToString:NSURLErrorDomain] == NO) return NO;
     
-    return ([self code] == kCFURLErrorUserCancelledAuthentication || [self code] == kCFURLErrorUserAuthenticationRequired);
+    if ([[self domain] isEqualToString:@"STHTTPRequest"] && ([self code] == 401)) return YES;
+    
+    if ([[self domain] isEqualToString:NSURLErrorDomain] && ([self code] == kCFURLErrorUserCancelledAuthentication || [self code] == kCFURLErrorUserAuthenticationRequired)) return YES;
+    
+    return NO;
 }
 
 - (BOOL)st_isCancellationError {
-    if([[self domain] isEqualToString:@"STHTTPRequest"] == NO) return NO;
-    
-    return ([self code] == kSTHTTPRequestCancellationError);
+    return ([[self domain] isEqualToString:@"STHTTPRequest"] && [self code] == kSTHTTPRequestCancellationError);
 }
 
 @end
