@@ -37,7 +37,7 @@
     r.completionBlock = ^(NSDictionary *headers, NSString *body) {
         
         _imageView.image = [UIImage imageWithData:wr.responseData];
-        _statusLabel.text = [NSString stringWithFormat:@"HTTP status %d", wr.responseStatus];
+        _statusLabel.text = [NSString stringWithFormat:@"HTTP status %@", @(wr.responseStatus)];
         _headersTextView.text = [headers description];
         
         _fetchButton.enabled = YES;
