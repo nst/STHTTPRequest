@@ -69,4 +69,25 @@
     STAssertEqualObjects(r.responseString, @"OK", [NSString stringWithFormat:@"bad response: %@", r.responseString]);
 }
 
+- (void)testStreaming {
+    
+    STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"http://www.google.com"];
+    
+    r.downloadProgressBlock = ^(NSData *data, NSInteger totalBytesReceived, NSInteger totalBytesExpectedToReceive) {
+        NSLog(@"-- %@", data);
+    };
+    
+    r.errorBlock = ^(NSError *error) {
+        // use error
+    };
+    
+    [r startAsynchronous]; // will actually get executed sychronously for tests
+
+    /**/
+    
+    [r unitTests_addDownloadProgressUTF8String:@"asd"];
+    
+    STAssertTrue([r.responseData length] == 3, @"");
+}
+
 @end
