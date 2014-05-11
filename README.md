@@ -2,6 +2,8 @@
 
 _A NSURLConnection wrapper for humans_
 
+> "It took me 15 minutes to do with STHTTPRequest what I couldn’t do in 3 hours with AFNetworking." [@sburlot](https://twitter.com/sburlot/status/431816832144900096)
+
 ##### Simple...
 
 -   700 lines of Objective-C you can understand
@@ -21,13 +23,9 @@ _A NSURLConnection wrapper for humans_
 
 ##### Maturity
 
-STHTTPRequest is used in banking applications available on the App Store and used by 100'000 regular users.
+STHTTPRequest is used in banking applications available on the App Store and used by 100'000+ regular users.
 
 STHTTPRequest is also used in the [STTwitter library](https://github.com/nst/STTwitter), the main Objective-C library to access Twitter API.
-
-##### Testimonials
-
-> "It took me 15 minutes to do with STHTTPRequest what I couldn’t do in 3 hours with AFNetworking." [@sburlot](https://twitter.com/sburlot/status/431816832144900096)
 
 ##### Typical usage
 
