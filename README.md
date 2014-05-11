@@ -127,6 +127,10 @@ To log curl description, add launch argument `-STHTTPRequestShowCurlDescription 
 
 (Curl is a command-line tool shipped with OS X that can craft and send HTTP requests.)
 
-### BSD 3-Clause License
+##### Support
+
+If you have any question, [open an issue](https://github.com/nst/STHTTPRequest/issues/new) on GitHub or use the [STHTTPRequest tag](http://stackoverflow.com/questions/tagged/sthttprequest) on StackOverflow.
+
+##### BSD 3-Clause License
 
 See [LICENCE.txt](LICENCE.txt).
