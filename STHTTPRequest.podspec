@@ -3,9 +3,11 @@ Pod::Spec.new do |s|
   s.version       = "1.0.0"
   s.summary       = "A NSURLConnection wrapper for humans"
   s.homepage      = "https://github.com/nst/STHTTPRequest"
-  s.license       = { :type => 'BSD', :file => 'LICENSE' }
-  s.author        = { "nst" => "XXX@XXX.XXX" }
+  s.license       = { :type => 'New BSD', :file => 'LICENSE.txt' }
+  s.author        = { 'Nicolas Seriot' }
   s.source        = { :git => "https://github.com/nst/STHTTPRequest.git", :tag => "1.0.0" }
   s.source_files  = 'STHTTPRequest.{h,m}'
   s.requires_arc  = true
+  s.ios.deployment_target = '5.0'
+  s.osx.deployment_target = '10.7'
 end
