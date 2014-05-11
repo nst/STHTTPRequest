@@ -7,6 +7,7 @@ _A NSURLConnection wrapper for humans_
 -   700 lines of Objective-C you can understand
 -   runs on iOS 5+ and Mac OS X 10.7+
 -   just drag and drop .h and .m in your project
+-   pod 'STHTTPRequest' in CocoaPods
 -   new BSD license
 
 ##### ... yet powerful
@@ -16,25 +17,33 @@ _A NSURLConnection wrapper for humans_
 -   easy to get response status, headers and encoding
 -   file upload with progress block
 -   fast and simple HTTP authentication
+-   log requests in curl format
 
-##### Usable in unit tests
+##### Maturity
 
-You can fill a queue with fake responses to be consumed by requests started from unit tests.
+STHTTPRequest is used in banking applications available on the App Store and used by 100'000 regular users.
+
+STHTTPRequest is also used in the [STTwitter library](https://github.com/nst/STTwitter), the main Objective-C library to access Twitter API.
+
+##### Testimonials
+
+> "It took me 15 minutes to do with STHTTPRequest what I couldn’t do in 3 hours with AFNetworking." [@sburlot](https://twitter.com/sburlot/status/431816832144900096)
 
 ##### Typical usage
 
-    STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"http://google.com"];
-        
-    r.completionBlock = ^(NSDictionary *headers, NSString *body) {
-        // ...
-    };
-    
-    r.errorBlock = ^(NSError *error) {
-        // ...
-    };
-    
-    [r startAsynchronous];
+```Objective-C
+STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"http://google.com"];
 
+r.completionBlock = ^(NSDictionary *headers, NSString *body) {
+    // ...
+};
+
+r.errorBlock = ^(NSError *error) {
+    // ...
+};
+
+[r startAsynchronous];
+```
 Notes:
 
 - STHTTPRequest must be used from the main thread
@@ -47,38 +56,56 @@ Notes:
 
 ##### Getting HTTP data and metadata
 
-    NSInteger     status   = r.responseStatus;
-    NSDictionary *headers  = r.responseHeaders;
-    NSString     *encoding = r.responseStringEncodingName;
-    NSData       *data     = r.responseData;
+```Objective-C
+NSInteger     status   = r.responseStatus;
+NSDictionary *headers  = r.responseHeaders;
+NSString     *encoding = r.responseStringEncodingName;
+NSData       *data     = r.responseData;
+```
+
+##### Usable in unit tests
+
+You can fill a queue with fake responses to be consumed by requests started from unit tests.
 
 ##### Adding a request header
 
-    [r setHeaderWithName:@"test" value:@"1234"];
+```Objective-C
+[r setHeaderWithName:@"test" value:@"1234"];
+```
 
 ##### Adding a request cookie
 
-    [r addCookieWithName:@"test" value:@"1234"];
+```Objective-C
+[r addCookieWithName:@"test" value:@"1234"];
+```
 
 ##### Setting a POST dictionary
-    
-    r.POSTDictionary = [NSDictionary dictionaryWithObject:@"1234" forKey:@"test"];
+
+```Objective-C
+r.POSTDictionary = [NSDictionary dictionaryWithObject:@"1234" forKey:@"test"];
+```
 
 ##### Setting credentials
 
-    [r setUsername:@"test" password:@"1234"];
+```Objective-C
+[r setUsername:@"test" password:@"1234"];
+```
 
 ##### Uploading a file
 
-    [r setFileToUpload:@"/tmp/photo.jpg" parameterName:@"photo"];
-    
+```Objective-C
+[r setFileToUpload:@"/tmp/photo.jpg" parameterName:@"photo"];
+```
+
 ##### Setting a download progress block
 
-    r.downloadProgressBlock = ^(NSData *dataJustReceived,
-                                NSInteger totalBytesReceived,
-                                NSInteger totalBytesExpectedToReceive) {
-        // notify user of download progress
-    }
+```Objective-C
+r.downloadProgressBlock = ^(NSData *dataJustReceived,
+                            NSInteger totalBytesReceived,
+                            NSInteger totalBytesExpectedToReceive) {
+    // notify user of download progress
+}
+```
 
 ##### Log the requests
 
@@ -99,3 +126,7 @@ To log curl description, add launch argument `-STHTTPRequestShowCurlDescription 
     "https://raw.github.com/github/media/master/octocats/octocat.png"
 
 (Curl is a command-line tool shipped with OS X that can craft and send HTTP requests.)
+
+### BSD 3-Clause License
+
+See [LICENCE.txt](LICENCE.txt).

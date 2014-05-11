@@ -4,7 +4,7 @@ Pod::Spec.new do |s|
   s.summary       = "A NSURLConnection wrapper for humans"
   s.homepage      = "https://github.com/nst/STHTTPRequest"
   s.license       = { :type => 'New BSD', :file => 'LICENSE.txt' }
-  s.author        = { 'Nicolas Seriot' }
+  s.authors       = 'Nicolas Seriot', 'Alistair Galbraith', 'Cyril Chandelier', 'Doug Ayers', 'Matthias Schmidt', 'Oktawian Chojnacki', 'Stephan Burlot', 'Zach Boyd'
   s.source        = { :git => "https://github.com/nst/STHTTPRequest.git", :tag => "1.0.0" }
   s.source_files  = 'STHTTPRequest.{h,m}'
   s.requires_arc  = true
