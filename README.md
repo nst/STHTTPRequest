@@ -77,13 +77,19 @@ You can fill a queue with fake responses to be consumed by requests started from
 [r addCookieWithName:@"test" value:@"1234"];
 ```
 
-##### POST a dictionary
+##### Setting credentials
+
+```Objective-C
+[r setUsername:@"test" password:@"1234"];
+```
+
+##### POSTing a dictionary
 
 ```Objective-C
 r.POSTDictionary = @{ @"paperid":@"6", @"q77":"1", @"q80":@"hello" };
 ```
 
-##### POST raw data
+##### POSTing raw data
 
 ```Objective-C
 request.rawPOSTData = myData;
@@ -91,16 +97,17 @@ request.rawPOSTData = myData;
 
 [full example here](http://stackoverflow.com/questions/19176289/sthttprequest-how-to-postdata-not-key-value/19226132#19226132)
 
-##### Setting credentials
-
-```Objective-C
-[r setUsername:@"test" password:@"1234"];
-```
-
 ##### Uploading a file
 
 ```Objective-C
 [r setFileToUpload:@"/tmp/photo.jpg" parameterName:@"photo"];
+```
+
+#### Uploading multiple images
+
+```Objective-C
+[request addDataToUpload:data1 parameterName:@"p1" mimeType:@"image/jpeg" fileName:@"name1"];
+[request addDataToUpload:data2 parameterName:@"p2" mimeType:@"image/jpeg" fileName:@"name2"];
 ```
 
 ##### Setting a download progress block
@@ -131,7 +138,7 @@ To log curl description, add launch argument `-STHTTPRequestShowCurlDescription 
     -H "Cookie: asd=sdf; xxx=yyy,asd=sdf; xxx=yyy" \
     "https://raw.github.com/github/media/master/octocats/octocat.png"
 
-(Curl is a command-line tool shipped with OS X that can craft and send HTTP requests.)
+(Curl is a command-line tool shipped with OS X that can craft HTTP requests.)
 
 ##### Support
 
