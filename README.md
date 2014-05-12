@@ -89,6 +89,8 @@ r.POSTDictionary = @{ @"paperid":@"6", @"q77":"1", @"q80":@"hello" };
 request.rawPOSTData = myData;
 ```
 
+[full example here](http://stackoverflow.com/questions/19176289/sthttprequest-how-to-postdata-not-key-value/19226132#19226132)
+
 ##### Setting credentials
 
 ```Objective-C
