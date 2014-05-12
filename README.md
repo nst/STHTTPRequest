@@ -77,10 +77,16 @@ You can fill a queue with fake responses to be consumed by requests started from
 [r addCookieWithName:@"test" value:@"1234"];
 ```
 
-##### Setting a POST dictionary
+##### POST a dictionary
 
 ```Objective-C
-r.POSTDictionary = [NSDictionary dictionaryWithObject:@"1234" forKey:@"test"];
+r.POSTDictionary = @{ @"paperid":@"6", @"q77":"1", @"q80":@"hello" };
+```
+
+##### POST raw data
+
+```Objective-C
+request.rawPOSTData = myData;
 ```
 
 ##### Setting credentials
