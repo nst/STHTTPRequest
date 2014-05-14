@@ -108,6 +108,12 @@ request.rawPOSTData = myData;
 [request addDataToUpload:data2 parameterName:@"p2" mimeType:@"image/jpeg" fileName:@"name2"];
 ```
 
+##### Getting headers only
+
+```Objective-C
+r.HTTPMethod = @"HEAD";
+```
+
 ##### Setting a download progress block
 
 ```Objective-C
