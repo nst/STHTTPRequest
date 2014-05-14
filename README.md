@@ -23,7 +23,7 @@ _A NSURLConnection wrapper for humans_
 
 ##### Maturity
 
-STHTTPRequest is used in banking applications available on the App Store and used by 100'000+ regular users.
+STHTTPRequest is used in applications available on the App Store and used by 100'000+ regular users.
 
 STHTTPRequest is also used in the [STTwitter library](https://github.com/nst/STTwitter), the main Objective-C library to access Twitter API.
 
