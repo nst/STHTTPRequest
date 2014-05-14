@@ -18,7 +18,7 @@ _A NSURLConnection wrapper for humans_
 -   easy to set request headers, cookies and POST data
 -   easy to get response status, headers and encoding
 -   file upload with progress block
--   can use streaming thank to download progress block
+-   can use streaming with the download progress block
 -   fast and simple HTTP authentication
 -   log requests in curl format
 
@@ -51,8 +51,10 @@ Notes:
 
 ##### Start a synchronous request
 
-    NSError *error = nil;
-    NSString *body = [r startSynchronousWithError:&error];
+```Objective-C
+NSError *error = nil;
+NSString *body = [r startSynchronousWithError:&error];
+```
 
 ##### Get HTTP data and metadata
 
