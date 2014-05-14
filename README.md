@@ -49,12 +49,12 @@ Notes:
 - STHTTPRequest must be used from the main thread
 - all blocks are guaranteed to be called on main thread
 
-##### Starting a synchronous request
+##### Start a synchronous request
 
     NSError *error = nil;
     NSString *body = [r startSynchronousWithError:&error];
 
-##### Getting HTTP data and metadata
+##### Get HTTP data and metadata
 
 ```Objective-C
 NSInteger     status   = r.responseStatus;
@@ -63,31 +63,31 @@ NSString     *encoding = r.responseStringEncodingName;
 NSData       *data     = r.responseData;
 ```
 
-##### Adding a request header
+##### Add a request header
 
 ```Objective-C
 [r setHeaderWithName:@"test" value:@"1234"];
 ```
 
-##### Adding a request cookie
+##### Add a request cookie
 
 ```Objective-C
 [r addCookieWithName:@"test" value:@"1234"];
 ```
 
-##### Setting credentials
+##### Set credentials
 
 ```Objective-C
 [r setUsername:@"test" password:@"1234"];
 ```
 
-##### POSTing a dictionary
+##### POST a dictionary
 
 ```Objective-C
 r.POSTDictionary = @{ @"paperid":@"6", @"q77":"1", @"q80":@"hello" };
 ```
 
-##### POSTing raw data
+##### POST raw data
 
 ```Objective-C
 request.rawPOSTData = myData;
@@ -95,38 +95,49 @@ request.rawPOSTData = myData;
 
 [full example here](http://stackoverflow.com/questions/19176289/sthttprequest-how-to-postdata-not-key-value/19226132#19226132)
 
-##### Uploading a file
+##### Upload a file
 
 ```Objective-C
 [r addFileToUpload:@"/tmp/photo.jpg" parameterName:@"photo"];
 ```
 
-##### Uploading multiple images
+##### Upload multiple images
 
 ```Objective-C
 [request addDataToUpload:data1 parameterName:@"p1" mimeType:@"image/jpeg" fileName:@"name1"];
 [request addDataToUpload:data2 parameterName:@"p2" mimeType:@"image/jpeg" fileName:@"name2"];
 ```
 
-##### Getting headers only
+##### Upload data with a parameter name
+
+```Objective-C
+NSString *path = [[NSBundle mainBundle] pathForResource:@"test" ofType:@"jpg"];
+NSData *data = [NSData dataWithContentsOfFile:path];
+[r addDataToUpload:data parameterName:@"image"];
+```
+
+[full example here](http://stackoverflow.com/questions/23605292/http-post-request-to-send-an-image/23631175#23631175)
+
+##### Get headers only
 
 ```Objective-C
 r.HTTPMethod = @"HEAD";
 ```
 
-##### Setting a download progress block
+##### Set a download progress block
 
 ```Objective-C
 r.downloadProgressBlock = ^(NSData *dataJustReceived,
                             NSInteger totalBytesReceived,
                             NSInteger totalBytesExpectedToReceive) {
     // notify user of download progress
+    // use the stream
 }
 ```
 
 ##### Usable in unit tests
 
-You can fill a queue with fake responses to be consumed by requests started from unit tests.
+You can [fill a queue](https://github.com/nst/STHTTPRequest/blob/master/Demo%20Project/Unit%20Tests/STHTTPRequestTests.m#L38-L70) with fake responses to be consumed by requests started from unit tests.
 
 ##### Log the requests
 
