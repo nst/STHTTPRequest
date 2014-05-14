@@ -100,7 +100,7 @@ request.rawPOSTData = myData;
 ##### Uploading a file
 
 ```Objective-C
-[r setFileToUpload:@"/tmp/photo.jpg" parameterName:@"photo"];
+[r addFileToUpload:@"/tmp/photo.jpg" parameterName:@"photo"];
 ```
 
 ##### Uploading multiple images
