@@ -18,12 +18,13 @@ _A NSURLConnection wrapper for humans_
 -   easy to set request headers, cookies and POST data
 -   easy to get response status, headers and encoding
 -   file upload with progress block
+-   can use streaming thank to download progress block
 -   fast and simple HTTP authentication
 -   log requests in curl format
 
 ##### Maturity
 
-STHTTPRequest is used in applications available on the App Store and used by 100'000+ regular users.
+STHTTPRequest is used in many applications available on the App Store and used by 100'000+ regular users.
 
 STHTTPRequest is also used in the [STTwitter library](https://github.com/nst/STTwitter), the main Objective-C library to access Twitter API.
 
@@ -42,10 +43,11 @@ r.errorBlock = ^(NSError *error) {
 
 [r startAsynchronous];
 ```
+
 Notes:
 
 - STHTTPRequest must be used from the main thread
-- success block and error block are called on main thread
+- all blocks are guaranteed to be called on main thread
 
 ##### Starting a synchronous request
 
@@ -60,10 +62,6 @@ NSDictionary *headers  = r.responseHeaders;
 NSString     *encoding = r.responseStringEncodingName;
 NSData       *data     = r.responseData;
 ```
-
-##### Usable in unit tests
-
-You can fill a queue with fake responses to be consumed by requests started from unit tests.
 
 ##### Adding a request header
 
@@ -119,6 +117,10 @@ r.downloadProgressBlock = ^(NSData *dataJustReceived,
     // notify user of download progress
 }
 ```
+
+##### Usable in unit tests
+
+You can fill a queue with fake responses to be consumed by requests started from unit tests.
 
 ##### Log the requests
 
