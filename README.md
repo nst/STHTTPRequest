@@ -2,8 +2,6 @@
 
 _A NSURLConnection wrapper for humans_
 
-> "It took me 15 minutes to do with STHTTPRequest what I couldn’t do in 3 hours with AFNetworking." [@sburlot](https://twitter.com/sburlot/status/431816832144900096)
-
 ##### Simple...
 
 -   700 lines of Objective-C you can understand
