@@ -4,7 +4,7 @@ _A NSURLConnection wrapper for humans_
 
 ##### Simple...
 
--   700 lines of Objective-C you can understand
+-   900 lines of Objective-C you can understand
 -   runs on iOS 5+ and Mac OS X 10.7+
 -   just drag and drop .h and .m in your project
 -   pod 'STHTTPRequest' in CocoaPods
