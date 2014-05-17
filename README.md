@@ -103,22 +103,21 @@ request.rawPOSTData = myData;
 [r addFileToUpload:@"/tmp/photo.jpg" parameterName:@"photo"];
 ```
 
-##### Upload multiple images
+[full example here](http://stackoverflow.com/questions/23605292/http-post-request-to-send-an-image/23631175#23631175)
+
+##### Upload an image and set parameters
+
+```Objective-C
+NSData *imageData = [NSData dataWithContentsOfFile:"image.jpg"];
+[request addDataToUpload:imageData parameterName:@"param" mimeType:@"image/jpeg" fileName:@"file_name"];
+```
+
+##### Upload several images
 
 ```Objective-C
 [request addDataToUpload:data1 parameterName:@"p1" mimeType:@"image/jpeg" fileName:@"name1"];
 [request addDataToUpload:data2 parameterName:@"p2" mimeType:@"image/jpeg" fileName:@"name2"];
 ```
-
-##### Upload data with a parameter name
-
-```Objective-C
-NSString *path = [[NSBundle mainBundle] pathForResource:@"test" ofType:@"jpg"];
-NSData *data = [NSData dataWithContentsOfFile:path];
-[r addDataToUpload:data parameterName:@"image"];
-```
-
-[full example here](http://stackoverflow.com/questions/23605292/http-post-request-to-send-an-image/23631175#23631175)
 
 ##### Get headers only
 
