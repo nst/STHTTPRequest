@@ -26,7 +26,6 @@
 		03E5FC851920EC67007BE44D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 03E5FC781920EC67007BE44D /* InfoPlist.strings */; };
 		03E5FC861920EC67007BE44D /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 03E5FC7A1920EC67007BE44D /* ViewController.xib */; };
 		03E5FC871920EC67007BE44D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 03E5FC7C1920EC67007BE44D /* main.m */; };
-		03E5FC881920EC67007BE44D /* STHTTPRequest-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 03E5FC7D1920EC67007BE44D /* STHTTPRequest-Info.plist */; };
 		03E5FC891920EC67007BE44D /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03E5FC801920EC67007BE44D /* ViewController.m */; };
 		03E5FC901920EC74007BE44D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 03E5FC8B1920EC74007BE44D /* InfoPlist.strings */; };
 		03E5FC911920EC74007BE44D /* STHTTPRequestTests-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 03E5FC8D1920EC74007BE44D /* STHTTPRequestTests-Info.plist */; };
@@ -317,7 +316,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				03E5FC861920EC67007BE44D /* ViewController.xib in Resources */,
-				03E5FC881920EC67007BE44D /* STHTTPRequest-Info.plist in Resources */,
 				03E5FC841920EC67007BE44D /* Default@2x.png in Resources */,
 				03E5FC851920EC67007BE44D /* InfoPlist.strings in Resources */,
 				03E5FC821920EC67007BE44D /* Default-568h@2x.png in Resources */,
@@ -595,6 +593,7 @@
 				0315A04F1923D6E0001C6C02 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		03191ECC17BF75060001C06D /* Build configuration list for PBXProject "STHTTPRequest" */ = {
 			isa = XCConfigurationList;
