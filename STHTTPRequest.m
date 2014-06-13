@@ -63,7 +63,7 @@ static NSMutableArray *localCookiesStorage = nil;
 #pragma mark Initializers
 
 + (STHTTPRequest *)requestWithURL:(NSURL *)url {
-    if(url == nil) return nil;
+    if (url == nil) return nil;
     return [(STHTTPRequest *)[self alloc] initWithURL:url];
 }
 
@@ -98,7 +98,7 @@ static NSMutableArray *localCookiesStorage = nil;
 #pragma mark Credentials
 
 + (NSMutableDictionary *)sharedCredentialsStorage {
-    if(localCredentialsStorage == nil) {
+    if(!localCredentialsStorage) {
         localCredentialsStorage = [NSMutableDictionary dictionary];
     }
     return localCredentialsStorage;
@@ -142,7 +142,7 @@ static NSMutableArray *localCookiesStorage = nil;
 #pragma mark Cookies
 
 + (NSMutableArray *)localCookiesStorage {
-    if(localCookiesStorage == nil) {
+    if(!localCredentialsStorage) {
         localCookiesStorage = [NSMutableArray array];
     }
     return localCookiesStorage;
@@ -161,7 +161,7 @@ static NSMutableArray *localCookiesStorage = nil;
 
 - (NSArray *)sessionCookies {
     
-    NSArray *allCookies = nil;
+    NSArray *allCookies;
     
     if(_ignoreSharedCookiesStorage) {
         allCookies = [[self class] localCookiesStorage];
@@ -179,8 +179,8 @@ static NSMutableArray *localCookiesStorage = nil;
 
 - (void)deleteSessionCookies {
     
-    for(NSHTTPCookie *cookie in [self sessionCookies]) {
-        if(_ignoreSharedCookiesStorage) {
+    for (NSHTTPCookie *cookie in [self sessionCookies]) {
+        if (_ignoreSharedCookiesStorage) {
             [[[self class] localCookiesStorage] removeObject:cookie];
         } else {
             [[NSHTTPCookieStorage sharedHTTPCookieStorage] deleteCookie:cookie];
@@ -216,7 +216,7 @@ static NSMutableArray *localCookiesStorage = nil;
 - (void)addCookie:(NSHTTPCookie *)cookie {
     
     NSParameterAssert(cookie);
-    if(cookie == nil) return;
+    if(!cookie) return;
     
     if(_ignoreSharedCookiesStorage) {
         [[[self class] localCookiesStorage] addObject:cookie];
@@ -233,7 +233,7 @@ static NSMutableArray *localCookiesStorage = nil;
 
 + (NSHTTPCookie *)createCookieWithName:(NSString *)name value:(NSString *)value url:(NSURL *)url {
     NSParameterAssert(url);
-    if(url == nil) return nil;
+    if(!url) return nil;
     
     NSMutableDictionary *cookieProperties = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                                              name, NSHTTPCookieName,
@@ -276,18 +276,18 @@ static NSMutableArray *localCookiesStorage = nil;
 #pragma mark Headers
 
 - (void)setHeaderWithName:(NSString *)name value:(NSString *)value {
-    if(name == nil || value == nil) return;
+    if(!name || !value) return;
     [[self requestHeaders] setObject:value forKey:name];
 }
 
 - (void)removeHeaderWithName:(NSString *)name {
-    if(name == nil) return;
+    if(!name) return;
     [[self requestHeaders] removeObjectForKey:name];
 }
 
 + (NSURL *)urlByAddingCredentials:(NSURLCredential *)credentials toURL:(NSURL *)url {
     
-    if(credentials == nil) return nil; // no credentials to add
+    if(!credentials) return nil; // no credentials to add
     
     NSString *scheme = [url scheme];
     NSString *host = [url host];
@@ -342,13 +342,13 @@ static NSMutableArray *localCookiesStorage = nil;
 
 - (NSMutableURLRequest *)requestByAddingCredentialsToURL:(BOOL)useCredentialsInURL {
     
-    NSURL *theURL = nil;
+    NSURL *theURL;
     
     if(useCredentialsInURL) {
         NSURLCredential *credential = [self credentialForCurrentHost];
-        if(credential == nil) return nil;
+        if(!credential) return nil;
         theURL = [[self class] urlByAddingCredentials:credential toURL:_url];
-        if(theURL == nil) return nil;
+        if(!theURL) return nil;
     } else {
         theURL = _url;
     }
@@ -392,7 +392,7 @@ static NSMutableArray *localCookiesStorage = nil;
         for(STHTTPRequestFileUpload *fileToUpload in self.filesToUpload) {
             
             NSData *data = [NSData dataWithContentsOfFile:fileToUpload.path];
-            if(data == nil) continue;
+            if(!data) continue;
             NSString *fileName = [fileToUpload.path lastPathComponent];
             
             NSData *multipartData = [[self class] multipartContentWithBoundary:boundary
@@ -431,18 +431,18 @@ static NSMutableArray *localCookiesStorage = nil;
         
         [body appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
         
-        if([request HTTPMethod] == nil) [request setHTTPMethod:@"POST"];
+        if(![request HTTPMethod]) [request setHTTPMethod:@"POST"];
         [request setValue:[NSString stringWithFormat:@"%u", (unsigned int)[body length]] forHTTPHeaderField:@"Content-Length"];
         [request setHTTPBody:body];
         
     } else if (_rawPOSTData) {
         
-        if([request HTTPMethod] == nil) [request setHTTPMethod:@"POST"];
+        if(![request HTTPMethod]) [request setHTTPMethod:@"POST"];
         
         [request setValue:[NSString stringWithFormat:@"%u", (unsigned int)[_rawPOSTData length]] forHTTPHeaderField:@"Content-Length"];
         [request setHTTPBody:_rawPOSTData];
         
-    } else if (_POSTDictionary != nil) { // may be empty (POST request without body)
+    } else if (_POSTDictionary) { // may be empty (POST request without body)
         
         if(_encodePOSTDictionary) {
             
@@ -470,12 +470,12 @@ static NSMutableArray *localCookiesStorage = nil;
         
         NSData *data = [s dataUsingEncoding:_POSTDataEncoding allowLossyConversion:YES];
         
-        if([request HTTPMethod] == nil) [request setHTTPMethod:@"POST"];
+        if(![request HTTPMethod]) [request setHTTPMethod:@"POST"];
         
         [request setValue:[NSString stringWithFormat:@"%u", (unsigned int)[data length]] forHTTPHeaderField:@"Content-Length"];
         [request setHTTPBody:data];
     } else {
-        if([request HTTPMethod] == nil) [request setHTTPMethod:@"GET"];
+        if(![request HTTPMethod]) [request setHTTPMethod:@"GET"];
     }
     
     [_requestHeaders enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
@@ -519,14 +519,14 @@ static NSMutableArray *localCookiesStorage = nil;
 #pragma mark Response
 
 - (NSString *)responseString {
-    if(_responseString == nil) {
+    if(!_responseString) {
         self.responseString = [self stringWithData:_responseData encodingName:_responseStringEncodingName];
     }
     return _responseString;
 }
 
 - (NSString *)stringWithData:(NSData *)data encodingName:(NSString *)encodingName {
-    if(data == nil) return nil;
+    if(!data) return nil;
     
     if(_forcedResponseEncoding > 0) {
         return [[NSString alloc] initWithData:data encoding:_forcedResponseEncoding];
@@ -536,7 +536,7 @@ static NSMutableArray *localCookiesStorage = nil;
     
     /* try to use encoding declared in HTTP response headers */
     
-    if(encodingName != nil) {
+    if(encodingName) {
         
         encoding = CFStringConvertEncodingToNSStringEncoding(CFStringConvertIANACharSetNameToEncoding((CFStringRef)encodingName));
         
@@ -553,7 +553,7 @@ static NSMutableArray *localCookiesStorage = nil;
 + (NSString *)descriptionForHTTPStatus:(NSUInteger)status {
     NSString *s = [NSString stringWithFormat:@"HTTP Status %@", @(status)];
     
-    NSString *description = nil;
+    NSString *description;
     // http://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml
     if(status == 400) description = @"Bad Request";
     if(status == 401) description = @"Unauthorized";
@@ -606,7 +606,7 @@ static NSMutableArray *localCookiesStorage = nil;
 
 + (NSDictionary *)userInfoWithErrorDescriptionForHTTPStatus:(NSUInteger)status {
     NSString *s = [self descriptionForHTTPStatus:status];
-    if(s == nil) return nil;
+    if(!s) return nil;
     return @{ NSLocalizedDescriptionKey : s };
 }
 
@@ -749,7 +749,7 @@ static NSMutableArray *localCookiesStorage = nil;
     BOOL showDebugDescription = [[NSUserDefaults standardUserDefaults] boolForKey:@"STHTTPRequestShowDebugDescription"];
     BOOL showCurlDescription = [[NSUserDefaults standardUserDefaults] boolForKey:@"STHTTPRequestShowCurlDescription"];
     
-    NSMutableString *logString = nil;
+    NSMutableString *logString;
     
     if(showDebugDescription || showCurlDescription) {
         logString = [NSMutableString stringWithString:@"\n----------\n"];
@@ -775,7 +775,7 @@ static NSMutableArray *localCookiesStorage = nil;
     
     /**/
     
-    if(_connection == nil) {
+    if(!_connection) {
         NSString *s = @"can't create connection";
         NSDictionary *userInfo = [NSDictionary dictionaryWithObject:s forKey:NSLocalizedDescriptionKey];
         self.error = [NSError errorWithDomain:NSStringFromClass([self class])
@@ -795,10 +795,10 @@ static NSMutableArray *localCookiesStorage = nil;
     
     NSURLRequest *request = [self requestByAddingCredentialsToURL:_addCredentialsToURL];
     
-    NSURLResponse *urlResponse = nil;
+    NSURLResponse *urlResponse;
     
     NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&urlResponse error:e];
-    if(data == nil) return nil;
+    if(!data) return nil;
     
     self.responseData = [NSMutableData dataWithData:data];
     
