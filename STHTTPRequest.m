@@ -98,7 +98,7 @@ static NSMutableArray *localCookiesStorage = nil;
 #pragma mark Credentials
 
 + (NSMutableDictionary *)sharedCredentialsStorage {
-    if(!localCredentialsStorage) {
+    if (!localCredentialsStorage) {
         localCredentialsStorage = [NSMutableDictionary dictionary];
     }
     return localCredentialsStorage;
@@ -142,7 +142,7 @@ static NSMutableArray *localCookiesStorage = nil;
 #pragma mark Cookies
 
 + (NSMutableArray *)localCookiesStorage {
-    if(!localCredentialsStorage) {
+    if (!localCredentialsStorage) {
         localCookiesStorage = [NSMutableArray array];
     }
     return localCookiesStorage;
@@ -163,7 +163,7 @@ static NSMutableArray *localCookiesStorage = nil;
     
     NSArray *allCookies;
     
-    if(_ignoreSharedCookiesStorage) {
+    if (_ignoreSharedCookiesStorage) {
         allCookies = [[self class] localCookiesStorage];
     } else {
         allCookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookies];
@@ -197,7 +197,7 @@ static NSMutableArray *localCookiesStorage = nil;
 }
 
 - (void)deleteAllCookies {
-    if(_ignoreSharedCookiesStorage) {
+    if (_ignoreSharedCookiesStorage) {
         [[[self class] localCookiesStorage] removeAllObjects];
     } else {
         [[self class] deleteAllCookiesFromSharedCookieStorage];
@@ -216,9 +216,9 @@ static NSMutableArray *localCookiesStorage = nil;
 - (void)addCookie:(NSHTTPCookie *)cookie {
     
     NSParameterAssert(cookie);
-    if(!cookie) return;
+    if (!cookie) return;
     
-    if(_ignoreSharedCookiesStorage) {
+    if (_ignoreSharedCookiesStorage) {
         [[[self class] localCookiesStorage] addObject:cookie];
     } else {
         [[self class] addCookieToSharedCookiesStorage:cookie];
@@ -233,7 +233,7 @@ static NSMutableArray *localCookiesStorage = nil;
 
 + (NSHTTPCookie *)createCookieWithName:(NSString *)name value:(NSString *)value url:(NSURL *)url {
     NSParameterAssert(url);
-    if(!url) return nil;
+    if (!url) return nil;
     
     NSMutableDictionary *cookieProperties = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                                              name, NSHTTPCookieName,
@@ -258,7 +258,7 @@ static NSMutableArray *localCookiesStorage = nil;
 
 - (NSArray *)requestCookies {
     
-    if(_ignoreSharedCookiesStorage) {
+    if (_ignoreSharedCookiesStorage) {
         NSArray *filteredCookies = [[[self class] localCookiesStorage] filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
             NSHTTPCookie *cookie = (NSHTTPCookie *)evaluatedObject;
             return [[cookie domain] isEqualToString:[_url host]];
@@ -276,28 +276,28 @@ static NSMutableArray *localCookiesStorage = nil;
 #pragma mark Headers
 
 - (void)setHeaderWithName:(NSString *)name value:(NSString *)value {
-    if(!name || !value) return;
+    if (!name || !value) return;
     [[self requestHeaders] setObject:value forKey:name];
 }
 
 - (void)removeHeaderWithName:(NSString *)name {
-    if(!name) return;
+    if (!name) return;
     [[self requestHeaders] removeObjectForKey:name];
 }
 
 + (NSURL *)urlByAddingCredentials:(NSURLCredential *)credentials toURL:(NSURL *)url {
     
-    if(!credentials) return nil; // no credentials to add
+    if (!credentials) return nil; // no credentials to add
     
     NSString *scheme = [url scheme];
     NSString *host = [url host];
     
     BOOL hostAlreadyContainsCredentials = [host rangeOfString:@"@"].location != NSNotFound;
-    if(hostAlreadyContainsCredentials) return url;
+    if (hostAlreadyContainsCredentials) return url;
     
     NSMutableString *resourceSpecifier = [[url resourceSpecifier] mutableCopy];
     
-    if([resourceSpecifier hasPrefix:@"//"] == NO) return nil;
+    if ([resourceSpecifier hasPrefix:@"//"] == NO) return nil;
     
     NSString *userPassword = [NSString stringWithFormat:@"%@:%@@", credentials.user, credentials.password];
     
@@ -314,7 +314,7 @@ static NSMutableArray *localCookiesStorage = nil;
     NSArray *sortedKeys = [dictionary keysSortedByValueUsingComparator:^NSComparisonResult(id obj1, id obj2) {
         return [obj2 compare:obj1];
     }];
-    for(NSString *key in sortedKeys) {
+    for (NSString *key in sortedKeys) {
         NSDictionary *d = @{ key : dictionary[key] };
         [sortedDictionaries addObject:d];
     }
@@ -344,11 +344,11 @@ static NSMutableArray *localCookiesStorage = nil;
     
     NSURL *theURL;
     
-    if(useCredentialsInURL) {
+    if (useCredentialsInURL) {
         NSURLCredential *credential = [self credentialForCurrentHost];
-        if(!credential) return nil;
+        if (!credential) return nil;
         theURL = [[self class] urlByAddingCredentials:credential toURL:_url];
-        if(!theURL) return nil;
+        if (!theURL) return nil;
     } else {
         theURL = _url;
     }
@@ -358,14 +358,14 @@ static NSMutableArray *localCookiesStorage = nil;
     
     request.timeoutInterval = self.timeoutSeconds;
     
-    if(_ignoreSharedCookiesStorage) {
+    if (_ignoreSharedCookiesStorage) {
         NSArray *cookies = [self sessionCookies];
         NSDictionary *d = [NSHTTPCookie requestHeaderFieldsWithCookies:cookies];
         [request setAllHTTPHeaderFields:d];
     }
     
     // escape POST dictionary keys and values if needed
-    if(_encodePOSTDictionary) {
+    if (_encodePOSTDictionary) {
         NSMutableDictionary *escapedPOSTDictionary = _POSTDictionary ? [NSMutableDictionary dictionary] : nil;
         [_POSTDictionary enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
             NSString *k = [key st_stringByAddingRFC3986PercentEscapesUsingEncoding:_POSTDataEncoding];
@@ -378,7 +378,7 @@ static NSMutableArray *localCookiesStorage = nil;
     // sort POST parameters in order to get deterministic, unit testable requests
     NSArray *sortedPOSTDictionaries = [[self class] dictionariesSortedByKey:_POSTDictionary];
     
-    if([self.filesToUpload count] > 0 || [self.dataToUpload count] > 0) {
+    if ([self.filesToUpload count] > 0 || [self.dataToUpload count] > 0) {
         
         NSString *boundary = @"----------kStHtTpReQuEsTbOuNdArY";
         
@@ -389,10 +389,10 @@ static NSMutableArray *localCookiesStorage = nil;
         
         /**/
         
-        for(STHTTPRequestFileUpload *fileToUpload in self.filesToUpload) {
+        for (STHTTPRequestFileUpload *fileToUpload in self.filesToUpload) {
             
             NSData *data = [NSData dataWithContentsOfFile:fileToUpload.path];
-            if(!data) continue;
+            if (!data) continue;
             NSString *fileName = [fileToUpload.path lastPathComponent];
             
             NSData *multipartData = [[self class] multipartContentWithBoundary:boundary
@@ -405,7 +405,7 @@ static NSMutableArray *localCookiesStorage = nil;
         
         /**/
         
-        for(STHTTPRequestDataUpload *dataToUpload in self.dataToUpload) {
+        for (STHTTPRequestDataUpload *dataToUpload in self.dataToUpload) {
             NSData *multipartData = [[self class] multipartContentWithBoundary:boundary
                                                                           data:dataToUpload.data
                                                                       fileName:dataToUpload.fileName
@@ -431,25 +431,25 @@ static NSMutableArray *localCookiesStorage = nil;
         
         [body appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
         
-        if(![request HTTPMethod]) [request setHTTPMethod:@"POST"];
+        if (![request HTTPMethod]) [request setHTTPMethod:@"POST"];
         [request setValue:[NSString stringWithFormat:@"%u", (unsigned int)[body length]] forHTTPHeaderField:@"Content-Length"];
         [request setHTTPBody:body];
         
     } else if (_rawPOSTData) {
         
-        if(![request HTTPMethod]) [request setHTTPMethod:@"POST"];
+        if (![request HTTPMethod]) [request setHTTPMethod:@"POST"];
         
         [request setValue:[NSString stringWithFormat:@"%u", (unsigned int)[_rawPOSTData length]] forHTTPHeaderField:@"Content-Length"];
         [request setHTTPBody:_rawPOSTData];
         
     } else if (_POSTDictionary) { // may be empty (POST request without body)
         
-        if(_encodePOSTDictionary) {
+        if (_encodePOSTDictionary) {
             
             CFStringEncoding cfStringEncoding = CFStringConvertNSStringEncodingToEncoding(_POSTDataEncoding);
             NSString *encodingName = (NSString *)CFStringConvertEncodingToIANACharSetName(cfStringEncoding);
             
-            if(encodingName) {
+            if (encodingName) {
                 NSString *contentTypeValue = [NSString stringWithFormat:@"application/x-www-form-urlencoded; charset=%@", encodingName];
                 [self setHeaderWithName:@"Content-Type" value:contentTypeValue];
             }
@@ -470,12 +470,12 @@ static NSMutableArray *localCookiesStorage = nil;
         
         NSData *data = [s dataUsingEncoding:_POSTDataEncoding allowLossyConversion:YES];
         
-        if(![request HTTPMethod]) [request setHTTPMethod:@"POST"];
+        if (![request HTTPMethod]) [request setHTTPMethod:@"POST"];
         
         [request setValue:[NSString stringWithFormat:@"%u", (unsigned int)[data length]] forHTTPHeaderField:@"Content-Length"];
         [request setHTTPBody:data];
     } else {
-        if(![request HTTPMethod]) [request setHTTPMethod:@"GET"];
+        if (![request HTTPMethod]) [request setHTTPMethod:@"GET"];
     }
     
     [_requestHeaders enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
@@ -484,7 +484,7 @@ static NSMutableArray *localCookiesStorage = nil;
     
     NSURLCredential *credentialForHost = [self credentialForCurrentHost];
     
-    if(credentialForHost) {
+    if (credentialForHost) {
         NSString *authString = [NSString stringWithFormat:@"%@:%@", credentialForHost.user, credentialForHost.password];
         NSData *authData = [authString dataUsingEncoding:NSASCIIStringEncoding];
         NSString *authValue = [NSString stringWithFormat:@"Basic %@", [authData base64Encoding]];
@@ -519,16 +519,16 @@ static NSMutableArray *localCookiesStorage = nil;
 #pragma mark Response
 
 - (NSString *)responseString {
-    if(!_responseString) {
+    if (!_responseString) {
         self.responseString = [self stringWithData:_responseData encodingName:_responseStringEncodingName];
     }
     return _responseString;
 }
 
 - (NSString *)stringWithData:(NSData *)data encodingName:(NSString *)encodingName {
-    if(!data) return nil;
+    if (!data) return nil;
     
-    if(_forcedResponseEncoding > 0) {
+    if (_forcedResponseEncoding > 0) {
         return [[NSString alloc] initWithData:data encoding:_forcedResponseEncoding];
     }
     
@@ -536,11 +536,11 @@ static NSMutableArray *localCookiesStorage = nil;
     
     /* try to use encoding declared in HTTP response headers */
     
-    if(encodingName) {
+    if (encodingName) {
         
         encoding = CFStringConvertEncodingToNSStringEncoding(CFStringConvertIANACharSetNameToEncoding((CFStringRef)encodingName));
         
-        if(encoding == kCFStringEncodingInvalidId) {
+        if (encoding == kCFStringEncodingInvalidId) {
             encoding = NSUTF8StringEncoding; // by default
         }
     }
@@ -555,49 +555,49 @@ static NSMutableArray *localCookiesStorage = nil;
     
     NSString *description;
     // http://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml
-    if(status == 400) description = @"Bad Request";
-    if(status == 401) description = @"Unauthorized";
-    if(status == 402) description = @"Payment Required";
-    if(status == 403) description = @"Forbidden";
-    if(status == 404) description = @"Not Found";
-    if(status == 405) description = @"Method Not Allowed";
-    if(status == 406) description = @"Not Acceptable";
-    if(status == 407) description = @"Proxy Authentication Required";
-    if(status == 408) description = @"Request Timeout";
-    if(status == 409) description = @"Conflict";
-    if(status == 410) description = @"Gone";
-    if(status == 411) description = @"Length Required";
-    if(status == 412) description = @"Precondition Failed";
-    if(status == 413) description = @"Payload Too Large";
-    if(status == 414) description = @"URI Too Long";
-    if(status == 415) description = @"Unsupported Media Type";
-    if(status == 416) description = @"Requested Range Not Satisfiable";
-    if(status == 417) description = @"Expectation Failed";
-    if(status == 422) description = @"Unprocessable Entity";
-    if(status == 423) description = @"Locked";
-    if(status == 424) description = @"Failed Dependency";
-    if(status == 425) description = @"Unassigned";
-    if(status == 426) description = @"Upgrade Required";
-    if(status == 427) description = @"Unassigned";
-    if(status == 428) description = @"Precondition Required";
-    if(status == 429) description = @"Too Many Requests";
-    if(status == 430) description = @"Unassigned";
-    if(status == 431) description = @"Request Header Fields Too Large";
-    if(status == 432) description = @"Unassigned";
-    if(status == 500) description = @"Internal Server Error";
-    if(status == 501) description = @"Not Implemented";
-    if(status == 502) description = @"Bad Gateway";
-    if(status == 503) description = @"Service Unavailable";
-    if(status == 504) description = @"Gateway Timeout";
-    if(status == 505) description = @"HTTP Version Not Supported";
-    if(status == 506) description = @"Variant Also Negotiates";
-    if(status == 507) description = @"Insufficient Storage";
-    if(status == 508) description = @"Loop Detected";
-    if(status == 509) description = @"Unassigned";
-    if(status == 510) description = @"Not Extended";
-    if(status == 511) description = @"Network Authentication Required";
+    if (status == 400) description = @"Bad Request";
+    if (status == 401) description = @"Unauthorized";
+    if (status == 402) description = @"Payment Required";
+    if (status == 403) description = @"Forbidden";
+    if (status == 404) description = @"Not Found";
+    if (status == 405) description = @"Method Not Allowed";
+    if (status == 406) description = @"Not Acceptable";
+    if (status == 407) description = @"Proxy Authentication Required";
+    if (status == 408) description = @"Request Timeout";
+    if (status == 409) description = @"Conflict";
+    if (status == 410) description = @"Gone";
+    if (status == 411) description = @"Length Required";
+    if (status == 412) description = @"Precondition Failed";
+    if (status == 413) description = @"Payload Too Large";
+    if (status == 414) description = @"URI Too Long";
+    if (status == 415) description = @"Unsupported Media Type";
+    if (status == 416) description = @"Requested Range Not Satisfiable";
+    if (status == 417) description = @"Expectation Failed";
+    if (status == 422) description = @"Unprocessable Entity";
+    if (status == 423) description = @"Locked";
+    if (status == 424) description = @"Failed Dependency";
+    if (status == 425) description = @"Unassigned";
+    if (status == 426) description = @"Upgrade Required";
+    if (status == 427) description = @"Unassigned";
+    if (status == 428) description = @"Precondition Required";
+    if (status == 429) description = @"Too Many Requests";
+    if (status == 430) description = @"Unassigned";
+    if (status == 431) description = @"Request Header Fields Too Large";
+    if (status == 432) description = @"Unassigned";
+    if (status == 500) description = @"Internal Server Error";
+    if (status == 501) description = @"Not Implemented";
+    if (status == 502) description = @"Bad Gateway";
+    if (status == 503) description = @"Service Unavailable";
+    if (status == 504) description = @"Gateway Timeout";
+    if (status == 505) description = @"HTTP Version Not Supported";
+    if (status == 506) description = @"Variant Also Negotiates";
+    if (status == 507) description = @"Insufficient Storage";
+    if (status == 508) description = @"Loop Detected";
+    if (status == 509) description = @"Unassigned";
+    if (status == 510) description = @"Not Extended";
+    if (status == 511) description = @"Network Authentication Required";
     
-    if(description) {
+    if (description) {
         s = [s stringByAppendingFormat:@": %@", description];
     }
     
@@ -606,7 +606,7 @@ static NSMutableArray *localCookiesStorage = nil;
 
 + (NSDictionary *)userInfoWithErrorDescriptionForHTTPStatus:(NSUInteger)status {
     NSString *s = [self descriptionForHTTPStatus:status];
-    if(!s) return nil;
+    if (!s) return nil;
     return @{ NSLocalizedDescriptionKey : s };
 }
 
@@ -620,14 +620,14 @@ static NSMutableArray *localCookiesStorage = nil;
     // -u usernane:password
     
     NSURLCredential *credential = [[self class] sessionAuthenticationCredentialsForURL:[self url]];
-    if(credential) {
+    if (credential) {
         NSString *s = [NSString stringWithFormat:@"-u \"%@:%@\"", credential.user, credential.password];
         [ma addObject:s];
     }
     
     // -d "k1=v1&k2=v2"                                             // POST, url encoded params
     
-    if(_POSTDictionary) {
+    if (_POSTDictionary) {
         NSMutableArray *postParameters = [NSMutableArray array];
         [_POSTDictionary enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
             NSString *s = [NSString stringWithFormat:@"%@=%@", key, obj];
@@ -639,7 +639,7 @@ static NSMutableArray *localCookiesStorage = nil;
     
     // -F "coolfiles=@fil1.gif;type=image/gif,fil2.txt,fil3.html"   // file upload
     
-    for(STHTTPRequestFileUpload *f in _filesToUpload) {
+    for (STHTTPRequestFileUpload *f in _filesToUpload) {
         NSString *s = [NSString stringWithFormat:@"%@=@%@", f.parameterName, f.path];
         [ma addObject:[NSString stringWithFormat:@"-F \"%@\"", s]];
     }
@@ -649,12 +649,12 @@ static NSMutableArray *localCookiesStorage = nil;
     NSArray *cookies = [self requestCookies];
     
     NSMutableArray *cookiesStrings = [NSMutableArray array];
-    for(NSHTTPCookie *cookie in cookies) {
+    for (NSHTTPCookie *cookie in cookies) {
         NSString *s = [NSString stringWithFormat:@"%@=%@", [cookie name], [cookie value]];
         [cookiesStrings addObject:s];
     }
     
-    if([cookiesStrings count] > 0) {
+    if ([cookiesStrings count] > 0) {
         [ma addObject:[NSString stringWithFormat:@"-b \"%@\"", [cookiesStrings componentsJoinedByString:@";"]]];
     }
     
@@ -669,7 +669,7 @@ static NSMutableArray *localCookiesStorage = nil;
         [headersStrings addObject:s];
     }];
     
-    if([headersStrings count] > 0) {
+    if ([headersStrings count] > 0) {
         [ma addObject:[headersStrings componentsJoinedByString:@" \\\n"]];
     }
     
@@ -691,7 +691,7 @@ static NSMutableArray *localCookiesStorage = nil;
     NSMutableDictionary *headers = [[_request allHTTPHeaderFields] mutableCopy];
     [headers removeObjectForKey:@"Cookie"];
     
-    if([headers count]) [ms appendString:@"HEADERS\n"];
+    if ([headers count]) [ms appendString:@"HEADERS\n"];
     
     [headers enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
         [ms appendFormat:@"\t %@ = %@\n", key, obj];
@@ -699,28 +699,28 @@ static NSMutableArray *localCookiesStorage = nil;
     
     NSArray *cookies = [self requestCookies];
     
-    if([cookies count]) [ms appendString:@"COOKIES\n"];
+    if ([cookies count]) [ms appendString:@"COOKIES\n"];
     
-    for(NSHTTPCookie *cookie in cookies) {
+    for (NSHTTPCookie *cookie in cookies) {
         [ms appendFormat:@"\t %@ = %@\n", [cookie name], [cookie value]];
     }
     
     NSArray *kvDictionaries = [[self class] dictionariesSortedByKey:_POSTDictionary];
     
-    if([kvDictionaries count]) [ms appendString:@"POST DATA\n"];
+    if ([kvDictionaries count]) [ms appendString:@"POST DATA\n"];
     
-    for(NSDictionary *kv in kvDictionaries) {
+    for (NSDictionary *kv in kvDictionaries) {
         NSString *k = [[kv allKeys] lastObject];
         NSString *v = [[kv allValues] lastObject];
         [ms appendFormat:@"\t %@ = %@\n", k, v];
     }
     
-    for(STHTTPRequestFileUpload *f in self.filesToUpload) {
+    for (STHTTPRequestFileUpload *f in self.filesToUpload) {
         [ms appendString:@"UPLOAD FILE\n"];
         [ms appendFormat:@"\t %@ = %@\n", f.parameterName, f.path];
     }
     
-    for(STHTTPRequestDataUpload *d in self.dataToUpload) {
+    for (STHTTPRequestDataUpload *d in self.dataToUpload) {
         [ms appendString:@"UPLOAD DATA\n"];
         [ms appendFormat:@"\t %@ = [%u bytes]\n", d.parameterName, (unsigned int)[d.data length]];
     }
@@ -751,31 +751,31 @@ static NSMutableArray *localCookiesStorage = nil;
     
     NSMutableString *logString;
     
-    if(showDebugDescription || showCurlDescription) {
+    if (showDebugDescription || showCurlDescription) {
         logString = [NSMutableString stringWithString:@"\n----------\n"];
     }
     
-    if(showDebugDescription) {
+    if (showDebugDescription) {
         [logString appendString:[self debugDescription]];
     }
     
-    if(showDebugDescription && showCurlDescription) {
+    if (showDebugDescription && showCurlDescription) {
         [logString appendString:@"\n"];
     }
     
-    if(showCurlDescription) {
+    if (showCurlDescription) {
         [logString appendString:[self curlDescription]];
     }
     
-    if(showDebugDescription || showCurlDescription) {
+    if (showDebugDescription || showCurlDescription) {
         [logString appendString:@"\n----------\n"];
     }
     
-    if(logString) NSLog(@"%@", logString);
+    if (logString) NSLog(@"%@", logString);
     
     /**/
     
-    if(!_connection) {
+    if (!_connection) {
         NSString *s = @"can't create connection";
         NSDictionary *userInfo = [NSDictionary dictionaryWithObject:s forKey:NSLocalizedDescriptionKey];
         self.error = [NSError errorWithDomain:NSStringFromClass([self class])
@@ -798,11 +798,11 @@ static NSMutableArray *localCookiesStorage = nil;
     NSURLResponse *urlResponse;
     
     NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&urlResponse error:e];
-    if(!data) return nil;
+    if (!data) return nil;
     
     self.responseData = [NSMutableData dataWithData:data];
     
-    if([urlResponse isKindOfClass:[NSHTTPURLResponse class]]) {
+    if ([urlResponse isKindOfClass:[NSHTTPURLResponse class]]) {
         
         NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)urlResponse;
         
@@ -813,9 +813,9 @@ static NSMutableArray *localCookiesStorage = nil;
     
     self.responseString = [self stringWithData:_responseData encodingName:_responseStringEncodingName];
     
-    if(_responseStatus >= 400) {
+    if (_responseStatus >= 400) {
         NSDictionary *userInfo = [[self class] userInfoWithErrorDescriptionForHTTPStatus:_responseStatus];
-        if(e) *e = [NSError errorWithDomain:NSStringFromClass([self class]) code:_responseStatus userInfo:userInfo];
+        if (e) *e = [NSError errorWithDomain:NSStringFromClass([self class]) code:_responseStatus userInfo:userInfo];
     }
     
     return _responseString;
@@ -839,7 +839,7 @@ static NSMutableArray *localCookiesStorage = nil;
 
 - (NSURLRequest *)connection:(NSURLConnection *)connection willSendRequest:(NSURLRequest *)request redirectResponse:(NSURLResponse *)redirectResponse {
     
-    if(_preventRedirections && redirectResponse) return nil;
+    if (_preventRedirections && redirectResponse) return nil;
     
     return request;
 }
@@ -852,7 +852,7 @@ static NSMutableArray *localCookiesStorage = nil;
     if ([authenticationMethod isEqualToString:NSURLAuthenticationMethodHTTPDigest] ||
         [authenticationMethod isEqualToString:NSURLAuthenticationMethodHTTPBasic]) {
         
-        if([challenge previousFailureCount] == 0) {
+        if ([challenge previousFailureCount] == 0) {
             NSURLCredential *credential = [self credentialForCurrentHost];
             [[challenge sender] useCredential:credential forAuthenticationChallenge:challenge];
         } else {
@@ -872,7 +872,7 @@ static NSMutableArray *localCookiesStorage = nil;
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
     
-    if([response isKindOfClass:[NSHTTPURLResponse class]]) {
+    if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
         NSHTTPURLResponse *r = (NSHTTPURLResponse *)response;
         self.responseHeaders = [r allHeaderFields];
         self.responseStatus = [r statusCode];
@@ -894,19 +894,19 @@ static NSMutableArray *localCookiesStorage = nil;
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
     
-    if(_responseStatus >= 400) {
+    if (_responseStatus >= 400) {
         NSDictionary *userInfo = [[self class] userInfoWithErrorDescriptionForHTTPStatus:_responseStatus];
         self.error = [NSError errorWithDomain:NSStringFromClass([self class]) code:_responseStatus userInfo:userInfo];
         _errorBlock(_error);
         return;
     }
     
-    if(_completionDataBlock)
+    if (_completionDataBlock)
     {
         _completionDataBlock(_responseHeaders,_responseData);
     }
     
-    if(_completionBlock)
+    if (_completionBlock)
     {
         NSString *responseString = [self stringWithData:_responseData encodingName:_responseStringEncodingName];
         _completionBlock(_responseHeaders, responseString);
