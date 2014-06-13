@@ -23,35 +23,35 @@ static NSMutableArray *localCookiesStorage = nil;
 /**/
 
 @interface STHTTPRequestFileUpload : NSObject
-@property (nonatomic, retain) NSString *path;
-@property (nonatomic, retain) NSString *parameterName;
-@property (nonatomic, retain) NSString *mimeType;
+@property (nonatomic, copy) NSString *path;
+@property (nonatomic, copy) NSString *parameterName;
+@property (nonatomic, copy) NSString *mimeType;
 
 + (instancetype)fileUploadWithPath:(NSString *)path parameterName:(NSString *)parameterName mimeType:(NSString *)mimeType;
 + (instancetype)fileUploadWithPath:(NSString *)path parameterName:(NSString *)parameterName;
 @end
 
 @interface STHTTPRequestDataUpload : NSObject
-@property (nonatomic, retain) NSData *data;
-@property (nonatomic, retain) NSString *parameterName;
-@property (nonatomic, retain) NSString *mimeType; // can be nil
-@property (nonatomic, retain) NSString *fileName; // can be nil
+@property (nonatomic, copy) NSData *data;
+@property (nonatomic, copy) NSString *parameterName;
+@property (nonatomic, copy) NSString *mimeType; // can be nil
+@property (nonatomic, copy) NSString *fileName; // can be nil
 + (instancetype)dataUploadWithData:(NSData *)data parameterName:(NSString *)parameterName mimeType:(NSString *)mimeType fileName:(NSString *)fileName;
 @end
 
 /**/
 
 @interface STHTTPRequest ()
-@property (nonatomic) NSInteger responseStatus;
-@property (nonatomic, retain) NSURLConnection *connection;
-@property (nonatomic, retain) NSMutableData *responseData;
-@property (nonatomic, retain) NSString *responseStringEncodingName;
-@property (nonatomic, retain) NSDictionary *responseHeaders;
-@property (nonatomic, retain) NSURL *url;
-@property (nonatomic, retain) NSError *error;
-@property (nonatomic, retain) NSMutableArray *filesToUpload; // STHTTPRequestFileUpload instances
-@property (nonatomic, retain) NSMutableArray *dataToUpload; // STHTTPRequestDataUpload instances
-@property (nonatomic, retain) NSURLRequest *request;
+@property (nonatomic, assign) NSInteger responseStatus;
+@property (nonatomic, strong) NSURLConnection *connection;
+@property (nonatomic, strong) NSMutableData *responseData;
+@property (nonatomic, strong, readwrite) NSString *responseStringEncodingName;
+@property (nonatomic, strong, readwrite) NSDictionary *responseHeaders;
+@property (nonatomic, strong) NSURL *url;
+@property (nonatomic, strong) NSError *error;
+@property (nonatomic, strong) NSMutableArray *filesToUpload; // STHTTPRequestFileUpload instances
+@property (nonatomic, strong) NSMutableArray *dataToUpload; // STHTTPRequestDataUpload instances
+@property (nonatomic, strong) NSURLRequest *request;
 @end
 
 @interface NSData (Base64)
