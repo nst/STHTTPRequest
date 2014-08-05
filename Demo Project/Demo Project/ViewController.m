@@ -58,8 +58,8 @@
 #endif
     
 #if 0
-    STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"http://jigsaw.w3.org/HTTP/Digest/"];
-    [r setUsername:@"guest" password:@"guest_"];
+    STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"http://httpbin.org/basic-auth/user/passwd"];
+    [r setUsername:@"user" password:@"xxxx"];
     
     r.addCredentialsToURL = NO;
     
@@ -71,9 +71,9 @@
     r.errorBlock = ^(NSError *error) {
         NSLog(@"-- error: %@", error);
         
-        STHTTPRequest *r2 = [STHTTPRequest requestWithURLString:@"http://jigsaw.w3.org/HTTP/Digest/"];
+        STHTTPRequest *r2 = [STHTTPRequest requestWithURLString:@"http://httpbin.org/basic-auth/user/passwd"];
         
-        [r2 setUsername:@"guest" password:@"guest"];
+        [r2 setUsername:@"user" password:@"passwd"];
         
         r2.addCredentialsToURL = NO;
         
@@ -92,14 +92,15 @@
 #endif
     
 #if 0
-    NSString *email = @"sburlot@coriolis.ch";
+    NSString *email = @"asd@asd.ch";
     NSString *password = @"123456";
 
-    STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"http://mywebsite.com"];
+    STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"http://httpbin.org/post"];
     [r setHeaderWithName:@"Content-Type" value:@"application/json"];
     [r setHeaderWithName:@"Accept" value:@"application/json"];
     NSString *jsonString = [NSString stringWithFormat:@"{\"user\":{\"email\":\"%@\", \"password\":\"%@\"}}", email, password];
-    [r setPOSTData:[jsonString dataUsingEncoding:NSUTF8StringEncoding]];
+    NSData *postData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
+    [r setRawPOSTData:postData];
     
     NSError *error = nil;
     [r startSynchronousWithError:&error];
@@ -109,7 +110,7 @@
         [_activityIndicator stopAnimating];
     } else {
         NSLog(@"response: %@", [r responseString]);
-        _statusLabel.text = [NSString stringWithFormat:@"HTTP status %d", r.responseStatus];
+        _statusLabel.text = [NSString stringWithFormat:@"HTTP status %@", @(r.responseStatus)];
         _headersTextView.text = [r.responseHeaders description];
         _fetchButton.enabled = YES;
         [_activityIndicator stopAnimating];
