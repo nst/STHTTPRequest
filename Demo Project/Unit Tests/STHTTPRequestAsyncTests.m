@@ -199,7 +199,7 @@ BOOL WaitFor(BOOL (^block)(void))
     STAssertNotNil(error, @"got an error when loading URL");
 }
 
-- (void)testStatusCode
+- (void)testStatusCodeError
 {
     __block NSString *body = nil;
     __block NSError *error = nil;
@@ -221,6 +221,56 @@ BOOL WaitFor(BOOL (^block)(void))
     
     STAssertTrue(WaitFor(^BOOL { return body || error; }), @"async URL loading failed");
     STAssertTrue(r.responseStatus == 418, @"bad response status");
+}
+
+- (void)testStatusCodeOK
+{
+    __block NSString *body = nil;
+    __block NSError *error = nil;
+    __block NSInteger responseStatus = 0;
+    
+    STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"http://httpbin.org/status/200"];
+    __weak typeof(r) wr = r;
+    
+    r.completionBlock = ^(NSDictionary *theHeaders, NSString *theBody) {
+        body = theBody;
+        responseStatus = wr.responseStatus;
+    };
+    
+    r.errorBlock = ^(NSError *theError) {
+        error = theError;
+    };
+    
+    [r startAsynchronous];
+    
+    STAssertTrue(WaitFor(^BOOL { return body || error; }), @"async URL loading failed");
+    STAssertNil(error, @"got an error when loading URL");
+    STAssertTrue(r.responseStatus == 200, @"bad response status");
+}
+
+- (void)testStreaming
+{
+    __block NSData *data = nil;
+    __block NSError *error = nil;
+    
+    STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"http://httpbin.org/stream-bytes/1024"];
+    
+    r.completionDataBlock = ^(NSDictionary *theHeaders, NSData *theData) {
+        data = theData;
+    };
+    
+    r.downloadProgressBlock = ^(NSData *data, NSUInteger totalBytesReceived, long long totalBytesExpectedToReceive) {
+        
+    };
+    
+    r.errorBlock = ^(NSError *theError) {
+        error = theError;
+    };
+    
+    [r startAsynchronous];
+    
+    STAssertTrue(WaitFor(^BOOL { return data || error; }), @"async URL loading failed");
+    STAssertTrue([r.responseData length] == 1024, @"bad response data length");
 }
 
 @end

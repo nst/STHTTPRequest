@@ -24,7 +24,6 @@
 		038AB2CC199217120031C019 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03191EF817BF75070001C06D /* SenTestingKit.framework */; };
 		038AB2CD199217120031C019 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03191ED417BF75060001C06D /* UIKit.framework */; };
 		038AB2CE199217120031C019 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03191ED617BF75060001C06D /* Foundation.framework */; };
-		038AB2D0199217120031C019 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 03E5FC8B1920EC74007BE44D /* InfoPlist.strings */; };
 		038AB2D8199217420031C019 /* STHTTPRequestAsyncTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 038AB2C1199212FC0031C019 /* STHTTPRequestAsyncTests.m */; };
 		03E5FC811920EC67007BE44D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 03E5FC741920EC67007BE44D /* AppDelegate.m */; };
 		03E5FC821920EC67007BE44D /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 03E5FC751920EC67007BE44D /* Default-568h@2x.png */; };
@@ -34,7 +33,6 @@
 		03E5FC861920EC67007BE44D /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 03E5FC7A1920EC67007BE44D /* ViewController.xib */; };
 		03E5FC871920EC67007BE44D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 03E5FC7C1920EC67007BE44D /* main.m */; };
 		03E5FC891920EC67007BE44D /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03E5FC801920EC67007BE44D /* ViewController.m */; };
-		03E5FC901920EC74007BE44D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 03E5FC8B1920EC74007BE44D /* InfoPlist.strings */; };
 		03E5FC9A1920ED3C007BE44D /* STHTTPRequest+UnitTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 03E5FC951920ED3C007BE44D /* STHTTPRequest+UnitTests.m */; };
 		03E5FC9B1920ED3C007BE44D /* STHTTPRequestTestResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 03E5FC971920ED3C007BE44D /* STHTTPRequestTestResponse.m */; };
 		03E5FC9C1920ED3C007BE44D /* STHTTPRequestTestResponseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 03E5FC991920ED3C007BE44D /* STHTTPRequestTestResponseQueue.m */; };
@@ -100,7 +98,6 @@
 		03E5FC7E1920EC67007BE44D /* STHTTPRequest-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "STHTTPRequest-Prefix.pch"; sourceTree = "<group>"; };
 		03E5FC7F1920EC67007BE44D /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		03E5FC801920EC67007BE44D /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
-		03E5FC8C1920EC74007BE44D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		03E5FC8F1920EC74007BE44D /* STHTTPRequestTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STHTTPRequestTests.m; sourceTree = "<group>"; };
 		03E5FC941920ED3C007BE44D /* STHTTPRequest+UnitTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "STHTTPRequest+UnitTests.h"; sourceTree = "<group>"; };
 		03E5FC951920ED3C007BE44D /* STHTTPRequest+UnitTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "STHTTPRequest+UnitTests.m"; sourceTree = "<group>"; };
@@ -228,7 +225,6 @@
 		03E5FC8A1920EC74007BE44D /* Unit Tests */ = {
 			isa = PBXGroup;
 			children = (
-				03E5FC8B1920EC74007BE44D /* InfoPlist.strings */,
 				0313600B19921BAB00AAD77D /* STHTTPRequestTests-Info.plist */,
 				03E5FC8F1920EC74007BE44D /* STHTTPRequestTests.m */,
 				0313600F19921BDB00AAD77D /* AsynchronousTests-Info.plist */,
@@ -373,7 +369,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				03E5FC901920EC74007BE44D /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -381,7 +376,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				038AB2D0199217120031C019 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -488,14 +482,6 @@
 				03E5FC7B1920EC67007BE44D /* en */,
 			);
 			name = ViewController.xib;
-			sourceTree = "<group>";
-		};
-		03E5FC8B1920EC74007BE44D /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				03E5FC8C1920EC74007BE44D /* en */,
-			);
-			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
