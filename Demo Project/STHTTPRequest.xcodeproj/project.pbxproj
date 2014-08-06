@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		031360061992184300AAD77D /* STHTTPRequestTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 03E5FC8F1920EC74007BE44D /* STHTTPRequestTests.m */; };
 		0315A0461923D6DF001C6C02 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03191ED617BF75060001C06D /* Foundation.framework */; };
 		0315A0491923D6E0001C6C02 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 0315A0481923D6E0001C6C02 /* main.m */; };
 		0315A04D1923D6E0001C6C02 /* cli.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0315A04C1923D6E0001C6C02 /* cli.1 */; };
@@ -19,6 +20,12 @@
 		03191EFB17BF75070001C06D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03191ED617BF75060001C06D /* Foundation.framework */; };
 		03191F1117BF75260001C06D /* STHTTPRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 03191F1017BF75260001C06D /* STHTTPRequest.m */; };
 		03191F1217BF75260001C06D /* STHTTPRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 03191F1017BF75260001C06D /* STHTTPRequest.m */; };
+		038AB2C9199217120031C019 /* STHTTPRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 03191F1017BF75260001C06D /* STHTTPRequest.m */; };
+		038AB2CC199217120031C019 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03191EF817BF75070001C06D /* SenTestingKit.framework */; };
+		038AB2CD199217120031C019 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03191ED417BF75060001C06D /* UIKit.framework */; };
+		038AB2CE199217120031C019 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03191ED617BF75060001C06D /* Foundation.framework */; };
+		038AB2D0199217120031C019 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 03E5FC8B1920EC74007BE44D /* InfoPlist.strings */; };
+		038AB2D8199217420031C019 /* STHTTPRequestAsyncTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 038AB2C1199212FC0031C019 /* STHTTPRequestAsyncTests.m */; };
 		03E5FC811920EC67007BE44D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 03E5FC741920EC67007BE44D /* AppDelegate.m */; };
 		03E5FC821920EC67007BE44D /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 03E5FC751920EC67007BE44D /* Default-568h@2x.png */; };
 		03E5FC831920EC67007BE44D /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 03E5FC761920EC67007BE44D /* Default.png */; };
@@ -28,8 +35,6 @@
 		03E5FC871920EC67007BE44D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 03E5FC7C1920EC67007BE44D /* main.m */; };
 		03E5FC891920EC67007BE44D /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03E5FC801920EC67007BE44D /* ViewController.m */; };
 		03E5FC901920EC74007BE44D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 03E5FC8B1920EC74007BE44D /* InfoPlist.strings */; };
-		03E5FC911920EC74007BE44D /* STHTTPRequestTests-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 03E5FC8D1920EC74007BE44D /* STHTTPRequestTests-Info.plist */; };
-		03E5FC921920EC74007BE44D /* STHTTPRequestTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 03E5FC8F1920EC74007BE44D /* STHTTPRequestTests.m */; };
 		03E5FC9A1920ED3C007BE44D /* STHTTPRequest+UnitTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 03E5FC951920ED3C007BE44D /* STHTTPRequest+UnitTests.m */; };
 		03E5FC9B1920ED3C007BE44D /* STHTTPRequestTestResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 03E5FC971920ED3C007BE44D /* STHTTPRequestTestResponse.m */; };
 		03E5FC9C1920ED3C007BE44D /* STHTTPRequestTestResponseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 03E5FC991920ED3C007BE44D /* STHTTPRequestTestResponseQueue.m */; };
@@ -37,6 +42,13 @@
 
 /* Begin PBXContainerItemProxy section */
 		03191EFC17BF75070001C06D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 03191EC917BF75060001C06D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 03191ED017BF75060001C06D;
+			remoteInfo = Demo;
+		};
+		038AB2C5199217120031C019 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 03191EC917BF75060001C06D /* Project object */;
 			proxyType = 1;
@@ -59,6 +71,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0313600B19921BAB00AAD77D /* STHTTPRequestTests-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "STHTTPRequestTests-Info.plist"; sourceTree = "<group>"; };
+		0313600F19921BDB00AAD77D /* AsynchronousTests-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "AsynchronousTests-Info.plist"; path = "Demo Project/AsynchronousTests-Info.plist"; sourceTree = SOURCE_ROOT; };
 		0315A0451923D6DF001C6C02 /* cli */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = cli; sourceTree = BUILT_PRODUCTS_DIR; };
 		0315A0481923D6E0001C6C02 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		0315A04B1923D6E0001C6C02 /* cli-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "cli-Prefix.pch"; sourceTree = "<group>"; };
@@ -72,6 +86,8 @@
 		03191F0F17BF75260001C06D /* STHTTPRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = STHTTPRequest.h; path = ../STHTTPRequest.h; sourceTree = "<group>"; };
 		03191F1017BF75260001C06D /* STHTTPRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = STHTTPRequest.m; path = ../STHTTPRequest.m; sourceTree = "<group>"; };
 		03606B3F17BF796B00105D85 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = text; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		038AB2C1199212FC0031C019 /* STHTTPRequestAsyncTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STHTTPRequestAsyncTests.m; sourceTree = "<group>"; };
+		038AB2D5199217120031C019 /* STHTTPRequestTests copy.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "STHTTPRequestTests copy.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		03E5FC731920EC67007BE44D /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		03E5FC741920EC67007BE44D /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		03E5FC751920EC67007BE44D /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
@@ -85,8 +101,6 @@
 		03E5FC7F1920EC67007BE44D /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		03E5FC801920EC67007BE44D /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		03E5FC8C1920EC74007BE44D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		03E5FC8D1920EC74007BE44D /* STHTTPRequestTests-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "STHTTPRequestTests-Info.plist"; sourceTree = "<group>"; };
-		03E5FC8E1920EC74007BE44D /* STHTTPRequestTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STHTTPRequestTests.h; sourceTree = "<group>"; };
 		03E5FC8F1920EC74007BE44D /* STHTTPRequestTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STHTTPRequestTests.m; sourceTree = "<group>"; };
 		03E5FC941920ED3C007BE44D /* STHTTPRequest+UnitTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "STHTTPRequest+UnitTests.h"; sourceTree = "<group>"; };
 		03E5FC951920ED3C007BE44D /* STHTTPRequest+UnitTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "STHTTPRequest+UnitTests.m"; sourceTree = "<group>"; };
@@ -122,6 +136,16 @@
 				03191EF917BF75070001C06D /* SenTestingKit.framework in Frameworks */,
 				03191EFA17BF75070001C06D /* UIKit.framework in Frameworks */,
 				03191EFB17BF75070001C06D /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		038AB2CB199217120031C019 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				038AB2CC199217120031C019 /* SenTestingKit.framework in Frameworks */,
+				038AB2CD199217120031C019 /* UIKit.framework in Frameworks */,
+				038AB2CE199217120031C019 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -166,6 +190,7 @@
 				03191ED117BF75060001C06D /* STHTTPRequest.app */,
 				03191EF717BF75070001C06D /* STHTTPRequestTests.octest */,
 				0315A0451923D6DF001C6C02 /* cli */,
+				038AB2D5199217120031C019 /* STHTTPRequestTests copy.octest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -204,9 +229,10 @@
 			isa = PBXGroup;
 			children = (
 				03E5FC8B1920EC74007BE44D /* InfoPlist.strings */,
-				03E5FC8D1920EC74007BE44D /* STHTTPRequestTests-Info.plist */,
-				03E5FC8E1920EC74007BE44D /* STHTTPRequestTests.h */,
+				0313600B19921BAB00AAD77D /* STHTTPRequestTests-Info.plist */,
 				03E5FC8F1920EC74007BE44D /* STHTTPRequestTests.m */,
+				0313600F19921BDB00AAD77D /* AsynchronousTests-Info.plist */,
+				038AB2C1199212FC0031C019 /* STHTTPRequestAsyncTests.m */,
 				03E5FC931920ED3C007BE44D /* UnitTestAdditions */,
 			);
 			path = "Unit Tests";
@@ -282,6 +308,25 @@
 			productReference = 03191EF717BF75070001C06D /* STHTTPRequestTests.octest */;
 			productType = "com.apple.product-type.bundle";
 		};
+		038AB2C3199217120031C019 /* AsynchronousTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 038AB2D2199217120031C019 /* Build configuration list for PBXNativeTarget "AsynchronousTests" */;
+			buildPhases = (
+				038AB2C6199217120031C019 /* Sources */,
+				038AB2CB199217120031C019 /* Frameworks */,
+				038AB2CF199217120031C019 /* Resources */,
+				038AB2D1199217120031C019 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				038AB2C4199217120031C019 /* PBXTargetDependency */,
+			);
+			name = AsynchronousTests;
+			productName = DemoTests;
+			productReference = 038AB2D5199217120031C019 /* STHTTPRequestTests copy.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -305,6 +350,7 @@
 			targets = (
 				03191ED017BF75060001C06D /* STHTTPRequest */,
 				03191EF617BF75070001C06D /* STHTTPRequestTests */,
+				038AB2C3199217120031C019 /* AsynchronousTests */,
 				0315A0441923D6DF001C6C02 /* cli */,
 			);
 		};
@@ -328,7 +374,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				03E5FC901920EC74007BE44D /* InfoPlist.strings in Resources */,
-				03E5FC911920EC74007BE44D /* STHTTPRequestTests-Info.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		038AB2CF199217120031C019 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				038AB2D0199217120031C019 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -336,6 +389,19 @@
 
 /* Begin PBXShellScriptBuildPhase section */
 		03191EF517BF75070001C06D /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+		038AB2D1199217120031C019 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -375,11 +441,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				03E5FC921920EC74007BE44D /* STHTTPRequestTests.m in Sources */,
+				031360061992184300AAD77D /* STHTTPRequestTests.m in Sources */,
 				03E5FC9C1920ED3C007BE44D /* STHTTPRequestTestResponseQueue.m in Sources */,
 				03E5FC9B1920ED3C007BE44D /* STHTTPRequestTestResponse.m in Sources */,
 				03191F1217BF75260001C06D /* STHTTPRequest.m in Sources */,
 				03E5FC9A1920ED3C007BE44D /* STHTTPRequest+UnitTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		038AB2C6199217120031C019 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				038AB2D8199217420031C019 /* STHTTPRequestAsyncTests.m in Sources */,
+				038AB2C9199217120031C019 /* STHTTPRequest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -390,6 +465,11 @@
 			isa = PBXTargetDependency;
 			target = 03191ED017BF75060001C06D /* STHTTPRequest */;
 			targetProxy = 03191EFC17BF75070001C06D /* PBXContainerItemProxy */;
+		};
+		038AB2C4199217120031C019 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 03191ED017BF75060001C06D /* STHTTPRequest */;
+			targetProxy = 038AB2C5199217120031C019 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -583,6 +663,40 @@
 			};
 			name = Release;
 		};
+		038AB2D3199217120031C019 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/STHTTPRequest.app/STHTTPRequest";
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Demo Project/STHTTPRequest-Prefix.pch";
+				INFOPLIST_FILE = "Demo Project/AsynchronousTests-Info.plist";
+				PRODUCT_NAME = "STHTTPRequestTests copy";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		038AB2D4199217120031C019 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/STHTTPRequest.app/STHTTPRequest";
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Demo Project/STHTTPRequest-Prefix.pch";
+				INFOPLIST_FILE = "Demo Project/AsynchronousTests-Info.plist";
+				PRODUCT_NAME = "STHTTPRequestTests copy";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -618,6 +732,15 @@
 			buildConfigurations = (
 				03191F0D17BF75070001C06D /* Debug */,
 				03191F0E17BF75070001C06D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		038AB2D2199217120031C019 /* Build configuration list for PBXNativeTarget "AsynchronousTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				038AB2D3199217120031C019 /* Debug */,
+				038AB2D4199217120031C019 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

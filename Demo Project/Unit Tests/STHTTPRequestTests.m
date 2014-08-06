@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 Nicolas Seriot. All rights reserved.
 //
 
-#import "STHTTPRequestTests.h"
+#import <SenTestingKit/SenTestingKit.h>
 
 #import "STHTTPRequest.h"
 
@@ -14,6 +14,10 @@
 #import "STHTTPRequestTestResponseQueue.h"
 
 #import "STHTTPRequest+UnitTests.h"
+
+@interface STHTTPRequestTests : SenTestCase
+
+@end
 
 @implementation STHTTPRequestTests
 
@@ -64,7 +68,7 @@
     [r startAsynchronous]; // will actually get executed sychronously for tests
     
     STAssertTrue(r.error == nil, [NSString stringWithFormat:@"error should be nil: %@", r.error]);
-    STAssertEquals(r.responseStatus, 200, [NSString stringWithFormat:@"bad response status: %d", r.responseStatus]);
+    STAssertTrue(r.responseStatus == 200, @"bad response status: %@", @(r.responseStatus));
     STAssertEqualObjects(r.responseHeaders, @{ @"key" : @"value" }, [NSString stringWithFormat:@"bad headers: %@", [r responseHeaders]]);
     STAssertEqualObjects(r.responseString, @"OK", [NSString stringWithFormat:@"bad response: %@", r.responseString]);
 }
@@ -73,7 +77,7 @@
     
     STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"http://www.google.com"];
     
-    r.downloadProgressBlock = ^(NSData *data, NSInteger totalBytesReceived, NSInteger totalBytesExpectedToReceive) {
+    r.downloadProgressBlock = ^(NSData *data, NSUInteger totalBytesReceived, long long totalBytesExpectedToReceive) {
         NSLog(@"-- %@", data);
     };
     
