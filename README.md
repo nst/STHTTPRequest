@@ -136,7 +136,11 @@ r.downloadProgressBlock = ^(NSData *dataJustReceived,
 
 ##### Usable in unit tests
 
-You can [fill a queue](https://github.com/nst/STHTTPRequest/blob/master/Demo%20Project/Unit%20Tests/STHTTPRequestTests.m#L38-L70) with fake responses to be consumed by requests started from unit tests.
+The demo project comes with two unit tests target.
+
+`AsynchronousTests` shows how to [perform actual network requests](https://github.com/nst/STHTTPRequest/blob/master/Demo%20Project/Unit%20Tests/STHTTPRequestAsyncTests.m) in unit tests.
+
+`STHTTPRequestTests` show how to perform synchronous tests by [filling a queue](https://github.com/nst/STHTTPRequest/blob/master/Demo%20Project/Unit%20Tests/STHTTPRequestTests.m#L42-L74) with fake responses to be consumed by requests started from unit tests. Just include the [UnitTestAdditions](https://github.com/nst/STHTTPRequest/tree/master/Demo%20Project/Unit%20Tests) directory to your project.
 
 ##### Log the requests
 
