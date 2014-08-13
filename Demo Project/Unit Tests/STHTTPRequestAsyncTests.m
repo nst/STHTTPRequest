@@ -273,4 +273,55 @@ BOOL WaitFor(BOOL (^block)(void))
     STAssertTrue([r.responseData length] == 1024, @"bad response data length");
 }
 
+- (void)testTimeout
+{
+    __block NSString *body = nil;
+    __block NSError *error = nil;
+    __block NSInteger responseStatus = 0;
+
+    STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"http://httpbin.org/delay/3"];
+    r.timeoutSeconds = 5;
+    __weak typeof(r) wr = r;
+    
+    r.completionBlock = ^(NSDictionary *theHeaders, NSString *theBody) {
+        responseStatus = wr.responseStatus;
+        body = theBody;
+    };
+    
+    r.errorBlock = ^(NSError *theError) {
+        error = theError;
+    };
+    
+    [r startAsynchronous];
+    
+    STAssertTrue(WaitFor(^BOOL { return body || error; }), @"async URL loading failed");
+    STAssertNil(error, @"error");
+    STAssertTrue(responseStatus == 200, @"bad response status");
+}
+
+- (void)testNoTimeout
+{
+    __block NSString *body = nil;
+    __block NSError *error = nil;
+    
+    STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"http://httpbin.org/delay/6"];
+    r.timeoutSeconds = 4;
+    
+    r.completionBlock = ^(NSDictionary *theHeaders, NSString *theBody) {
+        //
+    };
+    
+    r.errorBlock = ^(NSError *theError) {
+        error = theError;
+    };
+    
+    [r startAsynchronous];
+    
+    STAssertTrue(WaitFor(^BOOL { return body || error; }), @"async URL loading failed");
+    STAssertNotNil(error, @"missed the timeout error");
+    STAssertTrue([[error domain] isEqualToString:NSURLErrorDomain], @"bad error domain");
+    STAssertTrue([error code] == -1001, @"bad error code");
+    NSLog(@"--------- %@", r.error);
+}
+
 @end
