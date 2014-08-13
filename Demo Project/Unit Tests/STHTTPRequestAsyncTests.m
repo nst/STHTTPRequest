@@ -280,7 +280,7 @@ BOOL WaitFor(BOOL (^block)(void))
     __block NSInteger responseStatus = 0;
 
     STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"http://httpbin.org/delay/3"];
-    r.timeoutSeconds = 5;
+    r.timeoutSeconds = 6;
     __weak typeof(r) wr = r;
     
     r.completionBlock = ^(NSDictionary *theHeaders, NSString *theBody) {
@@ -321,7 +321,31 @@ BOOL WaitFor(BOOL (^block)(void))
     STAssertNotNil(error, @"missed the timeout error");
     STAssertTrue([[error domain] isEqualToString:NSURLErrorDomain], @"bad error domain");
     STAssertTrue([error code] == -1001, @"bad error code");
-    NSLog(@"--------- %@", r.error);
+}
+
+- (void)testCookies
+{
+    __block NSString *body = nil;
+    __block NSError *error = nil;
+    
+    STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"http://httpbin.org/cookies/set?name=value"];
+    
+    r.completionBlock = ^(NSDictionary *theHeaders, NSString *theBody) {
+        body = theBody;
+    };
+    
+    r.errorBlock = ^(NSError *theError) {
+        error = theError;
+    };
+    
+    [r startAsynchronous];
+    
+    STAssertTrue(WaitFor(^BOOL { return body || error; }), @"async URL loading failed");
+    STAssertNil(error, @"error");
+
+    NSHTTPCookie *cookie = [[r sessionCookies] lastObject];
+    
+    STAssertNotNil(cookie, @"missing cookie");
 }
 
 @end
