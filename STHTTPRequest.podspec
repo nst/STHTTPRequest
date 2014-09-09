@@ -1,11 +1,11 @@
 Pod::Spec.new do |s|
   s.name          = "STHTTPRequest"
-  s.version       = "1.0.1"
+  s.version       = "1.0.2"
   s.summary       = "A NSURLConnection wrapper for humans"
   s.homepage      = "https://github.com/nst/STHTTPRequest"
   s.license       = { :type => 'New BSD'}
   s.authors       = 'Nicolas Seriot', 'Alistair Galbraith', 'Cyril Chandelier', 'Doug Ayers', 'Matthias Schmidt', 'Oktawian Chojnacki', 'Stephan Burlot', 'Zach Boyd'
-  s.source        = { :git => "https://github.com/nst/STHTTPRequest.git", :tag => "1.0.1" }
+  s.source        = { :git => "https://github.com/jasperblues/STHTTPRequest.git", :tag => s.version.to_s }
   s.source_files  = '{STHTTPRequest, STURLUtils}.{h,m}'
   s.requires_arc  = true
   s.ios.deployment_target = '5.0'
