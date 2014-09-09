@@ -36,6 +36,7 @@
 		03E5FC9A1920ED3C007BE44D /* STHTTPRequest+UnitTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 03E5FC951920ED3C007BE44D /* STHTTPRequest+UnitTests.m */; };
 		03E5FC9B1920ED3C007BE44D /* STHTTPRequestTestResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 03E5FC971920ED3C007BE44D /* STHTTPRequestTestResponse.m */; };
 		03E5FC9C1920ED3C007BE44D /* STHTTPRequestTestResponseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 03E5FC991920ED3C007BE44D /* STHTTPRequestTestResponseQueue.m */; };
+		BA798328FF141BF62B790E6E /* STURLUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = BA7983BA623BBC7FB0A5A119 /* STURLUtils.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -105,6 +106,8 @@
 		03E5FC971920ED3C007BE44D /* STHTTPRequestTestResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STHTTPRequestTestResponse.m; sourceTree = "<group>"; };
 		03E5FC981920ED3C007BE44D /* STHTTPRequestTestResponseQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STHTTPRequestTestResponseQueue.h; sourceTree = "<group>"; };
 		03E5FC991920ED3C007BE44D /* STHTTPRequestTestResponseQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STHTTPRequestTestResponseQueue.m; sourceTree = "<group>"; };
+		BA7981B5C55A28D4B46FEDD1 /* STURLUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STURLUtils.h; sourceTree = "<group>"; };
+		BA7983BA623BBC7FB0A5A119 /* STURLUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STURLUtils.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -178,6 +181,8 @@
 				0315A0471923D6DF001C6C02 /* cli */,
 				03191ED317BF75060001C06D /* Frameworks */,
 				03191ED217BF75060001C06D /* Products */,
+				BA7981B5C55A28D4B46FEDD1 /* STURLUtils.h */,
+				BA7983BA623BBC7FB0A5A119 /* STURLUtils.m */,
 			);
 			sourceTree = "<group>";
 		};
@@ -428,6 +433,7 @@
 				03E5FC871920EC67007BE44D /* main.m in Sources */,
 				03E5FC891920EC67007BE44D /* ViewController.m in Sources */,
 				03191F1117BF75260001C06D /* STHTTPRequest.m in Sources */,
+				BA798328FF141BF62B790E6E /* STURLUtils.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
