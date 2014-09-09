@@ -57,6 +57,8 @@ typedef void (^errorBlock_t)(NSError *error);
 
 + (STHTTPRequest *)requestWithURL:(NSURL *)url;
 + (STHTTPRequest *)requestWithURLString:(NSString *)urlString;
++ (STHTTPRequest *)requestWithURL:(NSURL *)url appendedWithQueryParameters:(NSDictionary *)parameters;
++ (STHTTPRequest *)requestWithURLString:(NSString *)urlString appendedWithQueryParameters:(NSDictionary *)parameters;
 
 - (NSString *)debugDescription; // logged when launched with -STHTTPRequestShowDebugDescription 1
 - (NSString *)curlDescription; // logged when launched with -STHTTPRequestShowCurlDescription 1

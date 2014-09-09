@@ -13,6 +13,7 @@
 #endif
 
 #import "STHTTPRequest.h"
+#import "STURLUtils.h"
 
 NSUInteger const kSTHTTPRequestCancellationError = 1;
 NSUInteger const kSTHTTPRequestDefaultTimeout = 30;
@@ -70,6 +71,16 @@ static NSMutableArray *localCookiesStorage = nil;
 
 + (STHTTPRequest *)requestWithURLString:(NSString *)urlString {
     NSURL *url = [NSURL URLWithString:urlString];
+    return [self requestWithURL:url];
+}
+
++ (STHTTPRequest *)requestWithURL:(NSURL *)url appendedWithQueryParameters:(NSDictionary *)parameters {
+    return [self requestWithURL:[STURLUtils URL:url appendedWithQueryParameters:parameters]];
+}
+
++ (STHTTPRequest *)requestWithURLString:(NSString *)urlString appendedWithQueryParameters:(NSDictionary *)parameters
+{
+    NSURL *url = [STURLUtils URL:[NSURL URLWithString:urlString] appendedWithQueryParameters:parameters];
     return [self requestWithURL:url];
 }
 
@@ -539,7 +550,7 @@ static NSMutableArray *localCookiesStorage = nil;
     
     if(encodingName != nil) {
         
-        encoding = CFStringConvertEncodingToNSStringEncoding(CFStringConvertIANACharSetNameToEncoding((CFStringRef)encodingName));
+        encoding = CFStringConvertEncodingToNSStringEncoding(CFStringConvertIANACharSetNameToEncoding((__bridge CFStringRef)encodingName));
         
         if(encoding == kCFStringEncodingInvalidId) {
             encoding = NSUTF8StringEncoding; // by default
