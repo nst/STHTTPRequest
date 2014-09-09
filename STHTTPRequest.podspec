@@ -6,7 +6,7 @@ Pod::Spec.new do |s|
   s.license       = { :type => 'New BSD'}
   s.authors       = 'Nicolas Seriot', 'Alistair Galbraith', 'Cyril Chandelier', 'Doug Ayers', 'Matthias Schmidt', 'Oktawian Chojnacki', 'Stephan Burlot', 'Zach Boyd'
   s.source        = { :git => "https://github.com/jasperblues/STHTTPRequest.git", :tag => s.version.to_s }
-  s.source_files  = '{STHTTPRequest, STURLUtils}.{h,m}'
+  s.source_files  = 'STHTTPRequest.{h,m}', 'STURLUtils.{h,m}'
   s.requires_arc  = true
   s.ios.deployment_target = '5.0'
   s.osx.deployment_target = '10.7'
