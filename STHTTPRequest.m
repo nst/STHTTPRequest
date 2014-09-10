@@ -638,6 +638,16 @@ static NSMutableArray *localCookiesStorage = nil;
         [ma addObject:[NSString stringWithFormat:@"-d \"%@\"", ss]];
     }
     
+    if(_rawPOSTData) {
+        // try JSON
+        id jsonObject = [NSJSONSerialization JSONObjectWithData:_rawPOSTData options:NSJSONReadingMutableContainers error:nil];
+        if(jsonObject) {
+            NSString *jsonString = [[NSString alloc] initWithData:_rawPOSTData encoding:NSUTF8StringEncoding];
+            [ma addObject:@"-X POST"];
+            [ma addObject:[NSString stringWithFormat:@"-d \'%@\'", jsonString]];
+        }
+    }
+    
     // -F "coolfiles=@fil1.gif;type=image/gif,fil2.txt,fil3.html"   // file upload
     
     for(STHTTPRequestFileUpload *f in _filesToUpload) {
