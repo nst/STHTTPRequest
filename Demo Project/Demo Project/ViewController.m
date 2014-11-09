@@ -21,6 +21,9 @@
     _imageView.image = nil;
     
     __block STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"https://raw.github.com/github/media/master/octocats/octocat.png"];
+
+//    r.GETDictionary = @{@"a":@"1", @"b":@"x/x?!=&x"};
+    
     __weak STHTTPRequest *wr = r; // so that we can access the request from within the callback blocks but without creating a retain cycle
     
     r.completionBlock = ^(NSDictionary *headers, NSString *body) {
