@@ -343,6 +343,9 @@ static NSMutableArray *localCookiesStorage = nil;
 
 - (NSMutableURLRequest *)requestByAddingCredentialsToURL:(BOOL)useCredentialsInURL {
     
+    NSAssert(self.completionBlock, @"the completion block is mandatory");
+    NSAssert(self.errorBlock, @"the error block is mandatory");
+
     NSURL *theURL = nil;
     
     if(useCredentialsInURL) {
