@@ -81,6 +81,12 @@ NSData       *data     = r.responseData;
 [r setUsername:@"test" password:@"1234"];
 ```
 
+##### set the GET parameters
+
+```Objective-C
+r.GETDictionary = @{ @"paperid":@"6", @"q77":"1", @"q80":@"hello" };
+```
+
 ##### POST a dictionary
 
 ```Objective-C
