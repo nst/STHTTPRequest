@@ -346,7 +346,9 @@ static NSMutableArray *localCookiesStorage = nil;
     
     __block BOOL questionMarkFound = NO;
     
-    [parameters enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *value, BOOL *stop) {
+    [parameters enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSObject *obj, BOOL *stop) {
+        
+        NSString *value = [obj description];
         
         if(questionMarkFound == NO) {
             questionMarkFound = [urlString rangeOfString:@"?"].location != NSNotFound;
