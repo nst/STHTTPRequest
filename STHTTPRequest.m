@@ -717,7 +717,7 @@ static NSMutableArray *localCookiesStorage = nil;
     
     // url
     
-    [ma addObject:[NSString stringWithFormat:@"\"%@\"", _url]];
+    [ma addObject:[NSString stringWithFormat:@"\"%@\"", [_request URL]]];
     
     return [ma componentsJoinedByString:@" \\\n"];
 }
