@@ -996,7 +996,7 @@ static NSMutableArray *localCookiesStorage = nil;
     
     __block BOOL questionMarkFound = NO;
     
-    NSArray *sortedParameters = [[self class] dictionariesSortedByKey:parameters];
+    NSArray *sortedParameters = [STHTTPRequest dictionariesSortedByKey:parameters];
     
     [sortedParameters enumerateObjectsUsingBlock:^(NSDictionary *d, NSUInteger idx, BOOL *stop) {
         
