@@ -107,3 +107,7 @@ typedef void (^errorBlock_t)(NSError *error);
 @interface NSString (RFC3986)
 - (NSString *)st_stringByAddingRFC3986PercentEscapesUsingEncoding:(NSStringEncoding)encoding;
 @end
+
+@interface NSString (STUtilities)
+- (NSString *)st_stringByAppendingGETParameters:(NSDictionary *)parameters;
+@end
