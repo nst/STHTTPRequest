@@ -94,4 +94,14 @@
     STAssertTrue([r.responseData length] == 3, @"");
 }
 
+- (void)testStringByAppendingGETParameters {
+    NSString *s = @"http://www.test.com/x?b=1";
+    
+    NSDictionary *d = @{@"a":@"1", @"c":@"1"};
+    
+    NSString *s2 = [s st_stringByAppendingGETParameters:d];
+    
+    STAssertTrue(s2, @"http://www.test.com/x?b=1&a=1&c=1", @"");
+}
+
 @end
