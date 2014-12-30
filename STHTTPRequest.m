@@ -379,7 +379,9 @@ static NSMutableArray *localCookiesStorage = nil;
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:theURL];
     if(_HTTPMethod) [request setHTTPMethod:_HTTPMethod];
     
-    request.timeoutInterval = self.timeoutSeconds;
+    if(self.timeoutSeconds != 0.0) {
+        request.timeoutInterval = self.timeoutSeconds;
+    }
     
     if(_ignoreSharedCookiesStorage) {
         NSArray *cookies = [self sessionCookies];
