@@ -5,10 +5,12 @@ static STHTTPRequestTestResponseQueue *sharedInstance = nil;
 
 @implementation STHTTPRequestTestResponseQueue
 
-+ (STHTTPRequestTestResponseQueue *)sharedInstance {
-    if(sharedInstance == nil) {
-        sharedInstance = [[STHTTPRequestTestResponseQueue alloc] init];
-    }
++ (instancetype)sharedInstance {
+    static STHTTPRequestTestResponseQueue *sharedInstance = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sharedInstance = [[self alloc] init];
+    });
     return sharedInstance;
 }
 

@@ -6,7 +6,7 @@
 
 @property (nonatomic, retain) NSMutableArray *responses;
 
-+ (STHTTPRequestTestResponseQueue *)sharedInstance;
++ (instancetype)sharedInstance;
 
 - (void)enqueue:(STHTTPRequestTestResponse *)response;
 - (STHTTPRequestTestResponse *)dequeue;
