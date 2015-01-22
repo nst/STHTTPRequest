@@ -640,7 +640,7 @@ static NSMutableArray *localCookiesStorage = nil;
 - (NSString *)curlDescription {
     
     NSMutableArray *ma = [NSMutableArray array];
-    [ma addObject:@"$ curl -i"];
+    [ma addObject:@"\U0001F300 curl -i"];
     
     // -u usernane:password
     
