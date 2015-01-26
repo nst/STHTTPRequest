@@ -379,6 +379,10 @@ static NSMutableArray *localCookiesStorage = nil;
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:theURL];
     if(_HTTPMethod) [request setHTTPMethod:_HTTPMethod];
     
+    if(self.ignoreCache) {
+        request.cachePolicy = NSURLRequestReloadIgnoringCacheData;
+    }
+    
     if(self.timeoutSeconds != 0.0) {
         request.timeoutInterval = self.timeoutSeconds;
     }
@@ -868,6 +872,14 @@ static NSMutableArray *localCookiesStorage = nil;
     dispatch_async(dispatch_get_main_queue(), ^{
         _errorBlock(_error);
     });
+}
+
+#pragma mark NSURLConnectionDataDelegate
+
+- (NSCachedURLResponse *)connection:(NSURLConnection *)connection willCacheResponse:(NSCachedURLResponse *)cachedResponse {
+    if(self.ignoreCache) return nil;
+
+    return cachedResponse;
 }
 
 #pragma mark NSURLConnectionDelegate
