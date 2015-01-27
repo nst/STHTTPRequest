@@ -20,6 +20,8 @@ NSUInteger const kSTHTTPRequestDefaultTimeout = 30;
 static NSMutableDictionary *localCredentialsStorage = nil;
 static NSMutableArray *localCookiesStorage = nil;
 
+static BOOL globalIgnoreCache = NO;
+
 /**/
 
 @interface STHTTPRequestFileUpload : NSObject
@@ -71,6 +73,10 @@ static NSMutableArray *localCookiesStorage = nil;
 + (STHTTPRequest *)requestWithURLString:(NSString *)urlString {
     NSURL *url = [NSURL URLWithString:urlString];
     return [self requestWithURL:url];
+}
+
++ (void)setGlobalIgnoreCache:(BOOL)ignoreCache {
+    globalIgnoreCache = ignoreCache;
 }
 
 - (STHTTPRequest *)initWithURL:(NSURL *)theURL {
@@ -379,7 +385,7 @@ static NSMutableArray *localCookiesStorage = nil;
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:theURL];
     if(_HTTPMethod) [request setHTTPMethod:_HTTPMethod];
     
-    if(self.ignoreCache) {
+    if(globalIgnoreCache || _ignoreCache) {
         request.cachePolicy = NSURLRequestReloadIgnoringCacheData;
     }
     
@@ -877,8 +883,8 @@ static NSMutableArray *localCookiesStorage = nil;
 #pragma mark NSURLConnectionDataDelegate
 
 - (NSCachedURLResponse *)connection:(NSURLConnection *)connection willCacheResponse:(NSCachedURLResponse *)cachedResponse {
-    if(self.ignoreCache) return nil;
-
+    if(globalIgnoreCache || _ignoreCache) return nil;
+    
     return cachedResponse;
 }
 
