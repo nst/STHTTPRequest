@@ -362,9 +362,6 @@ static BOOL globalIgnoreCache = NO;
 
 - (NSMutableURLRequest *)requestByAddingCredentialsToURL:(BOOL)useCredentialsInURL {
     
-    NSAssert((self.completionBlock || self.completionDataBlock), @"a completion block is mandatory");
-    NSAssert(self.errorBlock, @"the error block is mandatory");
-    
     NSURL *theURL = nil;
     
     if(useCredentialsInURL) {
@@ -777,6 +774,9 @@ static BOOL globalIgnoreCache = NO;
 
 - (void)startAsynchronous {
     
+    NSAssert((self.completionBlock || self.completionDataBlock), @"a completion block is mandatory");
+    NSAssert(self.errorBlock, @"the error block is mandatory");
+
     NSMutableURLRequest *request = [self requestByAddingCredentialsToURL:_addCredentialsToURL];
     
     [request setHTTPShouldHandleCookies:(_ignoreSharedCookiesStorage == NO)];
