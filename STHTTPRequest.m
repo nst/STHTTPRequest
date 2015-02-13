@@ -652,6 +652,11 @@ static BOOL globalIgnoreCache = NO;
     NSMutableArray *ma = [NSMutableArray array];
     [ma addObject:@"\U0001F300 curl -i"];
     
+    if([_HTTPMethod isEqualToString:@"GET"] == NO) { // GET is optional in curl
+        NSString *s = [NSString stringWithFormat:@"-X %@", _HTTPMethod];
+        [ma addObject:s];
+    }
+    
     // -u usernane:password
     
     NSURLCredential *credential = [[self class] sessionAuthenticationCredentialsForURL:[self url]];
