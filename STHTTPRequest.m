@@ -91,7 +91,7 @@ static BOOL globalIgnoreCache = NO;
         self.timeoutSeconds = kSTHTTPRequestDefaultTimeout;
         self.filesToUpload = [NSMutableArray array];
         self.dataToUpload = [NSMutableArray array];
-        // self.HTTPMethod = @"GET"; // default
+        self.HTTPMethod = @"GET"; // default
     }
     
     return self;
@@ -382,16 +382,16 @@ static BOOL globalIgnoreCache = NO;
 
     /**/
     
-    if(_HTTPMethod == nil) {
+    if([_HTTPMethod isEqualToString:@"GET"]) {
         if(_POSTDictionary || _rawPOSTData || [self.filesToUpload count] > 0 || [self.dataToUpload count] > 0) {
-            _HTTPMethod = @"POST";
+            self.HTTPMethod = @"POST";
         }
     }
     
     /**/
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:theURL];
-    if(_HTTPMethod) [request setHTTPMethod:_HTTPMethod];
+    [request setHTTPMethod:_HTTPMethod];
     
     if(globalIgnoreCache || _ignoreCache) {
         request.cachePolicy = NSURLRequestReloadIgnoringCacheData;
@@ -474,13 +474,10 @@ static BOOL globalIgnoreCache = NO;
         
         [body appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
         
-        if(_HTTPMethod == nil) [request setHTTPMethod:@"POST"];
         [request setValue:[NSString stringWithFormat:@"%u", (unsigned int)[body length]] forHTTPHeaderField:@"Content-Length"];
         [request setHTTPBody:body];
         
     } else if (_rawPOSTData) {
-        
-        if(_HTTPMethod == nil) [request setHTTPMethod:@"POST"];
         
         [request setValue:[NSString stringWithFormat:@"%u", (unsigned int)[_rawPOSTData length]] forHTTPHeaderField:@"Content-Length"];
         [request setHTTPBody:_rawPOSTData];
@@ -513,12 +510,8 @@ static BOOL globalIgnoreCache = NO;
         
         NSData *data = [s dataUsingEncoding:_POSTDataEncoding allowLossyConversion:YES];
         
-        if(_HTTPMethod == nil) [request setHTTPMethod:@"POST"];
-        
         [request setValue:[NSString stringWithFormat:@"%u", (unsigned int)[data length]] forHTTPHeaderField:@"Content-Length"];
         [request setHTTPBody:data];
-    } else {
-        if(_HTTPMethod == nil) [request setHTTPMethod:@"GET"];
     }
     
     [_requestHeaders enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
@@ -660,7 +653,7 @@ static BOOL globalIgnoreCache = NO;
     NSMutableArray *ma = [NSMutableArray array];
     [ma addObject:@"\U0001F300 curl -i"];
     
-    if(_HTTPMethod && [_HTTPMethod isEqualToString:@"GET"] == NO) { // GET is optional in curl
+    if([_HTTPMethod isEqualToString:@"GET"] == NO) { // GET is optional in curl
         NSString *s = [NSString stringWithFormat:@"-X %@", _HTTPMethod];
         [ma addObject:s];
     }
