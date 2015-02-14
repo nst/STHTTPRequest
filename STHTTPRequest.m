@@ -379,6 +379,14 @@ static BOOL globalIgnoreCache = NO;
     /**/
     
     theURL = [[self class] appendURL:theURL withGETParameters:_GETDictionary];
+
+    /**/
+    
+    if(_HTTPMethod == nil) {
+        if(_POSTDictionary || _rawPOSTData || [self.filesToUpload count] > 0 || [self.dataToUpload count] > 0) {
+            _HTTPMethod = @"POST";
+        }
+    }
     
     /**/
     
@@ -652,7 +660,7 @@ static BOOL globalIgnoreCache = NO;
     NSMutableArray *ma = [NSMutableArray array];
     [ma addObject:@"\U0001F300 curl -i"];
     
-    if([_HTTPMethod isEqualToString:@"GET"] == NO) { // GET is optional in curl
+    if(_HTTPMethod && [_HTTPMethod isEqualToString:@"GET"] == NO) { // GET is optional in curl
         NSString *s = [NSString stringWithFormat:@"-X %@", _HTTPMethod];
         [ma addObject:s];
     }
@@ -682,7 +690,7 @@ static BOOL globalIgnoreCache = NO;
         id jsonObject = [NSJSONSerialization JSONObjectWithData:_rawPOSTData options:NSJSONReadingMutableContainers error:nil];
         if(jsonObject) {
             NSString *jsonString = [[NSString alloc] initWithData:_rawPOSTData encoding:NSUTF8StringEncoding];
-            [ma addObject:@"-X POST"];
+//            [ma addObject:@"-X POST"];
             [ma addObject:[NSString stringWithFormat:@"-d \'%@\'", jsonString]];
         }
     }
