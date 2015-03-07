@@ -406,9 +406,7 @@ static BOOL globalIgnoreCache = NO;
         NSDictionary *d = [NSHTTPCookie requestHeaderFieldsWithCookies:cookies];
         [request setAllHTTPHeaderFields:d];
     }
-    
-    __weak typeof(self) weakSelf = self;
-    
+        
     // escape POST dictionary keys and values if needed
     if(_encodePOSTDictionary) {
         NSMutableDictionary *escapedPOSTDictionary = _POSTDictionary ? [NSMutableDictionary dictionary] : nil;
