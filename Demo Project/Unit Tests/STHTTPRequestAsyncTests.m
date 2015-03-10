@@ -329,7 +329,7 @@ BOOL WaitFor(BOOL (^block)(void))
     __block NSError *error = nil;
     
     STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"http://httpbin.org/cookies/set?name=value"];
-    
+
     r.completionBlock = ^(NSDictionary *theHeaders, NSString *theBody) {
         body = theBody;
     };
@@ -346,6 +346,36 @@ BOOL WaitFor(BOOL (^block)(void))
     NSHTTPCookie *cookie = [[r sessionCookies] lastObject];
     
     STAssertNotNil(cookie, @"missing cookie");
+}
+
+- (void)testStatusPUT
+{
+    __block NSString *body = nil;
+    __block NSError *error = nil;
+    
+    STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"http://httpbin.org/put"];
+    
+    r.HTTPMethod = @"PUT";
+    
+    r.POSTDictionary = @{@"asd":@"sdf"};
+
+    r.completionBlock = ^(NSDictionary *theHeaders, NSString *theBody) {
+        body = theBody;
+    };
+    
+    r.errorBlock = ^(NSError *theError) {
+        error = theError;
+    };
+    
+    [r startAsynchronous];
+    
+    STAssertTrue(WaitFor(^BOOL { return body || error; }), @"async URL loading failed");
+    STAssertNil(error, @"got an error when loading URL");
+    STAssertTrue(r.responseStatus == 200, @"bad response status");
+
+    NSDictionary *json = [NSJSONSerialization JSONObjectWithData:r.responseData options:0 error:nil];
+    
+    STAssertTrue([json[@"form"] isEqualToDictionary:@{@"asd":@"sdf"}], nil);
 }
 
 @end
