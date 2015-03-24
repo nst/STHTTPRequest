@@ -598,6 +598,8 @@
 		03191F0A17BF75070001C06D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_REPEATED_USE_OF_WEAK = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Demo Project/STHTTPRequest-Prefix.pch";
 				INFOPLIST_FILE = "Demo Project/STHTTPRequest-Info.plist";
@@ -610,6 +612,8 @@
 		03191F0B17BF75070001C06D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_REPEATED_USE_OF_WEAK = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Demo Project/STHTTPRequest-Prefix.pch";
 				INFOPLIST_FILE = "Demo Project/STHTTPRequest-Info.plist";
