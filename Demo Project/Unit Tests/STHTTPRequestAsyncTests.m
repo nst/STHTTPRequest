@@ -6,11 +6,11 @@
 //  Copyright (c) 2014 Nicolas Seriot. All rights reserved.
 //
 
-#import <SenTestingKit/SenTestingKit.h>
+#import <XCTest/XCTest.h>
 
 #import "STHTTPRequest.h"
 
-@interface STHTTPRequestAsyncTests : SenTestCase
+@interface STHTTPRequestAsyncTests : XCTestCase
 
 @end
 
@@ -54,9 +54,9 @@ BOOL WaitFor(BOOL (^block)(void))
     
     [r startAsynchronous];
     
-    STAssertTrue(WaitFor(^BOOL { return body || error; }), @"async URL loading failed");
-    STAssertNotNil(body, @"failed to load body from URL");
-    STAssertNil(error, @"got an error when loading URL");
+    XCTAssertTrue(WaitFor(^BOOL { return body || error; }), @"async URL loading failed");
+    XCTAssertNotNil(body, @"failed to load body from URL");
+    XCTAssertNil(error, @"got an error when loading URL");
 }
 
 - (void)testRedirect
@@ -76,9 +76,9 @@ BOOL WaitFor(BOOL (^block)(void))
     
     [r startAsynchronous];
     
-    STAssertTrue(WaitFor(^BOOL { return body || error; }), @"async URL loading failed");
-    STAssertNotNil(body, @"failed to load body from URL");
-    STAssertNil(error, @"got an error when loading URL");
+    XCTAssertTrue(WaitFor(^BOOL { return body || error; }), @"async URL loading failed");
+    XCTAssertNotNil(body, @"failed to load body from URL");
+    XCTAssertNil(error, @"got an error when loading URL");
 }
 
 - (void)testDelay
@@ -98,9 +98,9 @@ BOOL WaitFor(BOOL (^block)(void))
     
     [r startAsynchronous];
     
-    STAssertTrue(WaitFor(^BOOL { return body || error; }), @"async URL loading failed");
-    STAssertNotNil(body, @"failed to load body from URL");
-    STAssertNil(error, @"got an error when loading URL");
+    XCTAssertTrue(WaitFor(^BOOL { return body || error; }), @"async URL loading failed");
+    XCTAssertNotNil(body, @"failed to load body from URL");
+    XCTAssertNil(error, @"got an error when loading URL");
 }
 
 - (void)testBasicAuthenticationSuccess
@@ -122,9 +122,9 @@ BOOL WaitFor(BOOL (^block)(void))
     
     [r startAsynchronous];
     
-    STAssertTrue(WaitFor(^BOOL { return body || error; }), @"async URL loading failed");
-    STAssertNotNil(body, @"failed to load body from URL");
-    STAssertNil(error, @"got an error when loading URL");
+    XCTAssertTrue(WaitFor(^BOOL { return body || error; }), @"async URL loading failed");
+    XCTAssertNotNil(body, @"failed to load body from URL");
+    XCTAssertNil(error, @"got an error when loading URL");
 }
 
 - (void)testBasicAuthenticationFailing
@@ -146,9 +146,9 @@ BOOL WaitFor(BOOL (^block)(void))
     
     [r startAsynchronous];
     
-    STAssertTrue(WaitFor(^BOOL { return body || error; }), @"async URL loading failed");
-    STAssertNil(body, @"failed to load body from URL");
-    STAssertNotNil(error, @"got an error when loading URL");
+    XCTAssertTrue(WaitFor(^BOOL { return body || error; }), @"async URL loading failed");
+    XCTAssertNil(body, @"failed to load body from URL");
+    XCTAssertNotNil(error, @"got an error when loading URL");
 }
 
 - (void)testDigestAuthenticationSuccess
@@ -170,9 +170,9 @@ BOOL WaitFor(BOOL (^block)(void))
     
     [r startAsynchronous];
     
-    STAssertTrue(WaitFor(^BOOL { return body || error; }), @"async URL loading failed");
-    STAssertNotNil(body, @"failed to load body from URL");
-    STAssertNil(error, @"got an error when loading URL");
+    XCTAssertTrue(WaitFor(^BOOL { return body || error; }), @"async URL loading failed");
+    XCTAssertNotNil(body, @"failed to load body from URL");
+    XCTAssertNil(error, @"got an error when loading URL");
 }
 
 - (void)testDigestAuthenticationFailing
@@ -194,9 +194,9 @@ BOOL WaitFor(BOOL (^block)(void))
     
     [r startAsynchronous];
     
-    STAssertTrue(WaitFor(^BOOL { return body || error; }), @"async URL loading failed");
-    STAssertNil(body, @"failed to load body from URL");
-    STAssertNotNil(error, @"got an error when loading URL");
+    XCTAssertTrue(WaitFor(^BOOL { return body || error; }), @"async URL loading failed");
+    XCTAssertNil(body, @"failed to load body from URL");
+    XCTAssertNotNil(error, @"got an error when loading URL");
 }
 
 - (void)testStatusCodeError
@@ -219,8 +219,8 @@ BOOL WaitFor(BOOL (^block)(void))
     
     [r startAsynchronous];
     
-    STAssertTrue(WaitFor(^BOOL { return body || error; }), @"async URL loading failed");
-    STAssertTrue(r.responseStatus == 418, @"bad response status");
+    XCTAssertTrue(WaitFor(^BOOL { return body || error; }), @"async URL loading failed");
+    XCTAssertTrue(r.responseStatus == 418, @"bad response status");
 }
 
 - (void)testStatusCodeOK
@@ -243,9 +243,9 @@ BOOL WaitFor(BOOL (^block)(void))
     
     [r startAsynchronous];
     
-    STAssertTrue(WaitFor(^BOOL { return body || error; }), @"async URL loading failed");
-    STAssertNil(error, @"got an error when loading URL");
-    STAssertTrue(r.responseStatus == 200, @"bad response status");
+    XCTAssertTrue(WaitFor(^BOOL { return body || error; }), @"async URL loading failed");
+    XCTAssertNil(error, @"got an error when loading URL");
+    XCTAssertTrue(r.responseStatus == 200, @"bad response status");
 }
 
 - (void)testStreaming
@@ -269,8 +269,8 @@ BOOL WaitFor(BOOL (^block)(void))
     
     [r startAsynchronous];
     
-    STAssertTrue(WaitFor(^BOOL { return data || error; }), @"async URL loading failed");
-    STAssertTrue([r.responseData length] == 1024, @"bad response data length");
+    XCTAssertTrue(WaitFor(^BOOL { return data || error; }), @"async URL loading failed");
+    XCTAssertTrue([r.responseData length] == 1024, @"bad response data length");
 }
 
 - (void)testTimeout
@@ -294,9 +294,9 @@ BOOL WaitFor(BOOL (^block)(void))
     
     [r startAsynchronous];
     
-    STAssertTrue(WaitFor(^BOOL { return body || error; }), @"async URL loading failed");
-    STAssertNil(error, @"error");
-    STAssertTrue(responseStatus == 200, @"bad response status");
+    XCTAssertTrue(WaitFor(^BOOL { return body || error; }), @"async URL loading failed");
+    XCTAssertNil(error, @"error");
+    XCTAssertTrue(responseStatus == 200, @"bad response status");
 }
 
 - (void)testNoTimeout
@@ -317,10 +317,10 @@ BOOL WaitFor(BOOL (^block)(void))
     
     [r startAsynchronous];
     
-    STAssertTrue(WaitFor(^BOOL { return body || error; }), @"async URL loading failed");
-    STAssertNotNil(error, @"missed the timeout error");
-    STAssertTrue([[error domain] isEqualToString:NSURLErrorDomain], @"bad error domain");
-    STAssertTrue([error code] == -1001, @"bad error code");
+    XCTAssertTrue(WaitFor(^BOOL { return body || error; }), @"async URL loading failed");
+    XCTAssertNotNil(error, @"missed the timeout error");
+    XCTAssertTrue([[error domain] isEqualToString:NSURLErrorDomain], @"bad error domain");
+    XCTAssertTrue([error code] == -1001, @"bad error code");
 }
 
 - (void)testCookies
@@ -340,12 +340,12 @@ BOOL WaitFor(BOOL (^block)(void))
     
     [r startAsynchronous];
     
-    STAssertTrue(WaitFor(^BOOL { return body || error; }), @"async URL loading failed");
-    STAssertNil(error, @"error");
+    XCTAssertTrue(WaitFor(^BOOL { return body || error; }), @"async URL loading failed");
+    XCTAssertNil(error, @"error");
 
     NSHTTPCookie *cookie = [[r sessionCookies] lastObject];
     
-    STAssertNotNil(cookie, @"missing cookie");
+    XCTAssertNotNil(cookie, @"missing cookie");
 }
 
 - (void)testStatusPUT
@@ -369,13 +369,13 @@ BOOL WaitFor(BOOL (^block)(void))
     
     [r startAsynchronous];
     
-    STAssertTrue(WaitFor(^BOOL { return body || error; }), @"async URL loading failed");
-    STAssertNil(error, @"got an error when loading URL");
-    STAssertTrue(r.responseStatus == 200, @"bad response status");
+    XCTAssertTrue(WaitFor(^BOOL { return body || error; }), @"async URL loading failed");
+    XCTAssertNil(error, @"got an error when loading URL");
+    XCTAssertTrue(r.responseStatus == 200, @"bad response status");
 
     NSDictionary *json = [NSJSONSerialization JSONObjectWithData:r.responseData options:0 error:nil];
     
-    STAssertTrue([json[@"form"] isEqualToDictionary:@{@"asd":@"sdf"}], nil);
+    XCTAssertTrue([json[@"form"] isEqualToDictionary:@{@"asd":@"sdf"}]);
 }
 
 @end

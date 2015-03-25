@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 Nicolas Seriot. All rights reserved.
 //
 
-#import <SenTestingKit/SenTestingKit.h>
+#import <XCTest/XCTest.h>
 
 #import "STHTTPRequest.h"
 
@@ -15,7 +15,7 @@
 
 #import "STHTTPRequest+UnitTests.h"
 
-@interface STHTTPRequestTests : SenTestCase
+@interface STHTTPRequestTests : XCTestCase
 
 @end
 
@@ -34,7 +34,7 @@
     
     NSUInteger numberOfReponsesLeft = [[STHTTPRequestTestResponseQueue sharedInstance].responses count];
     
-    STAssertTrue(numberOfReponsesLeft == 0, @"still %d responses in queue", numberOfReponsesLeft);
+    XCTAssertTrue(numberOfReponsesLeft == 0, @"still %@ responses in queue", @(numberOfReponsesLeft));
 
     [super tearDown];
 }
@@ -67,10 +67,10 @@
 
     [r startAsynchronous]; // will actually get executed sychronously for tests
     
-    STAssertTrue(r.error == nil, [NSString stringWithFormat:@"error should be nil: %@", r.error]);
-    STAssertTrue(r.responseStatus == 200, @"bad response status: %@", @(r.responseStatus));
-    STAssertEqualObjects(r.responseHeaders, @{ @"key" : @"value" }, [NSString stringWithFormat:@"bad headers: %@", [r responseHeaders]]);
-    STAssertEqualObjects(r.responseString, @"OK", [NSString stringWithFormat:@"bad response: %@", r.responseString]);
+    XCTAssertNil(r.error, @"error should be nil: %@", r.error);
+    XCTAssertTrue(r.responseStatus == 200, @"bad response status: %@", @(r.responseStatus));
+    XCTAssertEqualObjects(r.responseHeaders, @{ @"key" : @"value" }, @"bad headers: %@", [r responseHeaders]);
+    XCTAssertEqualObjects(r.responseString, @"OK", @"bad response: %@", r.responseString);
 }
 
 - (void)testStreaming {
@@ -91,7 +91,7 @@
     
     [r unitTests_addDownloadProgressUTF8String:@"asd"];
     
-    STAssertTrue([r.responseData length] == 3, @"");
+    XCTAssertTrue([r.responseData length] == 3, @"");
 }
 
 - (void)testStringByAppendingGETParameters {
@@ -101,7 +101,7 @@
     
     NSString *s2 = [s st_stringByAppendingGETParameters:d];
     
-    STAssertTrue(s2, @"http://www.test.com/x?b=1&a=1&c=1", @"");
+    XCTAssertTrue(s2, @"http://www.test.com/x?b=1&a=1&c=1");
 }
 
 @end
