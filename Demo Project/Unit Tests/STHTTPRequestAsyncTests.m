@@ -29,6 +29,9 @@ BOOL WaitFor(BOOL (^block)(void))
 {
     [super setUp];
     // Put setup code here. This method is called before the invocation of each test method in the class.
+    
+    [STHTTPRequest deleteAllCredentials];
+    [STHTTPRequest deleteAllCookiesFromSharedCookieStorage];
 }
 
 - (void)tearDown
@@ -330,6 +333,10 @@ BOOL WaitFor(BOOL (^block)(void))
     
     STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"http://httpbin.org/cookies/set?name=value"];
 
+    r.preventRedirections = YES;
+    
+    r.ignoreSharedCookiesStorage = YES;
+    
     r.completionBlock = ^(NSDictionary *theHeaders, NSString *theBody) {
         body = theBody;
     };
@@ -342,10 +349,14 @@ BOOL WaitFor(BOOL (^block)(void))
     
     XCTAssertTrue(WaitFor(^BOOL { return body || error; }), @"async URL loading failed");
     XCTAssertNil(error, @"error");
-
-    NSHTTPCookie *cookie = [[r sessionCookies] lastObject];
     
-    XCTAssertNotNil(cookie, @"missing cookie");
+    // session cookie should be set
+    XCTAssertEqual([[r sessionCookies] count], 1);
+    
+    // but shared cookies should be empty
+    NSURL *url = [NSURL URLWithString:@"http://httpbin.org"];
+    NSArray *cookiesFromSharedCookieStorage = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookiesForURL:url];
+    XCTAssertEqual([cookiesFromSharedCookieStorage count], 0);
 }
 
 - (void)testStatusPUT
