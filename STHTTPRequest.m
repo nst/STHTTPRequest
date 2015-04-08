@@ -104,6 +104,7 @@ static BOOL globalIgnoreSharedCookiesStorage = NO;
 
 + (void)clearSession {
     [[self class] deleteAllCookiesFromSharedCookieStorage];
+    [[self class] deleteAllCookiesFromLocalCookieStorage];
     [[self class] deleteAllCredentials];
 }
 
@@ -208,8 +209,12 @@ static BOOL globalIgnoreSharedCookiesStorage = NO;
     }
 }
 
++ (void)deleteAllCookiesFromLocalCookieStorage {
+    localCookiesStorage = nil;
+}
+
 - (void)deleteAllCookies {
-    if(ignoreSharedCookiesStorage || _ignoreSharedCookiesStorage) {
+    if(globalIgnoreSharedCookiesStorage || _ignoreSharedCookiesStorage) {
         [[[self class] localCookiesStorage] removeAllObjects];
     } else {
         [[self class] deleteAllCookiesFromSharedCookieStorage];
@@ -230,7 +235,7 @@ static BOOL globalIgnoreSharedCookiesStorage = NO;
     NSParameterAssert(cookie);
     if(cookie == nil) return;
     
-    if(ignoreSharedCookiesStorage || _ignoreSharedCookiesStorage) {
+    if(globalIgnoreSharedCookiesStorage || _ignoreSharedCookiesStorage) {
         [[[self class] localCookiesStorage] addObject:cookie];
     } else {
         [[self class] addCookieToSharedCookiesStorage:cookie];
@@ -270,7 +275,7 @@ static BOOL globalIgnoreSharedCookiesStorage = NO;
 
 - (NSArray *)requestCookies {
     
-    if(ignoreSharedCookiesStorage || _ignoreSharedCookiesStorage) {
+    if(globalIgnoreSharedCookiesStorage || _ignoreSharedCookiesStorage) {
         NSArray *filteredCookies = [[[self class] localCookiesStorage] filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
             NSHTTPCookie *cookie = (NSHTTPCookie *)evaluatedObject;
             return [[cookie domain] isEqualToString:[self.url host]];
@@ -397,7 +402,7 @@ static BOOL globalIgnoreSharedCookiesStorage = NO;
         request.timeoutInterval = self.timeoutSeconds;
     }
     
-    if(ignoreSharedCookiesStorage || _ignoreSharedCookiesStorage) {
+    if(globalIgnoreSharedCookiesStorage || _ignoreSharedCookiesStorage) {
         NSArray *cookies = [self sessionCookies];
         NSDictionary *d = [NSHTTPCookie requestHeaderFieldsWithCookies:cookies];
         [request setAllHTTPHeaderFields:d];
@@ -523,7 +528,7 @@ static BOOL globalIgnoreSharedCookiesStorage = NO;
         [request addValue:authValue forHTTPHeaderField:@"Authorization"];
     }
     
-    [request setHTTPShouldHandleCookies: (ignoreSharedCookiesStorage == NO && _ignoreSharedCookiesStorage == NO) ];
+    [request setHTTPShouldHandleCookies: (globalIgnoreSharedCookiesStorage == NO && _ignoreSharedCookiesStorage == NO) ];
     
     return request;
 }
