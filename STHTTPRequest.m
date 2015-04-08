@@ -518,8 +518,8 @@ static BOOL globalIgnoreCache = NO;
         [request addValue:authValue forHTTPHeaderField:@"Authorization"];
     }
     
-    [request setHTTPShouldHandleCookies:(_ignoreSharedCookiesStorage == NO)];
-
+    [request setHTTPShouldHandleCookies: (_ignoreSharedCookiesStorage == NO) ];
+    
     return request;
 }
 
@@ -927,6 +927,11 @@ static BOOL globalIgnoreCache = NO;
         self.responseStatus = [r statusCode];
         self.responseStringEncodingName = [r textEncodingName];
         self.responseExpectedContentLength = [r expectedContentLength];
+
+        NSArray *responseCookies = [NSHTTPCookie cookiesWithResponseHeaderFields:_responseHeaders forURL:connection.currentRequest.URL];
+        for(NSHTTPCookie *cookie in responseCookies) {
+            [self addCookie:cookie];
+        }
     }
     
     [_responseData setLength:0];
@@ -950,13 +955,11 @@ static BOOL globalIgnoreCache = NO;
         return;
     }
     
-    if(_completionDataBlock)
-    {
+    if(_completionDataBlock) {
         _completionDataBlock(_responseHeaders,_responseData);
     }
     
-    if(_completionBlock)
-    {
+    if(_completionBlock) {
         NSString *responseString = [self stringWithData:_responseData encodingName:_responseStringEncodingName];
         _completionBlock(_responseHeaders, responseString);
     }
