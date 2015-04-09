@@ -32,6 +32,8 @@ BOOL WaitFor(BOOL (^block)(void))
     
     [STHTTPRequest deleteAllCredentials];
     [STHTTPRequest deleteAllCookiesFromSharedCookieStorage];
+    
+    [STHTTPRequest setGlobalCookiesStoragePolicy:STHTTPRequestCookiesStorageLocal];
 }
 
 - (void)tearDown
@@ -331,11 +333,11 @@ BOOL WaitFor(BOOL (^block)(void))
     __block NSString *body = nil;
     __block NSError *error = nil;
     
+    [STHTTPRequest setGlobalCookiesStoragePolicy:STHTTPRequestCookiesStorageShared];
+
     STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"http://httpbin.org/cookies/set?name=value"];
     
     r.preventRedirections = YES;
-    
-//    r.ignoreSharedCookiesStorage = NO; // default
     
     r.completionBlock = ^(NSDictionary *theHeaders, NSString *theBody) {
         body = theBody;
@@ -359,16 +361,16 @@ BOOL WaitFor(BOOL (^block)(void))
     XCTAssertEqual([cookiesFromSharedCookieStorage count], 1);
 }
 
-- (void)testCookiesWithoutSharedStorage
+- (void)testCookiesWithLocalStorage
 {
     __block NSString *body = nil;
     __block NSError *error = nil;
     
+    [STHTTPRequest setGlobalCookiesStoragePolicy:STHTTPRequestCookiesStorageLocal];
+    
     STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"http://httpbin.org/cookies/set?name=value"];
 
     r.preventRedirections = YES;
-    
-    r.ignoreSharedCookiesStorage = YES;
     
     r.completionBlock = ^(NSDictionary *theHeaders, NSString *theBody) {
         body = theBody;
@@ -390,6 +392,46 @@ BOOL WaitFor(BOOL (^block)(void))
     NSURL *url = [NSURL URLWithString:@"http://httpbin.org"];
     NSArray *cookiesFromSharedCookieStorage = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookiesForURL:url];
     XCTAssertEqual([cookiesFromSharedCookieStorage count], 0);
+}
+
+- (void)testCookiesWithNoStorage
+{
+    __block NSString *body = nil;
+    __block NSDictionary *headers = nil;
+    __block NSError *error = nil;
+    
+    [STHTTPRequest setGlobalCookiesStoragePolicy:STHTTPRequestCookiesStorageNoStorage];
+    
+    STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"http://httpbin.org/cookies/set?name=value"];
+    
+    r.preventRedirections = YES;
+    
+//    r.ignoreSharedCookiesStorage = NO; // default
+    
+    r.completionBlock = ^(NSDictionary *theHeaders, NSString *theBody) {
+        headers = theHeaders;
+        body = theBody;
+    };
+    
+    r.errorBlock = ^(NSError *theError) {
+        error = theError;
+    };
+    
+    [r startAsynchronous];
+    
+    XCTAssertTrue(WaitFor(^BOOL { return body || error; }), @"async URL loading failed");
+    XCTAssertNil(error, @"error");
+    
+    // no cookies should not be set
+    XCTAssertEqual([[r sessionCookies] count], 0);
+    
+    // shared cookies should not be empty
+    NSURL *url = [NSURL URLWithString:@"http://httpbin.org"];
+    NSArray *cookiesFromSharedCookieStorage = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookiesForURL:url];
+    XCTAssertEqual([cookiesFromSharedCookieStorage count], 0);
+    
+    // set-cookie header should still be present
+    XCTAssertNotNil(headers[@"Set-Cookie"], @"set-cookie header is missing");
 }
 
 - (void)testStatusPUT

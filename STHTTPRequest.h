@@ -25,6 +25,12 @@ typedef void (^completionBlock_t)(NSDictionary *headers, NSString *body);
 typedef void (^completionDataBlock_t)(NSDictionary *headers, NSData *body);
 typedef void (^errorBlock_t)(NSError *error);
 
+typedef enum : NSUInteger {
+    STHTTPRequestCookiesStorageShared = 0,
+    STHTTPRequestCookiesStorageLocal = 1,
+    STHTTPRequestCookiesStorageNoStorage = 2,
+} STHTTPRequestCookiesStorage;
+
 @interface STHTTPRequest : NSObject <NSURLConnectionDelegate>
 
 @property (copy) uploadProgressBlock_t uploadProgressBlock;
@@ -44,8 +50,8 @@ typedef void (^errorBlock_t)(NSError *error);
 @property (nonatomic) BOOL addCredentialsToURL; // default NO
 @property (nonatomic) BOOL encodePOSTDictionary; // default YES
 @property (nonatomic, strong, readonly) NSURL *url;
-@property (nonatomic) BOOL ignoreSharedCookiesStorage;
 @property (nonatomic) BOOL preventRedirections;
+@property (nonatomic) STHTTPRequestCookiesStorage cookieStoragePolicy; // overrides globalCookiesStoragePolicy
 
 // response
 @property (nonatomic) NSStringEncoding forcedResponseEncoding;
@@ -64,7 +70,6 @@ typedef void (^errorBlock_t)(NSError *error);
 + (STHTTPRequest *)requestWithURLString:(NSString *)urlString;
 
 + (void)setGlobalIgnoreCache:(BOOL)ignoreCache; // no cache at all when set, overrides the ignoreCache property
-+ (void)setGlobalIgnoreSharedCookiesStorage:(BOOL)ignoreSharedCookiesStorage; // don't read or write in [NSHTTPCookieStorage sharedCookieStorage], overrides the ignoreSharedCookiesStorage property
 
 - (NSString *)debugDescription; // logged when launched with -STHTTPRequestShowDebugDescription 1
 - (NSString *)curlDescription; // logged when launched with -STHTTPRequestShowCurlDescription 1
@@ -84,6 +89,7 @@ typedef void (^errorBlock_t)(NSError *error);
 + (void)deleteAllCookiesFromSharedCookieStorage;
 + (void)deleteAllCookiesFromLocalCookieStorage;
 - (void)deleteSessionCookies; // empty the cookie storage that is used
++ (void)setGlobalCookiesStoragePolicy:(STHTTPRequestCookiesStorage)cookieStoragePolicy;
 
 // Credentials
 + (NSURLCredential *)sessionAuthenticationCredentialsForURL:(NSURL *)requestURL;
