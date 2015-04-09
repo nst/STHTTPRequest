@@ -394,6 +394,41 @@ BOOL WaitFor(BOOL (^block)(void))
     XCTAssertEqual([cookiesFromSharedCookieStorage count], 0);
 }
 
+- (void)testCookiesWithSharedStorageOverriddenByNoStorageAtInstanceLevel
+{
+    __block NSString *body = nil;
+    __block NSError *error = nil;
+    
+    [STHTTPRequest setGlobalCookiesStoragePolicy:STHTTPRequestCookiesStorageShared];
+    
+    STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"http://httpbin.org/cookies/set?name=value"];
+
+    r.cookieStoragePolicyForInstance = STHTTPRequestCookiesStorageNoStorage;
+    
+    r.preventRedirections = YES;
+    
+    r.completionBlock = ^(NSDictionary *theHeaders, NSString *theBody) {
+        body = theBody;
+    };
+    
+    r.errorBlock = ^(NSError *theError) {
+        error = theError;
+    };
+    
+    [r startAsynchronous];
+    
+    XCTAssertTrue(WaitFor(^BOOL { return body || error; }), @"async URL loading failed");
+    XCTAssertNil(error, @"error");
+    
+    // session cookie should be set
+    XCTAssertEqual([[r sessionCookies] count], 0);
+    
+    // but shared cookies should be empty
+    NSURL *url = [NSURL URLWithString:@"http://httpbin.org"];
+    NSArray *cookiesFromSharedCookieStorage = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookiesForURL:url];
+    XCTAssertEqual([cookiesFromSharedCookieStorage count], 0);
+}
+
 - (void)testCookiesWithNoStorage
 {
     __block NSString *body = nil;

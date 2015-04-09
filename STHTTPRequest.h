@@ -29,6 +29,7 @@ typedef enum : NSUInteger {
     STHTTPRequestCookiesStorageShared = 0,
     STHTTPRequestCookiesStorageLocal = 1,
     STHTTPRequestCookiesStorageNoStorage = 2,
+    STHTTPRequestCookiesStorageUndefined = NSUIntegerMax
 } STHTTPRequestCookiesStorage;
 
 @interface STHTTPRequest : NSObject <NSURLConnectionDelegate>
@@ -51,7 +52,7 @@ typedef enum : NSUInteger {
 @property (nonatomic) BOOL encodePOSTDictionary; // default YES
 @property (nonatomic, strong, readonly) NSURL *url;
 @property (nonatomic) BOOL preventRedirections;
-@property (nonatomic) STHTTPRequestCookiesStorage cookieStoragePolicy; // overrides globalCookiesStoragePolicy
+@property (nonatomic) STHTTPRequestCookiesStorage cookieStoragePolicyForInstance; // overrides globalCookiesStoragePolicy
 
 // response
 @property (nonatomic) NSStringEncoding forcedResponseEncoding;

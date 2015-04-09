@@ -97,6 +97,7 @@ static STHTTPRequestCookiesStorage globalCookiesStoragePolicy = STHTTPRequestCoo
         self.filesToUpload = [NSMutableArray array];
         self.dataToUpload = [NSMutableArray array];
         self.HTTPMethod = @"GET"; // default
+        self.cookieStoragePolicyForInstance = STHTTPRequestCookiesStorageUndefined; // globalCookiesStoragePolicy will be used
     }
     
     return self;
@@ -154,6 +155,14 @@ static STHTTPRequestCookiesStorage globalCookiesStoragePolicy = STHTTPRequestCoo
 
 #pragma mark Cookies
 
+- (STHTTPRequestCookiesStorage)cookieStoragePolicy {
+    if(_cookieStoragePolicyForInstance != STHTTPRequestCookiesStorageUndefined) {
+        return _cookieStoragePolicyForInstance;
+    }
+    
+    return globalCookiesStoragePolicy;
+}
+
 + (NSMutableArray *)localCookiesStorage {
     if(localCookiesStorage == nil) {
         localCookiesStorage = [NSMutableArray array];
@@ -176,9 +185,9 @@ static STHTTPRequestCookiesStorage globalCookiesStoragePolicy = STHTTPRequestCoo
     
     NSArray *allCookies = nil;
     
-    if(globalCookiesStoragePolicy == STHTTPRequestCookiesStorageShared) {
+    if([self cookieStoragePolicy] == STHTTPRequestCookiesStorageShared) {
         allCookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookies];
-    } else if (globalCookiesStoragePolicy == STHTTPRequestCookiesStorageLocal) {
+    } else if ([self cookieStoragePolicy] == STHTTPRequestCookiesStorageLocal) {
         allCookies = [[self class] localCookiesStorage];
     }
     
@@ -193,9 +202,9 @@ static STHTTPRequestCookiesStorage globalCookiesStoragePolicy = STHTTPRequestCoo
 - (void)deleteSessionCookies {
     
     for(NSHTTPCookie *cookie in [self sessionCookies]) {
-        if(globalCookiesStoragePolicy == STHTTPRequestCookiesStorageShared) {
+        if([self cookieStoragePolicy] == STHTTPRequestCookiesStorageShared) {
             [[NSHTTPCookieStorage sharedHTTPCookieStorage] deleteCookie:cookie];
-        } else if (globalCookiesStoragePolicy == STHTTPRequestCookiesStorageLocal) {
+        } else if ([self cookieStoragePolicy] == STHTTPRequestCookiesStorageLocal) {
             [[[self class] localCookiesStorage] removeObject:cookie];
         }
     }
@@ -214,9 +223,9 @@ static STHTTPRequestCookiesStorage globalCookiesStoragePolicy = STHTTPRequestCoo
 }
 
 - (void)deleteAllCookies {
-    if(globalCookiesStoragePolicy == STHTTPRequestCookiesStorageShared) {
+    if([self cookieStoragePolicy] == STHTTPRequestCookiesStorageShared) {
         [[self class] deleteAllCookiesFromSharedCookieStorage];
-    } else if (globalCookiesStoragePolicy == STHTTPRequestCookiesStorageLocal) {
+    } else if ([self cookieStoragePolicy] == STHTTPRequestCookiesStorageLocal) {
         [[[self class] localCookiesStorage] removeAllObjects];
     }
 }
@@ -235,9 +244,9 @@ static STHTTPRequestCookiesStorage globalCookiesStoragePolicy = STHTTPRequestCoo
     NSParameterAssert(cookie);
     if(cookie == nil) return;
     
-    if(globalCookiesStoragePolicy == STHTTPRequestCookiesStorageShared) {
+    if([self cookieStoragePolicy] == STHTTPRequestCookiesStorageShared) {
         [[self class] addCookieToSharedCookiesStorage:cookie];
-    } else if (globalCookiesStoragePolicy == STHTTPRequestCookiesStorageLocal) {
+    } else if ([self cookieStoragePolicy] == STHTTPRequestCookiesStorageLocal) {
         [[[self class] localCookiesStorage] addObject:cookie];
     } // else don't store anything
 }
@@ -275,9 +284,9 @@ static STHTTPRequestCookiesStorage globalCookiesStoragePolicy = STHTTPRequestCoo
 
 - (NSArray *)requestCookies {
     
-    if(globalCookiesStoragePolicy == STHTTPRequestCookiesStorageShared) {
+    if([self cookieStoragePolicy] == STHTTPRequestCookiesStorageShared) {
         return [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookiesForURL:[_url absoluteURL]];
-    } else if (globalCookiesStoragePolicy == STHTTPRequestCookiesStorageLocal) {
+    } else if ([self cookieStoragePolicy] == STHTTPRequestCookiesStorageLocal) {
         NSArray *filteredCookies = [[[self class] localCookiesStorage] filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
             NSHTTPCookie *cookie = (NSHTTPCookie *)evaluatedObject;
             return [[cookie domain] isEqualToString:[self.url host]];
@@ -404,7 +413,7 @@ static STHTTPRequestCookiesStorage globalCookiesStoragePolicy = STHTTPRequestCoo
         request.timeoutInterval = self.timeoutSeconds;
     }
     
-    if(globalCookiesStoragePolicy == STHTTPRequestCookiesStorageShared || globalCookiesStoragePolicy == STHTTPRequestCookiesStorageLocal) {
+    if([self cookieStoragePolicy] == STHTTPRequestCookiesStorageShared || [self cookieStoragePolicy] == STHTTPRequestCookiesStorageLocal) {
         NSArray *cookies = [self sessionCookies];
         NSDictionary *d = [NSHTTPCookie requestHeaderFieldsWithCookies:cookies];
         [request setAllHTTPHeaderFields:d];
@@ -530,7 +539,7 @@ static STHTTPRequestCookiesStorage globalCookiesStoragePolicy = STHTTPRequestCoo
         [request addValue:authValue forHTTPHeaderField:@"Authorization"];
     }
     
-    request.HTTPShouldHandleCookies = (globalCookiesStoragePolicy == STHTTPRequestCookiesStorageShared);
+    request.HTTPShouldHandleCookies = ([self cookieStoragePolicy] == STHTTPRequestCookiesStorageShared);
     
     return request;
 }
