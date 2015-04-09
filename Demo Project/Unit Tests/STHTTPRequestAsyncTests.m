@@ -397,6 +397,7 @@ BOOL WaitFor(BOOL (^block)(void))
 - (void)testCookiesWithSharedStorageOverriddenByNoStorageAtInstanceLevel
 {
     __block NSString *body = nil;
+    __block NSDictionary *headers = nil;
     __block NSError *error = nil;
     
     [STHTTPRequest setGlobalCookiesStoragePolicy:STHTTPRequestCookiesStorageShared];
@@ -408,6 +409,7 @@ BOOL WaitFor(BOOL (^block)(void))
     r.preventRedirections = YES;
     
     r.completionBlock = ^(NSDictionary *theHeaders, NSString *theBody) {
+        headers = theHeaders;
         body = theBody;
     };
     
@@ -427,6 +429,9 @@ BOOL WaitFor(BOOL (^block)(void))
     NSURL *url = [NSURL URLWithString:@"http://httpbin.org"];
     NSArray *cookiesFromSharedCookieStorage = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookiesForURL:url];
     XCTAssertEqual([cookiesFromSharedCookieStorage count], 0);
+    
+    // set-cookie header should still be present
+    XCTAssertNotNil(headers[@"Set-Cookie"], @"set-cookie header is missing");
 }
 
 - (void)testCookiesWithNoStorage
