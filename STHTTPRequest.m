@@ -706,25 +706,11 @@ static STHTTPRequestCookiesStorage globalCookiesStoragePolicy = STHTTPRequestCoo
         NSString *s = [NSString stringWithFormat:@"%@=@%@", f.parameterName, f.path];
         [ma addObject:[NSString stringWithFormat:@"-F \"%@\"", s]];
     }
-    
-    // -b "name=Daniel;age=35"                                      // cookies
-    
-    NSArray *cookies = [self requestCookies];
-    
-    NSMutableArray *cookiesStrings = [NSMutableArray array];
-    for(NSHTTPCookie *cookie in cookies) {
-        NSString *s = [NSString stringWithFormat:@"%@=%@", [cookie name], [cookie value]];
-        [cookiesStrings addObject:s];
-    }
-    
-    if([cookiesStrings count] > 0) {
-        [ma addObject:[NSString stringWithFormat:@"-b \"%@\"", [cookiesStrings componentsJoinedByString:@";"]]];
-    }
-    
+        
     // -H "X-you-and-me: yes"                                       // extra headers
     
     NSMutableDictionary *headers = [[_request allHTTPHeaderFields] mutableCopy];
-    [headers removeObjectForKey:@"Cookie"];
+//    [headers removeObjectForKey:@"Cookie"];
     
     NSMutableArray *headersStrings = [NSMutableArray array];
     [headers enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
@@ -753,21 +739,12 @@ static STHTTPRequestCookiesStorage globalCookiesStoragePolicy = STHTTPRequestCoo
     [ms appendFormat:@"%@ %@\n", method, [_request URL]];
     
     NSMutableDictionary *headers = [[_request allHTTPHeaderFields] mutableCopy];
-    [headers removeObjectForKey:@"Cookie"];
     
     if([headers count]) [ms appendString:@"HEADERS\n"];
     
     [headers enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
         [ms appendFormat:@"\t %@ = %@\n", key, obj];
     }];
-    
-    NSArray *cookies = [self requestCookies];
-    
-    if([cookies count]) [ms appendString:@"COOKIES\n"];
-    
-    for(NSHTTPCookie *cookie in cookies) {
-        [ms appendFormat:@"\t %@ = %@\n", [cookie name], [cookie value]];
-    }
     
     NSArray *kvDictionaries = [[self class] dictionariesSortedByKey:_POSTDictionary];
     
