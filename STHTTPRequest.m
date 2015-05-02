@@ -92,6 +92,7 @@ static STHTTPRequestCookiesStorage globalCookiesStoragePolicy = STHTTPRequestCoo
         self.requestHeaders = [NSMutableDictionary dictionary];
         self.POSTDataEncoding = NSUTF8StringEncoding;
         self.encodePOSTDictionary = YES;
+        self.encodeGETDictionary = YES;
         self.addCredentialsToURL = NO;
         self.timeoutSeconds = kSTHTTPRequestDefaultTimeout;
         self.filesToUpload = [NSMutableArray array];
@@ -373,10 +374,10 @@ static STHTTPRequestCookiesStorage globalCookiesStoragePolicy = STHTTPRequestCoo
     return data;
 }
 
-+ (NSURL *)appendURL:(NSURL *)url withGETParameters:(NSDictionary *)parameters {
++ (NSURL *)appendURL:(NSURL *)url withGETParameters:(NSDictionary *)parameters doApplyURLEncoding:(BOOL)doApplyURLEncoding {
     NSMutableString *urlString = [[NSMutableString alloc] initWithString:[url absoluteString]];
     
-    NSString *s = [urlString st_stringByAppendingGETParameters:parameters];
+    NSString *s = [urlString st_stringByAppendingGETParameters:parameters doApplyURLEncoding:doApplyURLEncoding];
     
     return [NSURL URLWithString:s];
 }
@@ -394,7 +395,7 @@ static STHTTPRequestCookiesStorage globalCookiesStoragePolicy = STHTTPRequestCoo
         theURL = _url;
     }
     
-    theURL = [[self class] appendURL:theURL withGETParameters:_GETDictionary];
+    theURL = [[self class] appendURL:theURL withGETParameters:_GETDictionary doApplyURLEncoding:_encodeGETDictionary];
     
     if([_HTTPMethod isEqualToString:@"GET"]) {
         if(_POSTDictionary || _rawPOSTData || [self.filesToUpload count] > 0 || [self.dataToUpload count] > 0) {
@@ -1005,7 +1006,7 @@ static STHTTPRequestCookiesStorage globalCookiesStoragePolicy = STHTTPRequestCoo
 
 @implementation NSString (STUtilities)
 
-- (NSString *)st_stringByAppendingGETParameters:(NSDictionary *)parameters {
+- (NSString *)st_stringByAppendingGETParameters:(NSDictionary *)parameters doApplyURLEncoding:(BOOL)doApplyURLEncoding {
     
     NSMutableString *ms = [self mutableCopy];
     
@@ -1024,10 +1025,12 @@ static STHTTPRequestCookiesStorage globalCookiesStoragePolicy = STHTTPRequestCoo
         
         [ms appendString: (questionMarkFound ? @"&" : @"?") ];
         
-        [ms appendFormat:@"%@=%@",
-         [key st_stringByAddingRFC3986PercentEscapesUsingEncoding:NSUTF8StringEncoding],
-         [value st_stringByAddingRFC3986PercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+        if(doApplyURLEncoding) {
+            key = [key st_stringByAddingRFC3986PercentEscapesUsingEncoding:NSUTF8StringEncoding];
+            value = [value st_stringByAddingRFC3986PercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        }
         
+        [ms appendFormat:@"%@=%@", key, value];
     }];
     
     return ms;

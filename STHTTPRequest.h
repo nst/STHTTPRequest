@@ -50,6 +50,7 @@ typedef enum : NSUInteger {
 @property (nonatomic) NSTimeInterval timeoutSeconds; // ignored if 0
 @property (nonatomic) BOOL addCredentialsToURL; // default NO
 @property (nonatomic) BOOL encodePOSTDictionary; // default YES
+@property (nonatomic) BOOL encodeGETDictionary; // default YES, set to NO if the parameters are already URL encoded
 @property (nonatomic, strong, readonly) NSURL *url;
 @property (nonatomic) BOOL preventRedirections;
 @property (nonatomic) STHTTPRequestCookiesStorage cookieStoragePolicyForInstance; // overrides globalCookiesStoragePolicy
@@ -127,5 +128,5 @@ typedef enum : NSUInteger {
 @end
 
 @interface NSString (STUtilities)
-- (NSString *)st_stringByAppendingGETParameters:(NSDictionary *)parameters;
+- (NSString *)st_stringByAppendingGETParameters:(NSDictionary *)parameters doApplyURLEncoding:(BOOL)doApplyURLEncoding;
 @end
