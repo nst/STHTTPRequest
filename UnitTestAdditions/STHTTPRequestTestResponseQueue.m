@@ -37,7 +37,7 @@ static STHTTPRequestTestResponseQueue *sharedInstance = nil;
     
     NSUInteger lastIndex = [_responses count] - 1;
     
-    STHTTPRequestTestResponse *response = [_responses objectAtIndex:lastIndex];
+    STHTTPRequestTestResponse *response = _responses[lastIndex];
     
     [_responses removeObjectAtIndex:lastIndex];
     
