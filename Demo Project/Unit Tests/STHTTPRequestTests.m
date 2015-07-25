@@ -15,6 +15,8 @@
 
 #import "STHTTPRequest+UnitTests.h"
 
+
+
 @interface STHTTPRequestTests : XCTestCase
 
 @end
@@ -99,7 +101,7 @@
     
     NSDictionary *d = @{@"a":@"1", @"c":@"1"};
     
-    NSString *s2 = [s st_stringByAppendingGETParameters:d];
+    NSString *s2 = [s st_stringByAppendingGETParameters:d doApplyURLEncoding:NO];
     
     XCTAssertTrue(s2, @"http://www.test.com/x?b=1&a=1&c=1");
 }
