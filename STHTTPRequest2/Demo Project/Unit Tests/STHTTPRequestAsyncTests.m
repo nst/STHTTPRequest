@@ -50,10 +50,12 @@ BOOL WaitFor(BOOL (^block)(void))
     STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"http://www.perdu.com"];
     
     r.completionBlock = ^(NSDictionary *theHeaders, NSString *theBody) {
+        NSAssert([NSThread currentThread] == [NSThread mainThread], @"not on main thread");
         body = theBody;
     };
     
     r.errorBlock = ^(NSError *theError) {
+        NSAssert([NSThread currentThread] == [NSThread mainThread], @"not on main thread");
         error = theError;
     };
     

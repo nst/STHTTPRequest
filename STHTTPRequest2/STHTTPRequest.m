@@ -47,7 +47,7 @@ static STHTTPRequestCookiesStorage globalCookiesStoragePolicy = STHTTPRequestCoo
 @interface STHTTPRequest ()
 
 @property (nonatomic) NSInteger responseStatus;
-@property (nonatomic, strong) NSURLSessionDataTask *task;
+@property (nonatomic, strong) NSURLSessionTask *task;
 @property (nonatomic, strong) NSMutableData *responseData;
 @property (nonatomic, strong) NSString *responseStringEncodingName;
 @property (nonatomic, strong) NSDictionary *responseHeaders;
@@ -778,11 +778,11 @@ static STHTTPRequestCookiesStorage globalCookiesStoragePolicy = STHTTPRequestCoo
     
     NSURLRequest *request = [self prepareURLRequest];
     
-    //    self.connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:NO];
-    //    [_connection scheduleInRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
-    //    [_connection start];
+    NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
     
-    NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:self delegateQueue:nil];
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfiguration
+                                                          delegate:self
+                                                     delegateQueue:nil];
     
     self.task = [session dataTaskWithRequest:request];
     
@@ -1008,7 +1008,8 @@ willPerformHTTPRedirection:(NSHTTPURLResponse *)response
 /* Sent as the last message related to a specific task.  Error may be
  * nil, which implies that no error occurred and this task is complete.
  */
-- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task
+- (void)URLSession:(NSURLSession *)session
+              task:(NSURLSessionTask *)task
 didCompleteWithError:(nullable NSError *)error {
     
     __weak typeof(self) weakSelf = self;
@@ -1069,6 +1070,7 @@ didReceiveResponse:(NSURLResponse *)response
         
         if([response isKindOfClass:[NSHTTPURLResponse class]] == NO) {
             // TODO: handle error
+            completionHandler(NSURLSessionResponseCancel);
             return;
         }
         
@@ -1140,7 +1142,7 @@ didBecomeDownloadTask:(NSURLSessionDownloadTask *)downloadTask {
           dataTask:(NSURLSessionDataTask *)dataTask
     didReceiveData:(NSData *)data {
     
-    NSLog(@"-- 2.4");
+    //NSLog(@"-- 2.4");
     
     [_responseData appendData:data];
     
@@ -1184,6 +1186,78 @@ didBecomeDownloadTask:(NSURLSessionDownloadTask *)downloadTask {
 
 
 
+//
+//
+//#pragma mark NSURLSessionDownloadDelegate
+//
+///* Sent when a download task that has completed a download.  The delegate should
+// * copy or move the file at the given location to a new location as it will be
+// * removed when the delegate message returns. URLSession:task:didCompleteWithError: will
+// * still be called.
+// */
+//- (void)URLSession:(NSURLSession *)session
+//      downloadTask:(NSURLSessionDownloadTask *)downloadTask
+//didFinishDownloadingToURL:(NSURL *)location {
+//
+//    NSLog(@"-- 3.1");
+//    
+//    NSData *responseData = [[NSFileManager defaultManager] contentsAtPath:[location filePathURL].path];
+//    
+//    self.responseData = responseData;
+//    
+//    /**/
+//    
+//    if([downloadTask.response isKindOfClass:[NSHTTPURLResponse class]] == NO) {
+//        // TODO: handle error
+//        //completionHandler(NSURLSessionResponseCancel);
+//        self.errorBlock(nil);
+//        return;
+//    }
+//    
+//    NSHTTPURLResponse *r = (NSHTTPURLResponse *)downloadTask.response;
+//    self.responseHeaders = [r allHeaderFields];
+//    self.responseStatus = [r statusCode];
+//    self.responseStringEncodingName = [r textEncodingName];
+//    self.responseExpectedContentLength = [r expectedContentLength];
+//    
+//    NSArray *responseCookies = [NSHTTPCookie cookiesWithResponseHeaderFields:self.responseHeaders forURL:downloadTask.currentRequest.URL];
+//    for(NSHTTPCookie *cookie in responseCookies) {
+//        NSLog(@"-- %@", cookie);
+//        [self addCookie:cookie]; // won't store anything when STHTTPRequestCookiesStorageNoStorage
+//    }
+//
+//    
+////    dispatch_async(dispatch_get_main_queue(), ^{
+////        self.completionDataBlock(_responseHeaders, _responseData);
+////    });
+////    
+//    
+//}
+//
+///* Sent periodically to notify the delegate of download progress. */
+//- (void)URLSession:(NSURLSession *)session
+//      downloadTask:(NSURLSessionDownloadTask *)downloadTask
+//      didWriteData:(int64_t)bytesWritten
+// totalBytesWritten:(int64_t)totalBytesWritten
+//totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite {
+//    NSLog(@"-- 3.2");
+//    
+//    NSLog(@"-- percent bytes written: %f", 100.0 * totalBytesWritten / totalBytesExpectedToWrite);
+//    
+//}
+//
+///* Sent when a download has been resumed. If a download failed with an
+// * error, the -userInfo dictionary of the error will contain an
+// * NSURLSessionDownloadTaskResumeData key, whose value is the resume
+// * data.
+// */
+//- (void)URLSession:(NSURLSession *)session
+//      downloadTask:(NSURLSessionDownloadTask *)downloadTask
+// didResumeAtOffset:(int64_t)fileOffset
+//expectedTotalBytes:(int64_t)expectedTotalBytes {
+//    NSLog(@"-- 3.3");
+//}
+//
 
 
 
@@ -1209,10 +1283,7 @@ didBecomeDownloadTask:(NSURLSessionDownloadTask *)downloadTask {
 
 
 
-
-
-
-
+/*
 
 
 #pragma mark NSURLConnectionDataDelegate
@@ -1311,7 +1382,10 @@ didBecomeDownloadTask:(NSURLSessionDownloadTask *)downloadTask {
     _errorBlock(_error);
 }
 
+ */
+
 @end
+
 
 /**/
 

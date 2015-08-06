@@ -77,12 +77,12 @@
 		03191ED417BF75060001C06D /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		03191ED617BF75060001C06D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		03191ED817BF75060001C06D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		03191EF717BF75070001C06D /* STHTTPRequestTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = STHTTPRequestTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		03191EF717BF75070001C06D /* STHTTPRequest2Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = STHTTPRequest2Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		03606B3F17BF796B00105D85 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = text; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		036590D91B735B9400C9570E /* STHTTPRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = STHTTPRequest.h; path = ../STHTTPRequest.h; sourceTree = "<group>"; };
 		036590DA1B735B9400C9570E /* STHTTPRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = STHTTPRequest.m; path = ../STHTTPRequest.m; sourceTree = "<group>"; };
 		038AB2C1199212FC0031C019 /* STHTTPRequestAsyncTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STHTTPRequestAsyncTests.m; sourceTree = "<group>"; };
-		038AB2D5199217120031C019 /* AsynchronousTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AsynchronousTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		038AB2D5199217120031C019 /* Asynchronous2Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Asynchronous2Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		03E5FC731920EC67007BE44D /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		03E5FC741920EC67007BE44D /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		03E5FC751920EC67007BE44D /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
@@ -180,9 +180,9 @@
 			isa = PBXGroup;
 			children = (
 				03191ED117BF75060001C06D /* STHTTPRequest2.app */,
-				03191EF717BF75070001C06D /* STHTTPRequestTests.xctest */,
+				03191EF717BF75070001C06D /* STHTTPRequest2Tests.xctest */,
 				0315A0451923D6DF001C6C02 /* cli */,
-				038AB2D5199217120031C019 /* AsynchronousTests.xctest */,
+				038AB2D5199217120031C019 /* Asynchronous2Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -295,7 +295,7 @@
 			);
 			name = STHTTPRequestTests;
 			productName = DemoTests;
-			productReference = 03191EF717BF75070001C06D /* STHTTPRequestTests.xctest */;
+			productReference = 03191EF717BF75070001C06D /* STHTTPRequest2Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		038AB2C3199217120031C019 /* AsynchronousTests */ = {
@@ -314,7 +314,7 @@
 			);
 			name = AsynchronousTests;
 			productName = DemoTests;
-			productReference = 038AB2D5199217120031C019 /* AsynchronousTests.xctest */;
+			productReference = 038AB2D5199217120031C019 /* Asynchronous2Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -622,7 +622,7 @@
 		03191F0D17BF75070001C06D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/STHTTPRequest.app/STHTTPRequest";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/STHTTPRequest2.app/STHTTPRequest2";
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
 					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
@@ -631,7 +631,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Demo Project/STHTTPRequest-Prefix.pch";
 				INFOPLIST_FILE = "Unit Tests/STHTTPRequestTests-Info.plist";
-				PRODUCT_NAME = STHTTPRequestTests;
+				PRODUCT_NAME = STHTTPRequest2Tests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 			};
 			name = Debug;
@@ -639,7 +639,7 @@
 		03191F0E17BF75070001C06D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/STHTTPRequest.app/STHTTPRequest";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/STHTTPRequest2.app/STHTTPRequest2";
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
 					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
@@ -648,7 +648,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Demo Project/STHTTPRequest-Prefix.pch";
 				INFOPLIST_FILE = "Unit Tests/STHTTPRequestTests-Info.plist";
-				PRODUCT_NAME = STHTTPRequestTests;
+				PRODUCT_NAME = STHTTPRequest2Tests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 			};
 			name = Release;
@@ -656,7 +656,7 @@
 		038AB2D3199217120031C019 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/STHTTPRequest.app/STHTTPRequest";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/STHTTPRequest2.app/STHTTPRequest2";
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
 					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
@@ -670,8 +670,7 @@
 					"-framework",
 					XCTest,
 				);
-				PRODUCT_NAME = AsynchronousTests;
-				TEST_HOST = "$(BUNDLE_LOADER)";
+				PRODUCT_NAME = Asynchronous2Tests;
 				WRAPPER_EXTENSION = xctest;
 			};
 			name = Debug;
@@ -679,7 +678,7 @@
 		038AB2D4199217120031C019 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/STHTTPRequest.app/STHTTPRequest";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/STHTTPRequest2.app/STHTTPRequest2";
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
 					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
@@ -693,8 +692,7 @@
 					"-framework",
 					XCTest,
 				);
-				PRODUCT_NAME = AsynchronousTests;
-				TEST_HOST = "$(BUNDLE_LOADER)";
+				PRODUCT_NAME = Asynchronous2Tests;
 				WRAPPER_EXTENSION = xctest;
 			};
 			name = Release;

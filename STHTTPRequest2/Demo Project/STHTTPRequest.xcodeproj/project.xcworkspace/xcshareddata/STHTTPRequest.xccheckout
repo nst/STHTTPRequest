@@ -14,11 +14,11 @@
 		<string>https://github.com/nst/STHTTPRequest.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>Demo Project/STHTTPRequest.xcodeproj</string>
+	<string>STHTTPRequest2/Demo Project/STHTTPRequest.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>DEE06D3C1C113C8B539205CC3B9AEEA17C65BFB4</key>
-		<string>../../..</string>
+		<string>../../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://github.com/nst/STHTTPRequest.git</string>

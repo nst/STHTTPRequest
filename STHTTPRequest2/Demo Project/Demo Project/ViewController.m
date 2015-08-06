@@ -26,23 +26,26 @@
     
     __weak STHTTPRequest *wr = r; // so that we can access the request from within the callback blocks but without creating a retain cycle
     
-    r.completionBlock = ^(NSDictionary *headers, NSString *body) {
+    r.completionDataBlock = ^(NSDictionary *headers, NSData *data) {
         
-        _imageView.image = [UIImage imageWithData:wr.responseData];
-        _statusLabel.text = [NSString stringWithFormat:@"HTTP status %@", @(wr.responseStatus)];
-        _headersTextView.text = [headers description];
+        __strong STHTTPRequest *sr = wr;
+        if(sr == nil) return;
         
-        _fetchButton.enabled = YES;
-        [_activityIndicator stopAnimating];
+        self.imageView.image = [UIImage imageWithData:data];
+        self.statusLabel.text = [NSString stringWithFormat:@"HTTP status %@", @(sr.responseStatus)];
+        self.headersTextView.text = [headers description];
+        
+        self.fetchButton.enabled = YES;
+        [self.activityIndicator stopAnimating];
     };
     
     r.errorBlock = ^(NSError *error) {
-        _statusLabel.text = [error localizedDescription];
+        self.statusLabel.text = [error localizedDescription];
         
         NSLog(@"-- isCancellationError: %d", [error st_isCancellationError]);
         
-        _fetchButton.enabled = YES;
-        [_activityIndicator stopAnimating];
+        self.fetchButton.enabled = YES;
+        [self.activityIndicator stopAnimating];
     };
     
     [r startAsynchronous];
