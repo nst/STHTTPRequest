@@ -21,7 +21,7 @@ void Swizzle(Class c, SEL orig, SEL new) {
         method_exchangeImplementations(origMethod, newMethod);
 }
 
-@implementation STHTTPRequest2 (UnitTests)
+@implementation STHTTPRequest (UnitTests)
 
 @dynamic responseStatus;
 @dynamic responseString;
@@ -30,8 +30,8 @@ void Swizzle(Class c, SEL orig, SEL new) {
 @dynamic error;
 
 + (void)initialize {
-    Swizzle([STHTTPRequest2 class], @selector(startAsynchronous), @selector(unitTests_startAsynchronous));
-    Swizzle([STHTTPRequest2 class], @selector(unitTests_startSynchronousWithError:), @selector(startSynchronousWithError:));
+    Swizzle([STHTTPRequest class], @selector(startAsynchronous), @selector(unitTests_startAsynchronous));
+    Swizzle([STHTTPRequest class], @selector(unitTests_startSynchronousWithError:), @selector(startSynchronousWithError:));
 }
 
 - (void)unitTests_startAsynchronous {

@@ -8,7 +8,7 @@
 
 #import <XCTest/XCTest.h>
 
-#import "STHTTPRequest2.h"
+#import "STHTTPRequest.h"
 
 @interface STHTTPRequestAsyncTests : XCTestCase
 
@@ -30,10 +30,10 @@ BOOL WaitFor(BOOL (^block)(void))
     [super setUp];
     // Put setup code here. This method is called before the invocation of each test method in the class.
     
-    [STHTTPRequest2 deleteAllCredentials];
-    [STHTTPRequest2 deleteAllCookiesFromSharedCookieStorage];
+    [STHTTPRequest deleteAllCredentials];
+    [STHTTPRequest deleteAllCookiesFromSharedCookieStorage];
     
-    [STHTTPRequest2 setGlobalCookiesStoragePolicy:STHTTPRequestCookiesStorageLocal];
+    [STHTTPRequest setGlobalCookiesStoragePolicy:STHTTPRequestCookiesStorageLocal];
 }
 
 - (void)tearDown
@@ -47,7 +47,7 @@ BOOL WaitFor(BOOL (^block)(void))
     __block NSString *body = nil;
     __block NSError *error = nil;
     
-    STHTTPRequest2 *r = [STHTTPRequest2 requestWithURLString:@"http://www.perdu.com"];
+    STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"http://www.perdu.com"];
     
     r.completionBlock = ^(NSDictionary *theHeaders, NSString *theBody) {
         body = theBody;
@@ -69,7 +69,7 @@ BOOL WaitFor(BOOL (^block)(void))
     __block NSString *body = nil;
     __block NSError *error = nil;
     
-    STHTTPRequest2 *r = [STHTTPRequest2 requestWithURLString:@"http://httpbin.org/redirect/6"];
+    STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"http://httpbin.org/redirect/6"];
     
     r.completionBlock = ^(NSDictionary *theHeaders, NSString *theBody) {
         body = theBody;
@@ -91,7 +91,7 @@ BOOL WaitFor(BOOL (^block)(void))
     __block NSString *body = nil;
     __block NSError *error = nil;
     
-    STHTTPRequest2 *r = [STHTTPRequest2 requestWithURLString:@"http://httpbin.org/delay/2"];
+    STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"http://httpbin.org/delay/2"];
     
     r.completionBlock = ^(NSDictionary *theHeaders, NSString *theBody) {
         body = theBody;
@@ -113,7 +113,7 @@ BOOL WaitFor(BOOL (^block)(void))
     __block NSString *body = nil;
     __block NSError *error = nil;
     
-    STHTTPRequest2 *r = [STHTTPRequest2 requestWithURLString:@"http://httpbin.org/basic-auth/myuser/mypassword"];
+    STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"http://httpbin.org/basic-auth/myuser/mypassword"];
     
     [r setUsername:@"myuser" password:@"mypassword"];
     
@@ -137,7 +137,7 @@ BOOL WaitFor(BOOL (^block)(void))
     __block NSString *body = nil;
     __block NSError *error = nil;
     
-    STHTTPRequest2 *r = [STHTTPRequest2 requestWithURLString:@"http://httpbin.org/basic-auth/myuser/mypassword"];
+    STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"http://httpbin.org/basic-auth/myuser/mypassword"];
     
     [r setUsername:@"myuser" password:@"badpassword"];
     
@@ -161,7 +161,7 @@ BOOL WaitFor(BOOL (^block)(void))
     __block NSString *body = nil;
     __block NSError *error = nil;
     
-    STHTTPRequest2 *r = [STHTTPRequest2 requestWithURLString:@"http://httpbin.org/basic-auth/myuser/mypassword"];
+    STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"http://httpbin.org/basic-auth/myuser/mypassword"];
     
     [r setUsername:@"myuser" password:@"mypassword"];
     
@@ -185,7 +185,7 @@ BOOL WaitFor(BOOL (^block)(void))
     __block NSString *body = nil;
     __block NSError *error = nil;
     
-    STHTTPRequest2 *r = [STHTTPRequest2 requestWithURLString:@"http://httpbin.org/digest-auth/auth/myuser/mypassword"];
+    STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"http://httpbin.org/digest-auth/auth/myuser/mypassword"];
     
     [r setUsername:@"myuser" password:@"badpassword"];
     
@@ -210,7 +210,7 @@ BOOL WaitFor(BOOL (^block)(void))
     __block NSError *error = nil;
     __block NSInteger responseStatus = 0;
     
-    STHTTPRequest2 *r = [STHTTPRequest2 requestWithURLString:@"http://httpbin.org/status/418"];
+    STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"http://httpbin.org/status/418"];
     __weak typeof(r) wr = r;
     
     r.completionBlock = ^(NSDictionary *theHeaders, NSString *theBody) {
@@ -234,7 +234,7 @@ BOOL WaitFor(BOOL (^block)(void))
     __block NSError *error = nil;
     __block NSInteger responseStatus = 0;
     
-    STHTTPRequest2 *r = [STHTTPRequest2 requestWithURLString:@"http://httpbin.org/status/200"];
+    STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"http://httpbin.org/status/200"];
     __weak typeof(r) wr = r;
     
     r.completionBlock = ^(NSDictionary *theHeaders, NSString *theBody) {
@@ -258,7 +258,7 @@ BOOL WaitFor(BOOL (^block)(void))
     __block NSData *data = nil;
     __block NSError *error = nil;
     
-    STHTTPRequest2 *r = [STHTTPRequest2 requestWithURLString:@"http://httpbin.org/stream-bytes/1024"];
+    STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"http://httpbin.org/stream-bytes/1024"];
     
     r.completionDataBlock = ^(NSDictionary *theHeaders, NSData *theData) {
         data = theData;
@@ -284,7 +284,7 @@ BOOL WaitFor(BOOL (^block)(void))
     __block NSError *error = nil;
     __block NSInteger responseStatus = 0;
 
-    STHTTPRequest2 *r = [STHTTPRequest2 requestWithURLString:@"http://httpbin.org/delay/3"];
+    STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"http://httpbin.org/delay/3"];
     r.timeoutSeconds = 6;
     __weak typeof(r) wr = r;
     
@@ -309,7 +309,7 @@ BOOL WaitFor(BOOL (^block)(void))
     __block NSString *body = nil;
     __block NSError *error = nil;
     
-    STHTTPRequest2 *r = [STHTTPRequest2 requestWithURLString:@"http://httpbin.org/delay/6"];
+    STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"http://httpbin.org/delay/6"];
     r.timeoutSeconds = 4;
     
     r.completionBlock = ^(NSDictionary *theHeaders, NSString *theBody) {
@@ -333,9 +333,9 @@ BOOL WaitFor(BOOL (^block)(void))
     __block NSString *body = nil;
     __block NSError *error = nil;
     
-    [STHTTPRequest2 setGlobalCookiesStoragePolicy:STHTTPRequestCookiesStorageShared];
+    [STHTTPRequest setGlobalCookiesStoragePolicy:STHTTPRequestCookiesStorageShared];
 
-    STHTTPRequest2 *r = [STHTTPRequest2 requestWithURLString:@"http://httpbin.org/cookies/set?name=value"];
+    STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"http://httpbin.org/cookies/set?name=value"];
     
     r.preventRedirections = YES;
     
@@ -366,9 +366,9 @@ BOOL WaitFor(BOOL (^block)(void))
     __block NSString *body = nil;
     __block NSError *error = nil;
     
-    [STHTTPRequest2 setGlobalCookiesStoragePolicy:STHTTPRequestCookiesStorageLocal];
+    [STHTTPRequest setGlobalCookiesStoragePolicy:STHTTPRequestCookiesStorageLocal];
     
-    STHTTPRequest2 *r = [STHTTPRequest2 requestWithURLString:@"http://httpbin.org/cookies/set?name=value"];
+    STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"http://httpbin.org/cookies/set?name=value"];
 
     r.preventRedirections = YES;
     
@@ -400,9 +400,9 @@ BOOL WaitFor(BOOL (^block)(void))
     __block NSDictionary *headers = nil;
     __block NSError *error = nil;
     
-    [STHTTPRequest2 setGlobalCookiesStoragePolicy:STHTTPRequestCookiesStorageShared];
+    [STHTTPRequest setGlobalCookiesStoragePolicy:STHTTPRequestCookiesStorageShared];
     
-    STHTTPRequest2 *r = [STHTTPRequest2 requestWithURLString:@"http://httpbin.org/cookies/set?name=value"];
+    STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"http://httpbin.org/cookies/set?name=value"];
 
     r.cookieStoragePolicyForInstance = STHTTPRequestCookiesStorageNoStorage;
     
@@ -443,9 +443,9 @@ BOOL WaitFor(BOOL (^block)(void))
     __block NSDictionary *headers = nil;
     __block NSError *error = nil;
     
-    [STHTTPRequest2 setGlobalCookiesStoragePolicy:STHTTPRequestCookiesStorageNoStorage];
+    [STHTTPRequest setGlobalCookiesStoragePolicy:STHTTPRequestCookiesStorageNoStorage];
     
-    STHTTPRequest2 *r = [STHTTPRequest2 requestWithURLString:@"http://httpbin.org/cookies/set?name=value"];
+    STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"http://httpbin.org/cookies/set?name=value"];
     
     r.preventRedirections = YES;
     
@@ -482,7 +482,7 @@ BOOL WaitFor(BOOL (^block)(void))
     __block NSString *body = nil;
     __block NSError *error = nil;
     
-    STHTTPRequest2 *r = [STHTTPRequest2 requestWithURLString:@"http://httpbin.org/put"];
+    STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"http://httpbin.org/put"];
     
     r.HTTPMethod = @"PUT";
     

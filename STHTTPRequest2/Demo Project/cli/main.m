@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "STHTTPRequest2.h"
+#import "STHTTPRequest.h"
 
 #define SYNCHRONOUS 0
 
@@ -22,7 +22,7 @@ int main(int argc, const char * argv[])
         [r startSynchronousWithError:&error];
         NSLog(@"--> %@", r.responseString);
 #else
-        STHTTPRequest2 *r = [STHTTPRequest2 requestWithURLString:@"http://perdu.com"];
+        STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"http://perdu.com"];
         
         r.completionBlock = ^(NSDictionary *headers, NSString *body) {
             NSLog(@"-- %@", body);

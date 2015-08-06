@@ -12,7 +12,7 @@
 #error This file must be compiled with ARC. Either turn on ARC for the project or use -fobjc-arc flag
 #endif
 
-#import "STHTTPRequest2.h"
+#import "STHTTPRequest.h"
 
 NSUInteger const kSTHTTPRequestCancellationError = 1;
 NSUInteger const kSTHTTPRequestDefaultTimeout = 30;
@@ -44,7 +44,7 @@ static STHTTPRequestCookiesStorage globalCookiesStoragePolicy = STHTTPRequestCoo
 
 /**/
 
-@interface STHTTPRequest2 ()
+@interface STHTTPRequest ()
 
 @property (nonatomic) NSInteger responseStatus;
 @property (nonatomic, strong) NSURLSessionDataTask *task;
@@ -62,13 +62,13 @@ static STHTTPRequestCookiesStorage globalCookiesStoragePolicy = STHTTPRequestCoo
 - (NSString *)base64Encoding; // private API
 @end
 
-@implementation STHTTPRequest2
+@implementation STHTTPRequest
 
 #pragma mark Initializers
 
 + (instancetype)requestWithURL:(NSURL *)url {
     if(url == nil) return nil;
-    return [(STHTTPRequest2 *)[self alloc] initWithURL:url];
+    return [(STHTTPRequest *)[self alloc] initWithURL:url];
 }
 
 + (instancetype)requestWithURLString:(NSString *)urlString {
@@ -833,6 +833,7 @@ static STHTTPRequestCookiesStorage globalCookiesStoragePolicy = STHTTPRequestCoo
     }
 }
 
+// TODO: rewrite synch requests without NSURLConnection
 - (NSString *)startSynchronousWithError:(NSError **)e {
     
     self.responseHeaders = nil;
@@ -1353,7 +1354,7 @@ didBecomeDownloadTask:(NSURLSessionDownloadTask *)downloadTask {
     
     __block BOOL questionMarkFound = NO;
     
-    NSArray *sortedParameters = [STHTTPRequest2 dictionariesSortedByKey:parameters];
+    NSArray *sortedParameters = [STHTTPRequest dictionariesSortedByKey:parameters];
     
     [sortedParameters enumerateObjectsUsingBlock:^(NSDictionary *d, NSUInteger idx, BOOL *stop) {
         

@@ -8,7 +8,7 @@
 
 #import <XCTest/XCTest.h>
 
-#import "STHTTPRequest2.h"
+#import "STHTTPRequest.h"
 
 #import "STHTTPRequestTestResponse.h"
 #import "STHTTPRequestTestResponseQueue.h"
@@ -45,7 +45,7 @@
     
     STHTTPRequestTestResponseQueue *queue = [STHTTPRequestTestResponseQueue sharedInstance];
 
-    STHTTPRequestTestResponse *tr = [STHTTPRequestTestResponse testResponseWithBlock:^(STHTTPRequest2 *r) {
+    STHTTPRequestTestResponse *tr = [STHTTPRequestTestResponse testResponseWithBlock:^(STHTTPRequest *r) {
         r.responseStatus = 200; // by default
         r.responseHeaders = @{ @"key" : @"value" };
         r.responseString = @"OK";
@@ -57,7 +57,7 @@
     
     /**/
     
-    STHTTPRequest2 *r = [STHTTPRequest2 requestWithURLString:@"http://www.google.com"];
+    STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"http://www.google.com"];
     
     r.completionBlock = ^(NSDictionary *headers, NSString *responseString) {
         // use response
@@ -77,7 +77,7 @@
 
 - (void)testStreaming {
     
-    STHTTPRequest2 *r = [STHTTPRequest2 requestWithURLString:@"http://www.google.com"];
+    STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"http://www.google.com"];
     
     r.downloadProgressBlock = ^(NSData *data, NSUInteger totalBytesReceived, long long totalBytesExpectedToReceive) {
         NSLog(@"-- %@", data);

@@ -7,7 +7,7 @@
 //
 
 #import "ViewController.h"
-#import "STHTTPRequest2.h"
+#import "STHTTPRequest.h"
 
 @implementation ViewController
 
@@ -20,11 +20,11 @@
     _headersTextView.text = @"";
     _imageView.image = nil;
     
-    __block STHTTPRequest2 *r = [STHTTPRequest2 requestWithURLString:@"https://raw.github.com/github/media/master/octocats/octocat.png"];
+    __block STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"https://raw.github.com/github/media/master/octocats/octocat.png"];
 
 //    r.GETDictionary = @{@"a":@"1", @"b":@"x/x?!=&x"};
     
-    __weak STHTTPRequest2 *wr = r; // so that we can access the request from within the callback blocks but without creating a retain cycle
+    __weak STHTTPRequest *wr = r; // so that we can access the request from within the callback blocks but without creating a retain cycle
     
     r.completionBlock = ^(NSDictionary *headers, NSString *body) {
         

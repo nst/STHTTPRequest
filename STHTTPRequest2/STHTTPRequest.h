@@ -16,9 +16,9 @@
 extern NSUInteger const kSTHTTPRequestCancellationError;
 extern NSUInteger const kSTHTTPRequestDefaultTimeout;
 
-@class STHTTPRequest2;
+@class STHTTPRequest;
 
-typedef void (^sendRequestBlock_t)(STHTTPRequest2 *request);
+typedef void (^sendRequestBlock_t)(STHTTPRequest *request);
 typedef void (^uploadProgressBlock_t)(NSInteger bytesWritten, NSInteger totalBytesWritten, NSInteger totalBytesExpectedToWrite);
 typedef void (^downloadProgressBlock_t)(NSData *data, NSUInteger totalBytesReceived, long long totalBytesExpectedToReceive);
 typedef void (^completionBlock_t)(NSDictionary *headers, NSString *body);
@@ -32,7 +32,7 @@ typedef NS_ENUM(NSUInteger, STHTTPRequestCookiesStorage) {
     STHTTPRequestCookiesStorageUndefined = NSUIntegerMax
 };
 
-@interface STHTTPRequest2 : NSObject <NSURLSessionDataDelegate>
+@interface STHTTPRequest : NSObject <NSURLSessionDataDelegate>
 
 @property (copy) uploadProgressBlock_t uploadProgressBlock;
 @property (copy) downloadProgressBlock_t downloadProgressBlock;

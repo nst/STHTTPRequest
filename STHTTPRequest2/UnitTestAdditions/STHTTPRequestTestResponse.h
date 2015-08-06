@@ -1,10 +1,10 @@
 #import <Foundation/Foundation.h>
-#import "STHTTPRequest2.h"
+#import "STHTTPRequest.h"
 
 // placeholder to simulate server responses
 // to be used in a STHTTPRequestTestResponseQueue
 
-typedef void(^FillResponseBlock)(STHTTPRequest2 *r);
+typedef void(^FillResponseBlock)(STHTTPRequest *r);
 
 @interface STHTTPRequestTestResponse : NSObject
 

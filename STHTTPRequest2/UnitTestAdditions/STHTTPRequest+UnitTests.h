@@ -5,9 +5,9 @@
 //
 //
 
-#import "STHTTPRequest2.h"
+#import "STHTTPRequest.h"
 
-@interface STHTTPRequest2 (UnitTests)
+@interface STHTTPRequest (UnitTests)
 
 // expose private properties
 @property (nonatomic) NSUInteger responseStatus;
