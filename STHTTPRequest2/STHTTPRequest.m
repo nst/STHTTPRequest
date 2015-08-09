@@ -19,6 +19,7 @@ NSUInteger const kSTHTTPRequestDefaultTimeout = 30;
 
 static NSMutableDictionary *localCredentialsStorage = nil;
 static NSMutableArray *localCookiesStorage = nil;
+static NSMutableDictionary *sessionCompletionHandlersForIdentifier = nil;
 
 static BOOL globalIgnoreCache = NO;
 static STHTTPRequestCookiesStorage globalCookiesStoragePolicy = STHTTPRequestCookiesStorageShared;
@@ -56,6 +57,8 @@ static STHTTPRequestCookiesStorage globalCookiesStoragePolicy = STHTTPRequestCoo
 @property (nonatomic, strong) NSMutableArray *filesToUpload; // STHTTPRequestFileUpload instances
 @property (nonatomic, strong) NSMutableArray *dataToUpload; // STHTTPRequestDataUpload instances
 @property (nonatomic, strong) NSURLRequest *request;
+@property (nonatomic, strong) NSURL *HTTPBodyFileURL; // created for NSURLSessionUploadTask, removed on completion
+@property (nonatomic, strong) NSString *backgroundSessionIdentifier;
 @end
 
 @interface NSData (Base64)
@@ -432,7 +435,9 @@ static STHTTPRequestCookiesStorage globalCookiesStoragePolicy = STHTTPRequestCoo
     
     // sort POST parameters in order to get deterministic, unit testable requests
     NSArray *sortedPOSTDictionaries = [[self class] dictionariesSortedByKey:_POSTDictionary];
-    
+
+    NSData *bodyData = nil;
+
     if([self.filesToUpload count] > 0 || [self.dataToUpload count] > 0) {
         
         NSString *boundary = @"----------kStHtTpReQuEsTbOuNdArY";
@@ -440,9 +445,9 @@ static STHTTPRequestCookiesStorage globalCookiesStoragePolicy = STHTTPRequestCoo
         NSString *contentType = [NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundary];
         [request addValue:contentType forHTTPHeaderField:@"Content-Type"];
         
-        NSMutableData *body = [NSMutableData data];
-        
         /**/
+        
+        NSMutableData *mutableBodyData = [NSMutableData data];
         
         for(STHTTPRequestFileUpload *fileToUpload in self.filesToUpload) {
             
@@ -455,7 +460,7 @@ static STHTTPRequestCookiesStorage globalCookiesStoragePolicy = STHTTPRequestCoo
                                                                       fileName:fileName
                                                                  parameterName:fileToUpload.parameterName
                                                                       mimeType:fileToUpload.mimeType];
-            [body appendData:multipartData];
+            [mutableBodyData appendData:multipartData];
         }
         
         /**/
@@ -467,7 +472,7 @@ static STHTTPRequestCookiesStorage globalCookiesStoragePolicy = STHTTPRequestCoo
                                                                  parameterName:dataToUpload.parameterName
                                                                       mimeType:dataToUpload.mimeType];
             
-            [body appendData:multipartData];
+            [mutableBodyData appendData:multipartData];
         }
         
         /**/
@@ -477,22 +482,23 @@ static STHTTPRequestCookiesStorage globalCookiesStoragePolicy = STHTTPRequestCoo
             NSString *key = [[d allKeys] lastObject];
             NSObject *value = [[d allValues] lastObject];
             
-            [body appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
-            [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"\r\n\r\n", key] dataUsingEncoding:NSUTF8StringEncoding]];
-            [body appendData:[[value description] dataUsingEncoding:NSUTF8StringEncoding]];
+            [mutableBodyData appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+            [mutableBodyData appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"\r\n\r\n", key] dataUsingEncoding:NSUTF8StringEncoding]];
+            [mutableBodyData appendData:[[value description] dataUsingEncoding:NSUTF8StringEncoding]];
         }];
         
         /**/
         
-        [body appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+        [mutableBodyData appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
         
-        [request setValue:[NSString stringWithFormat:@"%u", (unsigned int)[body length]] forHTTPHeaderField:@"Content-Length"];
-        [request setHTTPBody:body];
+        [request setValue:[NSString stringWithFormat:@"%u", (unsigned int)[bodyData length]] forHTTPHeaderField:@"Content-Length"];
+        
+        bodyData = mutableBodyData;
         
     } else if (_rawPOSTData) {
         
         [request setValue:[NSString stringWithFormat:@"%u", (unsigned int)[_rawPOSTData length]] forHTTPHeaderField:@"Content-Length"];
-        [request setHTTPBody:_rawPOSTData];
+        bodyData = _rawPOSTData;
         
     } else if (_POSTDictionary != nil) { // may be empty (POST request without body)
         
@@ -520,10 +526,13 @@ static STHTTPRequestCookiesStorage globalCookiesStoragePolicy = STHTTPRequestCoo
         
         NSString *s = [ma componentsJoinedByString:@"&"];
         
-        NSData *data = [s dataUsingEncoding:_POSTDataEncoding allowLossyConversion:YES];
+        bodyData = [s dataUsingEncoding:_POSTDataEncoding allowLossyConversion:YES];
         
-        [request setValue:[NSString stringWithFormat:@"%u", (unsigned int)[data length]] forHTTPHeaderField:@"Content-Length"];
-        [request setHTTPBody:data];
+        [request setValue:[NSString stringWithFormat:@"%u", (unsigned int)[bodyData length]] forHTTPHeaderField:@"Content-Length"];
+    }
+
+    if(bodyData) {
+        [request setHTTPBody:bodyData];
     }
     
     [_requestHeaders enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
@@ -660,8 +669,6 @@ static STHTTPRequestCookiesStorage globalCookiesStoragePolicy = STHTTPRequestCoo
 
 - (NSString *)curlDescription {
     
-    //[self prepareURLRequest];
-    
     NSMutableArray *ma = [NSMutableArray array];
     [ma addObject:@"\U0001F300 curl -i"];
     
@@ -778,13 +785,31 @@ static STHTTPRequestCookiesStorage globalCookiesStoragePolicy = STHTTPRequestCoo
     
     NSURLRequest *request = [self prepareURLRequest];
     
-    NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
+    BOOL useUploadTaskInBackground = [request.HTTPMethod isEqualToString:@"POST"] && request.HTTPBody != nil;
+
+    NSURLSessionConfiguration *sessionConfiguration = nil;
+    
+    if(useUploadTaskInBackground) {
+        self.backgroundSessionIdentifier = [[NSProcessInfo processInfo] globallyUniqueString];
+        sessionConfiguration = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:_backgroundSessionIdentifier];
+    } else {
+        sessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
+    }
+    
+    sessionConfiguration.allowsCellularAccess = YES;
     
     NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfiguration
                                                           delegate:self
                                                      delegateQueue:nil];
     
-    self.task = [session dataTaskWithRequest:request];
+    if(useUploadTaskInBackground) {
+        NSString *fileName = [[NSProcessInfo processInfo] globallyUniqueString];
+        self.HTTPBodyFileURL = [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathComponent:fileName]];
+        [request.HTTPBody writeToURL:_HTTPBodyFileURL atomically:YES];
+        self.task = [session uploadTaskWithRequest:request fromFile:_HTTPBodyFileURL];
+    } else {
+        self.task = [session dataTaskWithRequest:request];
+    }
     
     [_task resume];
     
@@ -877,43 +902,17 @@ static STHTTPRequestCookiesStorage globalCookiesStoragePolicy = STHTTPRequestCoo
     self.errorBlock(self.error);
 }
 
++ (void)setBackgroundCompletionHandler:(void(^)())completionHandler forSessionIdentifier:(NSString *)sessionIdentifier {
+    if(sessionCompletionHandlersForIdentifier == nil) {
+        sessionCompletionHandlersForIdentifier = [NSMutableDictionary dictionary];
+    }
+    
+    sessionCompletionHandlersForIdentifier[sessionIdentifier] = [completionHandler copy];
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//+ (void(^)())backgroundCompletionHandlerForSessionIdentifier:(NSString *)sessionIdentifier {
+//    return sessionCompletionHandlersForIdentifier[sessionIdentifier];
+//}
 
 #pragma mark NSURLSessionDelegate
 
@@ -949,6 +948,13 @@ static STHTTPRequestCookiesStorage globalCookiesStoragePolicy = STHTTPRequestCoo
  */
 - (void)URLSessionDidFinishEventsForBackgroundURLSession:(NSURLSession *)session NS_AVAILABLE_IOS(7_0) {
     NSLog(@"-- 0.3");
+    
+    void (^completionHandler)() = sessionCompletionHandlersForIdentifier[_backgroundSessionIdentifier];
+    
+    if(completionHandler) {
+        completionHandler();
+        NSLog(@"Task complete");
+    }
 }
 
 #pragma mark NSURLSessionTaskDelegate
@@ -972,7 +978,6 @@ willPerformHTTPRedirection:(NSHTTPURLResponse *)response
     NSURLRequest *actualRequest = _preventRedirections ? nil : request;
     
     completionHandler(actualRequest);
-    
 }
 //
 ///* The task has received a request specific authentication challenge.
@@ -995,15 +1000,18 @@ willPerformHTTPRedirection:(NSHTTPURLResponse *)response
 //    NSLog(@"-- 1.3");
 //}
 //
-///* Sent periodically to notify the delegate of upload progress.  This
-// * information is also available as properties of the task.
-// */
-//- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task
-//   didSendBodyData:(int64_t)bytesSent
-//    totalBytesSent:(int64_t)totalBytesSent
-//totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend {
-//    NSLog(@"-- 1.4");
-//}
+/* Sent periodically to notify the delegate of upload progress.  This
+ * information is also available as properties of the task.
+ */
+- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task
+   didSendBodyData:(int64_t)bytesSent
+    totalBytesSent:(int64_t)totalBytesSent
+totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend {
+    NSLog(@"-- 1.4");
+    if(_uploadProgressBlock) {
+        _uploadProgressBlock(bytesSent, totalBytesSent, totalBytesExpectedToSend);
+    }
+}
 
 /* Sent as the last message related to a specific task.  Error may be
  * nil, which implies that no error occurred and this task is complete.
@@ -1025,6 +1033,31 @@ didCompleteWithError:(nullable NSError *)error {
         //
         //    _completionBlock(_responseHeaders, s);
         
+        
+        if([task.response isKindOfClass:[NSHTTPURLResponse class]]) {
+            NSHTTPURLResponse *r = (NSHTTPURLResponse *)[task response];
+            self.responseHeaders = [r allHeaderFields];
+            self.responseStatus = [r statusCode];
+            self.responseStringEncodingName = [r textEncodingName];
+            self.responseExpectedContentLength = [r expectedContentLength];
+            
+            NSArray *responseCookies = [NSHTTPCookie cookiesWithResponseHeaderFields:self.responseHeaders forURL:task.currentRequest.URL];
+            for(NSHTTPCookie *cookie in responseCookies) {
+                NSLog(@"-- %@", cookie);
+                [self addCookie:cookie]; // won't store anything when STHTTPRequestCookiesStorageNoStorage
+            }
+        } else {
+            // TODO: handle error
+        }
+        
+        if(strongSelf.HTTPBodyFileURL) {
+            NSError *error = nil;
+            BOOL status = [[NSFileManager defaultManager] removeItemAtURL:strongSelf.HTTPBodyFileURL error:&error];
+            if(status == NO) {
+                NSLog(@"-- can't remove %@, %@", strongSelf.HTTPBodyFileURL, [error localizedDescription]);
+            }
+        }
+
         if (error) {
             strongSelf.errorBlock(error);
             return;
@@ -1045,7 +1078,6 @@ didCompleteWithError:(nullable NSError *)error {
             NSString *responseString = [strongSelf stringWithData:strongSelf.responseData encodingName:strongSelf.responseStringEncodingName];
             strongSelf.completionBlock(strongSelf.responseHeaders, responseString);
         }
-        
     });
 }
 
@@ -1068,38 +1100,8 @@ didReceiveResponse:(NSURLResponse *)response
         
         NSLog(@"-- 2.1");
         
-        if([response isKindOfClass:[NSHTTPURLResponse class]] == NO) {
-            // TODO: handle error
-            completionHandler(NSURLSessionResponseCancel);
-            return;
-        }
-        
-        NSHTTPURLResponse *r = (NSHTTPURLResponse *)response;
-        self.responseHeaders = [r allHeaderFields];
-        self.responseStatus = [r statusCode];
-        self.responseStringEncodingName = [r textEncodingName];
-        self.responseExpectedContentLength = [r expectedContentLength];
-        
-        NSArray *responseCookies = [NSHTTPCookie cookiesWithResponseHeaderFields:self.responseHeaders forURL:dataTask.currentRequest.URL];
-        for(NSHTTPCookie *cookie in responseCookies) {
-            NSLog(@"-- %@", cookie);
-            [self addCookie:cookie]; // won't store anything when STHTTPRequestCookiesStorageNoStorage
-        }
-        
         completionHandler(NSURLSessionResponseAllow);
-        
-        //    self.responseStringEncodingName = [r textEncodingName];
-        //    self.responseExpectedContentLength = [r expectedContentLength];
-        //
-        //    NSArray *responseCookies = [NSHTTPCookie cookiesWithResponseHeaderFields:_responseHeaders forURL:connection.currentRequest.URL];
-        //    for(NSHTTPCookie *cookie in responseCookies) {
-        //        [self addCookie:cookie]; // won't store anything when STHTTPRequestCookiesStorageNoStorage
-        //    }
-        
-        //    [_responseData setLength:0];
-        
     });
-    
 }
 
 /* Notification that a data task has become a download task.  No
@@ -1168,25 +1170,6 @@ didBecomeDownloadTask:(NSURLSessionDownloadTask *)downloadTask {
     completionHandler(actualResponse);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//
 //
 //#pragma mark NSURLSessionDownloadDelegate
 //
@@ -1259,133 +1242,7 @@ didBecomeDownloadTask:(NSURLSessionDownloadTask *)downloadTask {
 //}
 //
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-
-
-#pragma mark NSURLConnectionDataDelegate
-
-- (NSCachedURLResponse *)connection:(NSURLConnection *)connection willCacheResponse:(NSCachedURLResponse *)cachedResponse {
-    if(globalIgnoreCache || _ignoreCache) return nil;
-    
-    return cachedResponse;
-}
-
-#pragma mark NSURLConnectionDelegate
-
-- (NSURLRequest *)connection:(NSURLConnection *)connection willSendRequest:(NSURLRequest *)request redirectResponse:(NSURLResponse *)redirectResponse {
-    
-    if(_preventRedirections && redirectResponse) {
-        return nil;
-    }
-    
-    return request;
-}
-
-- (void)connection:(NSURLConnection *)connection willSendRequestForAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
-    
-    NSURLProtectionSpace *protectionSpace = [challenge protectionSpace];
-    NSString *authenticationMethod = [protectionSpace authenticationMethod];
-    
-    if ([authenticationMethod isEqualToString:NSURLAuthenticationMethodHTTPDigest] ||
-        [authenticationMethod isEqualToString:NSURLAuthenticationMethodHTTPBasic]) {
-        
-        if([challenge previousFailureCount] == 0) {
-            NSURLCredential *credential = [self credentialForCurrentHost];
-            [[challenge sender] useCredential:credential forAuthenticationChallenge:challenge];
-        } else {
-            [[[self class] sharedCredentialsStorage] removeObjectForKey:[_url host]];
-            [[challenge sender] continueWithoutCredentialForAuthenticationChallenge:challenge];
-        }
-    } else {
-        [[challenge sender] performDefaultHandlingForAuthenticationChallenge:challenge];
-    }
-}
-
-- (void)connection:(NSURLConnection *)connection didSendBodyData:(NSInteger)bytesWritten totalBytesWritten:(NSInteger)totalBytesWritten totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite {
-    if (_uploadProgressBlock) {
-        _uploadProgressBlock(bytesWritten, totalBytesWritten, totalBytesExpectedToWrite);
-    }
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
-    
-    if([response isKindOfClass:[NSHTTPURLResponse class]]) {
-        NSHTTPURLResponse *r = (NSHTTPURLResponse *)response;
-        self.responseHeaders = [r allHeaderFields];
-        self.responseStatus = [r statusCode];
-        self.responseStringEncodingName = [r textEncodingName];
-        self.responseExpectedContentLength = [r expectedContentLength];
-        
-        NSArray *responseCookies = [NSHTTPCookie cookiesWithResponseHeaderFields:_responseHeaders forURL:connection.currentRequest.URL];
-        for(NSHTTPCookie *cookie in responseCookies) {
-            [self addCookie:cookie]; // won't store anything when STHTTPRequestCookiesStorageNoStorage
-        }
-    }
-    
-    [_responseData setLength:0];
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)theData {
-    
-    [_responseData appendData:theData];
-    
-    if (_downloadProgressBlock) {
-        _downloadProgressBlock(theData, [_responseData length], self.responseExpectedContentLength);
-    }
-}
-
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
-    
-    if(_responseStatus >= 400) {
-        NSDictionary *userInfo = [[self class] userInfoWithErrorDescriptionForHTTPStatus:_responseStatus];
-        self.error = [NSError errorWithDomain:NSStringFromClass([self class]) code:_responseStatus userInfo:userInfo];
-        _errorBlock(_error);
-        return;
-    }
-    
-    if(_completionDataBlock) {
-        _completionDataBlock(_responseHeaders,_responseData);
-    }
-    
-    if(_completionBlock) {
-        NSString *responseString = [self stringWithData:_responseData encodingName:_responseStringEncodingName];
-        _completionBlock(_responseHeaders, responseString);
-    }
-}
-
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)e {
-    self.error = e;
-    _errorBlock(_error);
-}
-
- */
-
 @end
-
 
 /**/
 
