@@ -58,7 +58,6 @@ static STHTTPRequestCookiesStorage globalCookiesStoragePolicy = STHTTPRequestCoo
 @property (nonatomic, strong) NSMutableArray *dataToUpload; // STHTTPRequestDataUpload instances
 @property (nonatomic, strong) NSURLRequest *request;
 @property (nonatomic, strong) NSURL *HTTPBodyFileURL; // created for NSURLSessionUploadTask, removed on completion
-@property (nonatomic, strong) NSString *backgroundSessionIdentifier;
 @end
 
 @interface NSData (Base64)
@@ -790,8 +789,8 @@ static STHTTPRequestCookiesStorage globalCookiesStoragePolicy = STHTTPRequestCoo
     NSURLSessionConfiguration *sessionConfiguration = nil;
     
     if(useUploadTaskInBackground) {
-        self.backgroundSessionIdentifier = [[NSProcessInfo processInfo] globallyUniqueString];
-        sessionConfiguration = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:_backgroundSessionIdentifier];
+        NSString *backgroundSessionIdentifier = [[NSProcessInfo processInfo] globallyUniqueString];
+        sessionConfiguration = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:backgroundSessionIdentifier];
     } else {
         sessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
     }
@@ -949,10 +948,11 @@ static STHTTPRequestCookiesStorage globalCookiesStoragePolicy = STHTTPRequestCoo
 - (void)URLSessionDidFinishEventsForBackgroundURLSession:(NSURLSession *)session NS_AVAILABLE_IOS(7_0) {
     NSLog(@"-- 0.3");
     
-    void (^completionHandler)() = sessionCompletionHandlersForIdentifier[_backgroundSessionIdentifier];
+    void (^completionHandler)() = sessionCompletionHandlersForIdentifier[session.configuration.identifier];
     
     if(completionHandler) {
         completionHandler();
+        [sessionCompletionHandlersForIdentifier removeObjectForKey:session.configuration.identifier];
         NSLog(@"Task complete");
     }
 }
