@@ -434,9 +434,9 @@ static STHTTPRequestCookiesStorage globalCookiesStoragePolicy = STHTTPRequestCoo
     
     // sort POST parameters in order to get deterministic, unit testable requests
     NSArray *sortedPOSTDictionaries = [[self class] dictionariesSortedByKey:_POSTDictionary];
-
+    
     NSData *bodyData = nil;
-
+    
     if([self.filesToUpload count] > 0 || [self.dataToUpload count] > 0) {
         
         NSString *boundary = @"----------kStHtTpReQuEsTbOuNdArY";
@@ -529,7 +529,7 @@ static STHTTPRequestCookiesStorage globalCookiesStoragePolicy = STHTTPRequestCoo
         
         [request setValue:[NSString stringWithFormat:@"%u", (unsigned int)[bodyData length]] forHTTPHeaderField:@"Content-Length"];
     }
-
+    
     if(bodyData) {
         [request setHTTPBody:bodyData];
     }
@@ -785,7 +785,7 @@ static STHTTPRequestCookiesStorage globalCookiesStoragePolicy = STHTTPRequestCoo
     NSURLRequest *request = [self prepareURLRequest];
     
     BOOL useUploadTaskInBackground = [request.HTTPMethod isEqualToString:@"POST"] && request.HTTPBody != nil;
-
+    
     NSURLSessionConfiguration *sessionConfiguration = nil;
     
     if(useUploadTaskInBackground) {
@@ -920,7 +920,12 @@ static STHTTPRequestCookiesStorage globalCookiesStoragePolicy = STHTTPRequestCoo
  * explicitly invalidated, in which case the error parameter will be nil.
  */
 - (void)URLSession:(NSURLSession *)session didBecomeInvalidWithError:(nullable NSError *)error {
-    NSLog(@"-- 0.1");
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if(self.errorBlock) {
+            self.errorBlock(error);
+        }
+    });
 }
 
 /* If implemented, when a connection level authentication challenge
@@ -946,15 +951,18 @@ static STHTTPRequestCookiesStorage globalCookiesStoragePolicy = STHTTPRequestCoo
  * result in invoking the completion handler.
  */
 - (void)URLSessionDidFinishEventsForBackgroundURLSession:(NSURLSession *)session NS_AVAILABLE_IOS(7_0) {
-    NSLog(@"-- 0.3");
     
-    void (^completionHandler)() = sessionCompletionHandlersForIdentifier[session.configuration.identifier];
-    
-    if(completionHandler) {
-        completionHandler();
-        [sessionCompletionHandlersForIdentifier removeObjectForKey:session.configuration.identifier];
-        NSLog(@"Task complete");
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        void (^completionHandler)() = sessionCompletionHandlersForIdentifier[session.configuration.identifier];
+        
+        if(completionHandler) {
+            completionHandler();
+            [sessionCompletionHandlersForIdentifier removeObjectForKey:session.configuration.identifier];
+            NSLog(@"Task complete");
+        }
+        
+    });
 }
 
 #pragma mark NSURLSessionTaskDelegate
@@ -973,11 +981,16 @@ static STHTTPRequestCookiesStorage globalCookiesStoragePolicy = STHTTPRequestCoo
 willPerformHTTPRedirection:(NSHTTPURLResponse *)response
         newRequest:(NSURLRequest *)request
  completionHandler:(void (^)(NSURLRequest * __nullable))completionHandler {
-    NSLog(@"-- 1.1");
     
-    NSURLRequest *actualRequest = _preventRedirections ? nil : request;
+    __weak typeof(self) weakSelf = self;
     
-    completionHandler(actualRequest);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        NSURLRequest *actualRequest = weakSelf.preventRedirections ? nil : request;
+        
+        completionHandler(actualRequest);
+        
+    });
 }
 //
 ///* The task has received a request specific authentication challenge.
@@ -1007,10 +1020,19 @@ willPerformHTTPRedirection:(NSHTTPURLResponse *)response
    didSendBodyData:(int64_t)bytesSent
     totalBytesSent:(int64_t)totalBytesSent
 totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend {
-    NSLog(@"-- 1.4");
-    if(_uploadProgressBlock) {
-        _uploadProgressBlock(bytesSent, totalBytesSent, totalBytesExpectedToSend);
-    }
+    
+    __weak typeof(self) weakSelf = self;
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        if(strongSelf == nil) return;
+        
+        if(strongSelf.uploadProgressBlock) {
+            strongSelf.uploadProgressBlock(bytesSent, totalBytesSent, totalBytesExpectedToSend);
+        }
+        
+    });
 }
 
 /* Sent as the last message related to a specific task.  Error may be
@@ -1036,15 +1058,15 @@ didCompleteWithError:(nullable NSError *)error {
         
         if([task.response isKindOfClass:[NSHTTPURLResponse class]]) {
             NSHTTPURLResponse *r = (NSHTTPURLResponse *)[task response];
-            self.responseHeaders = [r allHeaderFields];
-            self.responseStatus = [r statusCode];
-            self.responseStringEncodingName = [r textEncodingName];
-            self.responseExpectedContentLength = [r expectedContentLength];
+            strongSelf.responseHeaders = [r allHeaderFields];
+            strongSelf.responseStatus = [r statusCode];
+            strongSelf.responseStringEncodingName = [r textEncodingName];
+            strongSelf.responseExpectedContentLength = [r expectedContentLength];
             
             NSArray *responseCookies = [NSHTTPCookie cookiesWithResponseHeaderFields:self.responseHeaders forURL:task.currentRequest.URL];
             for(NSHTTPCookie *cookie in responseCookies) {
                 NSLog(@"-- %@", cookie);
-                [self addCookie:cookie]; // won't store anything when STHTTPRequestCookiesStorageNoStorage
+                [strongSelf addCookie:cookie]; // won't store anything when STHTTPRequestCookiesStorageNoStorage
             }
         } else {
             // TODO: handle error
@@ -1057,7 +1079,7 @@ didCompleteWithError:(nullable NSError *)error {
                 NSLog(@"-- can't remove %@, %@", strongSelf.HTTPBodyFileURL, [error localizedDescription]);
             }
         }
-
+        
         if (error) {
             strongSelf.errorBlock(error);
             return;
@@ -1097,9 +1119,6 @@ didReceiveResponse:(NSURLResponse *)response
  completionHandler:(void (^)(NSURLSessionResponseDisposition disposition))completionHandler {
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        
-        NSLog(@"-- 2.1");
-        
         completionHandler(NSURLSessionResponseAllow);
     });
 }
@@ -1107,11 +1126,14 @@ didReceiveResponse:(NSURLResponse *)response
 /* Notification that a data task has become a download task.  No
  * future messages will be sent to the data task.
  */
-- (void)URLSession:(NSURLSession *)session
-          dataTask:(NSURLSessionDataTask *)dataTask
-didBecomeDownloadTask:(NSURLSessionDownloadTask *)downloadTask {
-    NSLog(@"-- 2.2");
-}
+//- (void)URLSession:(NSURLSession *)session
+//          dataTask:(NSURLSessionDataTask *)dataTask
+//didBecomeDownloadTask:(NSURLSessionDownloadTask *)downloadTask {
+//    
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        NSAssert([[NSThread currentThread] isMainThread], @"not on main thread");
+//    });
+//}
 
 ///*
 // * Notification that a data task has become a bidirectional stream
@@ -1144,13 +1166,20 @@ didBecomeDownloadTask:(NSURLSessionDownloadTask *)downloadTask {
           dataTask:(NSURLSessionDataTask *)dataTask
     didReceiveData:(NSData *)data {
     
-    //NSLog(@"-- 2.4");
+    __weak typeof(self) weakSelf = self;
     
-    [_responseData appendData:data];
-    
-    if (_downloadProgressBlock) {
-        _downloadProgressBlock(data, [_responseData length], self.responseExpectedContentLength);
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        if(strongSelf == nil) return;
+        
+        [strongSelf.responseData appendData:data];
+        
+        if (strongSelf.downloadProgressBlock) {
+            strongSelf.downloadProgressBlock(data, [strongSelf.responseData length], strongSelf.responseExpectedContentLength);
+        }
+        
+    });
 }
 
 /* Invoke the completion routine with a valid NSCachedURLResponse to
@@ -1163,11 +1192,19 @@ didBecomeDownloadTask:(NSURLSessionDownloadTask *)downloadTask {
           dataTask:(NSURLSessionDataTask *)dataTask
  willCacheResponse:(NSCachedURLResponse *)proposedResponse
  completionHandler:(void (^)(NSCachedURLResponse * __nullable cachedResponse))completionHandler {
-    NSLog(@"-- 2.5");
     
-    NSCachedURLResponse *actualResponse = (globalIgnoreCache || _ignoreCache) ? nil : proposedResponse;
+    __weak typeof(self) weakSelf = self;
     
-    completionHandler(actualResponse);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        if(strongSelf == nil) return;
+        
+        NSCachedURLResponse *actualResponse = (globalIgnoreCache || strongSelf.ignoreCache) ? nil : proposedResponse;
+        
+        completionHandler(actualResponse);
+        
+    });
 }
 
 //
@@ -1183,38 +1220,38 @@ didBecomeDownloadTask:(NSURLSessionDownloadTask *)downloadTask {
 //didFinishDownloadingToURL:(NSURL *)location {
 //
 //    NSLog(@"-- 3.1");
-//    
+//
 //    NSData *responseData = [[NSFileManager defaultManager] contentsAtPath:[location filePathURL].path];
-//    
+//
 //    self.responseData = responseData;
-//    
+//
 //    /**/
-//    
+//
 //    if([downloadTask.response isKindOfClass:[NSHTTPURLResponse class]] == NO) {
 //        // TODO: handle error
 //        //completionHandler(NSURLSessionResponseCancel);
 //        self.errorBlock(nil);
 //        return;
 //    }
-//    
+//
 //    NSHTTPURLResponse *r = (NSHTTPURLResponse *)downloadTask.response;
 //    self.responseHeaders = [r allHeaderFields];
 //    self.responseStatus = [r statusCode];
 //    self.responseStringEncodingName = [r textEncodingName];
 //    self.responseExpectedContentLength = [r expectedContentLength];
-//    
+//
 //    NSArray *responseCookies = [NSHTTPCookie cookiesWithResponseHeaderFields:self.responseHeaders forURL:downloadTask.currentRequest.URL];
 //    for(NSHTTPCookie *cookie in responseCookies) {
 //        NSLog(@"-- %@", cookie);
 //        [self addCookie:cookie]; // won't store anything when STHTTPRequestCookiesStorageNoStorage
 //    }
 //
-//    
+//
 ////    dispatch_async(dispatch_get_main_queue(), ^{
 ////        self.completionDataBlock(_responseHeaders, _responseData);
 ////    });
-////    
-//    
+////
+//
 //}
 //
 ///* Sent periodically to notify the delegate of download progress. */
@@ -1224,9 +1261,9 @@ didBecomeDownloadTask:(NSURLSessionDownloadTask *)downloadTask {
 // totalBytesWritten:(int64_t)totalBytesWritten
 //totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite {
 //    NSLog(@"-- 3.2");
-//    
+//
 //    NSLog(@"-- percent bytes written: %f", 100.0 * totalBytesWritten / totalBytesExpectedToWrite);
-//    
+//
 //}
 //
 ///* Sent when a download has been resumed. If a download failed with an
