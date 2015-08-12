@@ -937,10 +937,19 @@ static STHTTPRequestCookiesStorage globalCookiesStoragePolicy = STHTTPRequestCoo
  * behavior will be to use the default handling, which may involve user
  * interaction.
  */
-//- (void)URLSession:(NSURLSession *)session didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
-// completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential * __nullable credential))completionHandler {
-//    NSLog(@"-- 0.2");
-//}
+// accept self-signed SSL certificates
+#if DEBUG
+- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *credential))completionHandler
+{
+    if([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust]){
+        NSURLCredential *credential = [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust];
+        completionHandler(NSURLSessionAuthChallengeUseCredential,credential);
+    } else {
+        completionHandler(NSURLSessionAuthChallengePerformDefaultHandling, nil);
+    }
+    
+}
+#endif
 
 /* If an application has received an
  * -application:handleEventsForBackgroundURLSession:completionHandler:
@@ -959,7 +968,6 @@ static STHTTPRequestCookiesStorage globalCookiesStoragePolicy = STHTTPRequestCoo
         if(completionHandler) {
             completionHandler();
             [sessionCompletionHandlersForIdentifier removeObjectForKey:session.configuration.identifier];
-            NSLog(@"Task complete");
         }
         
     });
@@ -1046,7 +1054,7 @@ didCompleteWithError:(nullable NSError *)error {
     
     dispatch_async(dispatch_get_main_queue(), ^{
         
-        NSLog(@"-- didCompleteWithError: %@", [error localizedDescription]);
+        //NSLog(@"-- didCompleteWithError: %@", [error localizedDescription]);
         
         __strong typeof(weakSelf) strongSelf = weakSelf;
         if(strongSelf == nil) return;
@@ -1065,7 +1073,7 @@ didCompleteWithError:(nullable NSError *)error {
             
             NSArray *responseCookies = [NSHTTPCookie cookiesWithResponseHeaderFields:self.responseHeaders forURL:task.currentRequest.URL];
             for(NSHTTPCookie *cookie in responseCookies) {
-                NSLog(@"-- %@", cookie);
+                //NSLog(@"-- %@", cookie);
                 [strongSelf addCookie:cookie]; // won't store anything when STHTTPRequestCookiesStorageNoStorage
             }
         } else {
@@ -1278,14 +1286,6 @@ didReceiveResponse:(NSURLResponse *)response
 //    NSLog(@"-- 3.3");
 //}
 //
-
-// accept self-signed SSL certificates
-#if DEBUG
-- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *credential))completionHandler
-{
-    completionHandler(NSURLSessionAuthChallengeUseCredential, [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust]);
-}
-#endif
 
 @end
 
