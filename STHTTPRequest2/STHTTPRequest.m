@@ -1279,6 +1279,14 @@ didReceiveResponse:(NSURLResponse *)response
 //}
 //
 
+// accept self-signed SSL certificates
+#if DEBUG
+- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *credential))completionHandler
+{
+    completionHandler(NSURLSessionAuthChallengeUseCredential, [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust]);
+}
+#endif
+
 @end
 
 /**/
@@ -1347,19 +1355,19 @@ didReceiveResponse:(NSURLResponse *)response
 }
 
 @end
-
-/**/
-
-#if DEBUG
-@implementation NSURLRequest (IgnoreSSLValidation)
-
-+ (BOOL)allowsAnyHTTPSCertificateForHost:(NSString *)host {
-    return NO;
-}
-
-@end
-#endif
-
+//
+///**/
+//
+//#if DEBUG
+//@implementation NSURLRequest (IgnoreSSLValidation)
+//
+//+ (BOOL)allowsAnyHTTPSCertificateForHost:(NSString *)host {
+//    return NO;
+//}
+//
+//@end
+//#endif
+//
 /**/
 
 @implementation STHTTPRequestFileUpload
