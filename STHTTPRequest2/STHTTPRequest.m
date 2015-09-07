@@ -1001,6 +1001,11 @@ didCompleteWithError:(NSError *)error {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         if(strongSelf == nil) return;
         
+        if (error) {
+            strongSelf.errorBlock(error);
+            return;
+        }
+        
         if([task.response isKindOfClass:[NSHTTPURLResponse class]]) {
             NSHTTPURLResponse *r = (NSHTTPURLResponse *)[task response];
             strongSelf.responseHeaders = [r allHeaderFields];
@@ -1026,11 +1031,6 @@ didCompleteWithError:(NSError *)error {
             if(status == NO) {
                 NSLog(@"-- can't remove %@, %@", strongSelf.HTTPBodyFileURL, [error localizedDescription]);
             }
-        }
-        
-        if (error) {
-            strongSelf.errorBlock(error);
-            return;
         }
         
         if(strongSelf.responseStatus >= 400) {
