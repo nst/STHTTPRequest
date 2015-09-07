@@ -916,10 +916,16 @@ static STHTTPRequestCookiesStorage globalCookiesStoragePolicy = STHTTPRequestCoo
 #pragma mark NSURLSessionDelegate
 
 - (void)URLSession:(NSURLSession *)session didBecomeInvalidWithError:(NSError *)error {
+
+    __weak typeof(self) weakSelf = self;
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        if(self.errorBlock) {
-            self.errorBlock(error);
+        
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        if(strongSelf == nil) return;
+
+        if(strongSelf.errorBlock) {
+            strongSelf.errorBlock(error);
         }
     });
 }
@@ -1013,7 +1019,7 @@ didCompleteWithError:(NSError *)error {
             strongSelf.responseStringEncodingName = [r textEncodingName];
             strongSelf.responseExpectedContentLength = [r expectedContentLength];
             
-            NSArray *responseCookies = [NSHTTPCookie cookiesWithResponseHeaderFields:self.responseHeaders forURL:task.currentRequest.URL];
+            NSArray *responseCookies = [NSHTTPCookie cookiesWithResponseHeaderFields:strongSelf.responseHeaders forURL:task.currentRequest.URL];
             for(NSHTTPCookie *cookie in responseCookies) {
                 //NSLog(@"-- %@", cookie);
                 [strongSelf addCookie:cookie]; // won't store anything when STHTTPRequestCookiesStorageNoStorage
@@ -1048,6 +1054,8 @@ didCompleteWithError:(NSError *)error {
             NSString *responseString = [strongSelf stringWithData:strongSelf.responseData encodingName:strongSelf.responseStringEncodingName];
             strongSelf.completionBlock(strongSelf.responseHeaders, responseString);
         }
+        
+        [session finishTasksAndInvalidate];
     });
 }
 
