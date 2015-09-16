@@ -25,8 +25,7 @@ BOOL WaitFor(BOOL (^block)(void))
 
 @implementation STHTTPRequestAsyncTests
 
-- (void)setUp
-{
+- (void)setUp {
     [super setUp];
     // Put setup code here. This method is called before the invocation of each test method in the class.
     
@@ -36,14 +35,12 @@ BOOL WaitFor(BOOL (^block)(void))
     [STHTTPRequest setGlobalCookiesStoragePolicy:STHTTPRequestCookiesStorageLocal];
 }
 
-- (void)tearDown
-{
+- (void)tearDown {
     // Put teardown code here. This method is called after the invocation of each test method in the class.
     [super tearDown];
 }
 
-- (void)testExample
-{
+- (void)testExample {
     __block NSString *body = nil;
     __block NSError *error = nil;
     
@@ -66,8 +63,7 @@ BOOL WaitFor(BOOL (^block)(void))
     XCTAssertNil(error, @"got an error when loading URL");
 }
 
-- (void)testRedirect
-{
+- (void)testRedirect {
     __block NSString *body = nil;
     __block NSError *error = nil;
     
@@ -88,8 +84,7 @@ BOOL WaitFor(BOOL (^block)(void))
     XCTAssertNil(error, @"got an error when loading URL");
 }
 
-- (void)testDelay
-{
+- (void)testDelay {
     __block NSString *body = nil;
     __block NSError *error = nil;
     
@@ -110,8 +105,7 @@ BOOL WaitFor(BOOL (^block)(void))
     XCTAssertNil(error, @"got an error when loading URL");
 }
 
-- (void)testBasicAuthenticationSuccess
-{
+- (void)testBasicAuthenticationSuccess {
     __block NSString *body = nil;
     __block NSError *error = nil;
     
@@ -134,8 +128,7 @@ BOOL WaitFor(BOOL (^block)(void))
     XCTAssertNil(error, @"got an error when loading URL");
 }
 
-- (void)testBasicAuthenticationFailing
-{
+- (void)testBasicAuthenticationFailing {
     __block NSString *body = nil;
     __block NSError *error = nil;
     
@@ -158,8 +151,7 @@ BOOL WaitFor(BOOL (^block)(void))
     XCTAssertNotNil(error, @"got an error when loading URL");
 }
 
-- (void)testDigestAuthenticationSuccess
-{
+- (void)testDigestAuthenticationSuccess {
     __block NSString *body = nil;
     __block NSError *error = nil;
     
@@ -182,8 +174,7 @@ BOOL WaitFor(BOOL (^block)(void))
     XCTAssertNil(error, @"got an error when loading URL");
 }
 
-- (void)testDigestAuthenticationFailing
-{
+- (void)testDigestAuthenticationFailing {
     __block NSString *body = nil;
     __block NSError *error = nil;
     
@@ -230,8 +221,7 @@ BOOL WaitFor(BOOL (^block)(void))
     XCTAssertTrue(r.responseStatus == 418, @"bad response status");
 }
 
-- (void)testStatusCodeOK
-{
+- (void)testStatusCodeOK {
     __block NSString *body = nil;
     __block NSError *error = nil;
     __block NSInteger responseStatus = 0;
@@ -255,8 +245,7 @@ BOOL WaitFor(BOOL (^block)(void))
     XCTAssertTrue(r.responseStatus == 200, @"bad response status");
 }
 
-- (void)testStreaming
-{
+- (void)testStreaming {
     __block NSData *data = nil;
     __block NSError *error = nil;
     
@@ -266,7 +255,7 @@ BOOL WaitFor(BOOL (^block)(void))
         data = theData;
     };
     
-    r.downloadProgressBlock = ^(NSData *data, NSUInteger totalBytesReceived, long long totalBytesExpectedToReceive) {
+    r.downloadProgressBlock = ^(NSData *data, int64_t totalBytesReceived, int64_t totalBytesExpectedToReceive) {
         
     };
     
@@ -306,8 +295,7 @@ BOOL WaitFor(BOOL (^block)(void))
     XCTAssertTrue(responseStatus == 200, @"bad response status");
 }
 
-- (void)testNoTimeout
-{
+- (void)testNoTimeout {
     __block NSString *body = nil;
     __block NSError *error = nil;
     
@@ -330,8 +318,7 @@ BOOL WaitFor(BOOL (^block)(void))
     XCTAssertTrue([error code] == -1001, @"bad error code");
 }
 
-- (void)testCookiesWithSharedStorage
-{
+- (void)testCookiesWithSharedStorage {
     __block NSString *body = nil;
     __block NSError *error = nil;
     
@@ -396,8 +383,7 @@ BOOL WaitFor(BOOL (^block)(void))
     XCTAssertEqual([cookiesFromSharedCookieStorage count], 0);
 }
 
-- (void)testCookiesWithSharedStorageOverriddenByNoStorageAtInstanceLevel
-{
+- (void)testCookiesWithSharedStorageOverriddenByNoStorageAtInstanceLevel {
     __block NSString *body = nil;
     __block NSDictionary *headers = nil;
     __block NSError *error = nil;
@@ -439,8 +425,7 @@ BOOL WaitFor(BOOL (^block)(void))
     XCTAssertNotNil(headers[@"Set-Cookie"], @"set-cookie header is missing");
 }
 
-- (void)testCookiesWithNoStorage
-{
+- (void)testCookiesWithNoStorage {
     __block NSString *body = nil;
     __block NSDictionary *headers = nil;
     __block NSError *error = nil;
@@ -479,8 +464,7 @@ BOOL WaitFor(BOOL (^block)(void))
     XCTAssertNotNil(headers[@"Set-Cookie"], @"set-cookie header is missing");
 }
 
-- (void)testStatusPUT
-{
+- (void)testStatusPUT {
     __block NSString *body = nil;
     __block NSError *error = nil;
     
@@ -507,6 +491,66 @@ BOOL WaitFor(BOOL (^block)(void))
     NSDictionary *json = [NSJSONSerialization JSONObjectWithData:r.responseData options:0 error:nil];
     
     XCTAssertTrue([json[@"form"] isEqualToDictionary:@{@"asd":@"sdf"}]);
+}
+
+- (void)testStatusPOST {
+    __block NSString *body = nil;
+    __block NSError *error = nil;
+    
+    STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"http://httpbin.org/post"];
+    
+    r.HTTPMethod = @"POST";
+    
+    r.POSTDictionary = @{@"grant_type":@"client_credentials"};
+    
+    r.completionBlock = ^(NSDictionary *theHeaders, NSString *theBody) {
+        body = theBody;
+    };
+    
+    r.errorBlock = ^(NSError *theError) {
+        error = theError;
+    };
+    
+    [r startAsynchronous];
+    
+    XCTAssertTrue(WaitFor(^BOOL { return body || error; }), @"async URL loading failed");
+    XCTAssertNil(error, @"got an error when loading URL");
+    XCTAssertTrue(r.responseStatus == 200, @"bad response status");
+    
+    NSDictionary *json = [NSJSONSerialization JSONObjectWithData:r.responseData options:0 error:nil];
+    
+    XCTAssertTrue([json[@"form"] isEqualToDictionary:@{@"grant_type":@"client_credentials"}]);
+}
+
+- (void)testStatusPOSTRaw {
+    __block NSString *body = nil;
+    __block NSError *error = nil;
+    
+    STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"http://httpbin.org/post"];
+    
+    r.HTTPMethod = @"POST";
+    
+    NSData *data = [NSJSONSerialization dataWithJSONObject:@{@"asd":@"sdf"} options:0 error:nil];
+    
+    r.rawPOSTData = data;
+    
+    r.completionBlock = ^(NSDictionary *theHeaders, NSString *theBody) {
+        body = theBody;
+    };
+    
+    r.errorBlock = ^(NSError *theError) {
+        error = theError;
+    };
+    
+    [r startAsynchronous];
+    
+    XCTAssertTrue(WaitFor(^BOOL { return body || error; }), @"async URL loading failed");
+    XCTAssertNil(error, @"got an error when loading URL");
+    XCTAssertTrue(r.responseStatus == 200, @"bad response status");
+    
+    NSDictionary *json = [NSJSONSerialization JSONObjectWithData:r.responseData options:0 error:nil];
+    
+    XCTAssertTrue([json[@"json"] isEqualToDictionary:@{@"asd":@"sdf"}]);
 }
 
 @end
