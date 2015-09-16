@@ -501,16 +501,19 @@ static STHTTPRequestCookiesStorage globalCookiesStoragePolicy = STHTTPRequestCoo
         
     } else if (_POSTDictionary != nil) { // may be empty (POST request without body)
         
+        NSMutableString *contentTypeValue = [NSMutableString stringWithString:@"application/x-www-form-urlencoded"];
+        
         if(_encodePOSTDictionary) {
             
             CFStringEncoding cfStringEncoding = CFStringConvertNSStringEncodingToEncoding(_POSTDataEncoding);
             NSString *encodingName = (NSString *)CFStringConvertEncodingToIANACharSetName(cfStringEncoding);
             
             if(encodingName) {
-                NSString *contentTypeValue = [NSString stringWithFormat:@"application/x-www-form-urlencoded; charset=%@", encodingName];
-                [self setHeaderWithName:@"Content-Type" value:contentTypeValue];
+                [contentTypeValue appendFormat:@"; charset=%@", encodingName];
             }
         }
+        
+        [self setHeaderWithName:@"Content-Type" value:contentTypeValue];
         
         NSMutableArray *ma = [NSMutableArray arrayWithCapacity:[_POSTDictionary count]];
         
