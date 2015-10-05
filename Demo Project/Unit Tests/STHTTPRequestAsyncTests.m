@@ -32,7 +32,8 @@ BOOL WaitFor(BOOL (^block)(void))
     
     [STHTTPRequest deleteAllCredentials];
     [STHTTPRequest deleteAllCookiesFromSharedCookieStorage];
-    
+    [STHTTPRequest deleteAllCookiesFromLocalCookieStorage];
+
     [STHTTPRequest setGlobalCookiesStoragePolicy:STHTTPRequestCookiesStorageLocal];
 }
 
@@ -40,6 +41,80 @@ BOOL WaitFor(BOOL (^block)(void))
 {
     // Put teardown code here. This method is called after the invocation of each test method in the class.
     [super tearDown];
+}
+
+- (NSArray *)cookiesSentBySTHTTPRequestAfterNSURLConnection {
+    // 1. set cookie a=b with NSURLConnection directly
+    
+    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"http://httpbin.org/cookies/set?a=b"]];
+    NSURLResponse *response = nil;
+    NSError *error = nil;
+    NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+    XCTAssert(data);
+    NSString *s = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    NSLog(@"-- %@", s);
+    
+    // 2. ensure that shared cookies contains a=b
+    
+    NSArray *sharedCookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookies];
+    XCTAssertEqual([sharedCookies count], 1);
+    NSHTTPCookie *cookie = [sharedCookies lastObject];
+    XCTAssertEqualObjects(cookie.properties[NSHTTPCookieName], @"a");
+    XCTAssertEqualObjects(cookie.properties[NSHTTPCookieValue], @"b");
+    
+    // 3. new request with c=d
+    
+    STHTTPRequest *r3 = [STHTTPRequest requestWithURLString:@"http://httpbin.org/cookies"];
+    [r3 addCookieWithName:@"c" value:@"d"];
+    NSError *error3 = nil;
+    NSString *s3 = [r3 startSynchronousWithError:&error3];
+    NSLog(@"-- %@", s3);
+    
+    return [r3 sessionCookies];
+}
+
+- (void)testCookiesStorageShared {
+    
+    [STHTTPRequest setGlobalCookiesStoragePolicy:STHTTPRequestCookiesStorageShared];
+    
+    NSArray *cookies = [self cookiesSentBySTHTTPRequestAfterNSURLConnection];
+    XCTAssertEqual([cookies count], 2);
+    
+    BOOL cookieABExists = NO;
+    BOOL cookieCDExists = NO;
+    
+    for(NSHTTPCookie *c in cookies) {
+        NSDictionary *properties = [c properties];
+        NSString *name = properties[NSHTTPCookieName];
+        NSString *value = properties[NSHTTPCookieValue];
+        if([name isEqualToString:@"a"] && [value isEqualToString:@"b"]) cookieABExists = YES;
+        if([name isEqualToString:@"c"] && [value isEqualToString:@"d"]) cookieCDExists = YES;
+    }
+
+    XCTAssertTrue(cookieABExists); // <- AB is sent
+    XCTAssertTrue(cookieCDExists);
+}
+
+- (void)testCookiesStorageLocal {
+    
+    [STHTTPRequest setGlobalCookiesStoragePolicy:STHTTPRequestCookiesStorageLocal];
+    
+    NSArray *cookies = [self cookiesSentBySTHTTPRequestAfterNSURLConnection];
+    XCTAssertEqual([cookies count], 1);
+    
+    BOOL cookieABExists = NO;
+    BOOL cookieCDExists = NO;
+    
+    for(NSHTTPCookie *c in cookies) {
+        NSDictionary *properties = [c properties];
+        NSString *name = properties[NSHTTPCookieName];
+        NSString *value = properties[NSHTTPCookieValue];
+        if([name isEqualToString:@"a"] && [value isEqualToString:@"b"]) cookieABExists = YES;
+        if([name isEqualToString:@"c"] && [value isEqualToString:@"d"]) cookieCDExists = YES;
+    }
+    
+    XCTAssertFalse(cookieABExists); // <- AB is not sent
+    XCTAssertTrue(cookieCDExists);
 }
 
 - (void)testExample
