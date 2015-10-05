@@ -1,11 +1,11 @@
 ### STHTTPRequest
 
-_A NSURLConnection wrapper for humans_
+_A NSURLConnection / NSURLSession wrapper for humans_
 
 ##### Simple...
 
--   900 lines of Objective-C you can understand
--   runs on iOS 5+ and Mac OS X 10.7+
+-   1000 lines of Objective-C you can understand
+-   runs on iOS 7+ and Mac OS X 10.7+
 -   just drag and drop .h and .m in your project
 -   pod 'STHTTPRequest' in CocoaPods
 -   new BSD license
@@ -19,12 +19,6 @@ _A NSURLConnection wrapper for humans_
 -   can use streaming with the download progress block
 -   fast and simple HTTP authentication
 -   log requests in curl format
-
-##### Maturity
-
-STHTTPRequest is used in many applications available on the App Store and used by 100'000+ regular users.
-
-STHTTPRequest is also used in the [STTwitter library](https://github.com/nst/STTwitter), the main Objective-C library to access Twitter API.
 
 ##### Typical usage
 
