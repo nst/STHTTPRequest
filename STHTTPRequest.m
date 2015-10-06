@@ -56,6 +56,7 @@ static STHTTPRequestCookiesStorage globalCookiesStoragePolicy = STHTTPRequestCoo
 @property (nonatomic, strong) NSMutableArray *filesToUpload; // STHTTPRequestFileUpload instances
 @property (nonatomic, strong) NSMutableArray *dataToUpload; // STHTTPRequestDataUpload instances
 @property (nonatomic, strong) NSURLRequest *request;
+@property (nonatomic, strong) NSMutableArray *ephemeralRequestCookies;
 @end
 
 @interface NSData (Base64)
@@ -99,6 +100,7 @@ static STHTTPRequestCookiesStorage globalCookiesStoragePolicy = STHTTPRequestCoo
         self.dataToUpload = [NSMutableArray array];
         self.HTTPMethod = @"GET"; // default
         self.cookieStoragePolicyForInstance = STHTTPRequestCookiesStorageUndefined; // globalCookiesStoragePolicy will be used
+        self.ephemeralRequestCookies = [NSMutableArray array];
     }
     
     return self;
@@ -249,7 +251,9 @@ static STHTTPRequestCookiesStorage globalCookiesStoragePolicy = STHTTPRequestCoo
         [[self class] addCookieToSharedCookiesStorage:cookie];
     } else if ([self cookieStoragePolicy] == STHTTPRequestCookiesStorageLocal) {
         [[[self class] localCookiesStorage] addObject:cookie];
-    } // else don't store anything
+    } else if ([self cookieStoragePolicy] == STHTTPRequestCookiesStorageNoStorage) { // ephemeral cookie, only for this request
+        [_ephemeralRequestCookies addObject:cookie];
+    }
 }
 
 + (void)addCookieToSharedCookiesStorageWithName:(NSString *)name value:(NSString *)value url:(NSURL *)url {
@@ -293,6 +297,8 @@ static STHTTPRequestCookiesStorage globalCookiesStoragePolicy = STHTTPRequestCoo
             return [[cookie domain] isEqualToString:[self.url host]];
         }]];
         return filteredCookies;
+    } else if ([self cookieStoragePolicy] == STHTTPRequestCookiesStorageNoStorage) {
+        return _ephemeralRequestCookies;
     }
     
     return nil;
@@ -413,11 +419,9 @@ static STHTTPRequestCookiesStorage globalCookiesStoragePolicy = STHTTPRequestCoo
         request.timeoutInterval = self.timeoutSeconds;
     }
     
-    if([self cookieStoragePolicy] == STHTTPRequestCookiesStorageShared || [self cookieStoragePolicy] == STHTTPRequestCookiesStorageLocal) {
-        NSArray *cookies = [self sessionCookies];
-        NSDictionary *d = [NSHTTPCookie requestHeaderFieldsWithCookies:cookies];
-        [request setAllHTTPHeaderFields:d];
-    }
+    NSArray *cookies = [self requestCookies];
+    NSDictionary *d = [NSHTTPCookie requestHeaderFieldsWithCookies:cookies];
+    [request setAllHTTPHeaderFields:d];
     
     // escape POST dictionary keys and values if needed
     if(_encodePOSTDictionary) {
