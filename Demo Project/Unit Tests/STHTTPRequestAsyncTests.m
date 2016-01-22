@@ -368,7 +368,7 @@ BOOL WaitFor(BOOL (^block)(void))
         data = theData;
     };
     
-    r.downloadProgressBlock = ^(NSData *data, NSUInteger totalBytesReceived, long long totalBytesExpectedToReceive) {
+    r.downloadProgressBlock = ^(NSData *data, int64_t totalBytesReceived, int64_t totalBytesExpectedToReceive) {
         
     };
     
@@ -631,7 +631,7 @@ BOOL WaitFor(BOOL (^block)(void))
     
     XCTAssertTrue([json[@"form"] isEqualToDictionary:@{@"grant_type":@"client_credentials"}]);
 }
-/*
+
 - (void)testStatusPOSTRaw {
     __block NSString *body = nil;
     __block NSError *error = nil;
@@ -659,10 +659,10 @@ BOOL WaitFor(BOOL (^block)(void))
     XCTAssertTrue(r.responseStatus == 200, @"bad response status");
     
     NSLog(@"--> %@", r.responseString);
-    
+
     NSDictionary *json = [NSJSONSerialization JSONObjectWithData:r.responseData options:0 error:nil];
     
     XCTAssertTrue([json[@"json"] isEqualToDictionary:@{@"asd":@"sdf"}]);
 }
-*/
+
 @end

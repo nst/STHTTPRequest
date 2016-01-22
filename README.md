@@ -1,6 +1,6 @@
 ### STHTTPRequest
 
-_A NSURLConnection / NSURLSession wrapper for humans_
+_A NSURLSession wrapper for humans_
 
 ##### Simple...
 

@@ -10,6 +10,8 @@
 
 #import "ViewController.h"
 
+#import "STHTTPRequest.h"
+
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -47,6 +49,33 @@
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+//
+//- (void)application:(UIApplication *)application
+//handleEventsForBackgroundURLSession:(NSString *)identifier
+//  completionHandler:(void (^)())completionHandler {
+//    NSLog(@"-- handleEventsForBackgroundURLSession: %@", identifier);
+//    completionHandler();
+//}
+//
+//- (void)application:(UIApplication *)application
+//performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult result))completionHandler {
+//    NSLog(@"-- performFetchWithCompletionHandler:");
+//    completionHandler(UIBackgroundFetchResultNewData);
+//}
+
+// Applications using an NSURLSession with a background configuration may be launched or resumed in the background in order to handle the
+// completion of tasks in that session, or to handle authentication. This method will be called with the identifier of the session needing
+// attention. Once a session has been created from a configuration object with that identifier, the session's delegate will begin receiving
+// callbacks. If such a session has already been created (if the app is being resumed, for instance), then the delegate will start receiving
+// callbacks without any action by the application. You should call the completionHandler as soon as you're finished handling the callbacks.
+- (void)application:(UIApplication *)application
+handleEventsForBackgroundURLSession:(NSString *)identifier
+  completionHandler:(void (^)())completionHandler {
+    
+    NSLog(@"-- handleEventsForBackgroundURLSession: %@", identifier);
+    
+    [STHTTPRequest setBackgroundCompletionHandler:completionHandler forSessionIdentifier:identifier];
 }
 
 @end
