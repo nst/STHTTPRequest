@@ -12,3 +12,5 @@ build/
 *.mode2v3
 
 xcuserdata
+
+Carthage/Build
