@@ -1,0 +1,6 @@
+framework module STHTTPRequest {
+  umbrella header "STHTTPRequestFramework.h"
+
+  export *
+  module * { export * }
+}

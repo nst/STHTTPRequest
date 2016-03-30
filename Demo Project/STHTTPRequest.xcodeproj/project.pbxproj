@@ -34,6 +34,14 @@
 		03E5FC9A1920ED3C007BE44D /* STHTTPRequest+UnitTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 03E5FC951920ED3C007BE44D /* STHTTPRequest+UnitTests.m */; };
 		03E5FC9B1920ED3C007BE44D /* STHTTPRequestTestResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 03E5FC971920ED3C007BE44D /* STHTTPRequestTestResponse.m */; };
 		03E5FC9C1920ED3C007BE44D /* STHTTPRequestTestResponseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 03E5FC991920ED3C007BE44D /* STHTTPRequestTestResponseQueue.m */; };
+		AE12649F1C882DCA00AE0B00 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03191ED617BF75060001C06D /* Foundation.framework */; };
+		AE45B7EC1C881C6600BA0D1C /* STHTTPRequestFramework.h in Headers */ = {isa = PBXBuildFile; fileRef = AE45B7EB1C881C6600BA0D1C /* STHTTPRequestFramework.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AE45B8031C88226E00BA0D1C /* STHTTPRequestFramework.h in Headers */ = {isa = PBXBuildFile; fileRef = AE45B7EB1C881C6600BA0D1C /* STHTTPRequestFramework.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AE45B8041C8823A000BA0D1C /* STHTTPRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 036590D91B735B9400C9570E /* STHTTPRequest.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AE45B8051C8823A100BA0D1C /* STHTTPRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 036590D91B735B9400C9570E /* STHTTPRequest.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AE45B8061C8823B100BA0D1C /* STHTTPRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 036590DA1B735B9400C9570E /* STHTTPRequest.m */; };
+		AE45B8071C8823B200BA0D1C /* STHTTPRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 036590DA1B735B9400C9570E /* STHTTPRequest.m */; };
+		AE45B8081C88243B00BA0D1C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03191ED617BF75060001C06D /* Foundation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -102,6 +110,11 @@
 		03E5FC971920ED3C007BE44D /* STHTTPRequestTestResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STHTTPRequestTestResponse.m; sourceTree = "<group>"; };
 		03E5FC981920ED3C007BE44D /* STHTTPRequestTestResponseQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STHTTPRequestTestResponseQueue.h; sourceTree = "<group>"; };
 		03E5FC991920ED3C007BE44D /* STHTTPRequestTestResponseQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STHTTPRequestTestResponseQueue.m; sourceTree = "<group>"; };
+		AE1A74981C8AE12F00FB26FE /* STHTTPRequestFramework.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = STHTTPRequestFramework.modulemap; sourceTree = "<group>"; };
+		AE45B7E91C881C6600BA0D1C /* STHTTPRequest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = STHTTPRequest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AE45B7EB1C881C6600BA0D1C /* STHTTPRequestFramework.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = STHTTPRequestFramework.h; sourceTree = "<group>"; };
+		AE45B7ED1C881C6600BA0D1C /* STHTTPRequestFramework.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = STHTTPRequestFramework.plist; sourceTree = "<group>"; };
+		AE45B7FB1C881D6F00BA0D1C /* STHTTPRequest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = STHTTPRequest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -141,6 +154,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		AE45B7E51C881C6600BA0D1C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AE45B8081C88243B00BA0D1C /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AE45B7F71C881D6F00BA0D1C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AE12649F1C882DCA00AE0B00 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -168,6 +197,7 @@
 				03606B3F17BF796B00105D85 /* README.md */,
 				036590D91B735B9400C9570E /* STHTTPRequest.h */,
 				036590DA1B735B9400C9570E /* STHTTPRequest.m */,
+				AE45B7EA1C881C6600BA0D1C /* Framework */,
 				03E5FC721920EC67007BE44D /* Demo Project */,
 				03E5FC8A1920EC74007BE44D /* Unit Tests */,
 				0315A0471923D6DF001C6C02 /* cli */,
@@ -183,6 +213,8 @@
 				03191EF717BF75070001C06D /* STHTTPRequest2Tests.xctest */,
 				0315A0451923D6DF001C6C02 /* cli */,
 				038AB2D5199217120031C019 /* Asynchronous2Tests.xctest */,
+				AE45B7E91C881C6600BA0D1C /* STHTTPRequest.framework */,
+				AE45B7FB1C881D6F00BA0D1C /* STHTTPRequest.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -242,7 +274,39 @@
 			path = ../../UnitTestAdditions;
 			sourceTree = "<group>";
 		};
+		AE45B7EA1C881C6600BA0D1C /* Framework */ = {
+			isa = PBXGroup;
+			children = (
+				AE45B7EB1C881C6600BA0D1C /* STHTTPRequestFramework.h */,
+				AE1A74981C8AE12F00FB26FE /* STHTTPRequestFramework.modulemap */,
+				AE45B7ED1C881C6600BA0D1C /* STHTTPRequestFramework.plist */,
+			);
+			name = Framework;
+			path = ../Framework;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		AE45B7E61C881C6600BA0D1C /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AE45B7EC1C881C6600BA0D1C /* STHTTPRequestFramework.h in Headers */,
+				AE45B8041C8823A000BA0D1C /* STHTTPRequest.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AE45B7F81C881D6F00BA0D1C /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AE45B8031C88226E00BA0D1C /* STHTTPRequestFramework.h in Headers */,
+				AE45B8051C8823A100BA0D1C /* STHTTPRequest.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
 		0315A0441923D6DF001C6C02 /* cli */ = {
@@ -317,6 +381,42 @@
 			productReference = 038AB2D5199217120031C019 /* Asynchronous2Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		AE45B7E81C881C6600BA0D1C /* STHTTPRequest-iOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AE45B7F41C881C6700BA0D1C /* Build configuration list for PBXNativeTarget "STHTTPRequest-iOS" */;
+			buildPhases = (
+				AE45B7E41C881C6600BA0D1C /* Sources */,
+				AE45B7E51C881C6600BA0D1C /* Frameworks */,
+				AE45B7E61C881C6600BA0D1C /* Headers */,
+				AE45B7E71C881C6600BA0D1C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "STHTTPRequest-iOS";
+			productName = STHTTPRequest;
+			productReference = AE45B7E91C881C6600BA0D1C /* STHTTPRequest.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		AE45B7FA1C881D6F00BA0D1C /* STHTTPRequest-OSX */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AE45B8001C881D6F00BA0D1C /* Build configuration list for PBXNativeTarget "STHTTPRequest-OSX" */;
+			buildPhases = (
+				AE45B7F61C881D6F00BA0D1C /* Sources */,
+				AE45B7F71C881D6F00BA0D1C /* Frameworks */,
+				AE45B7F81C881D6F00BA0D1C /* Headers */,
+				AE45B7F91C881D6F00BA0D1C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "STHTTPRequest-OSX";
+			productName = "STHTTPRequest-OSX";
+			productReference = AE45B7FB1C881D6F00BA0D1C /* STHTTPRequest.framework */;
+			productType = "com.apple.product-type.framework";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -325,6 +425,14 @@
 			attributes = {
 				LastUpgradeCheck = 0460;
 				ORGANIZATIONNAME = "Nicolas Seriot";
+				TargetAttributes = {
+					AE45B7E81C881C6600BA0D1C = {
+						CreatedOnToolsVersion = 7.2;
+					};
+					AE45B7FA1C881D6F00BA0D1C = {
+						CreatedOnToolsVersion = 7.2;
+					};
+				};
 			};
 			buildConfigurationList = 03191ECC17BF75060001C06D /* Build configuration list for PBXProject "STHTTPRequest" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -342,6 +450,8 @@
 				03191EF617BF75070001C06D /* STHTTPRequestTests */,
 				038AB2C3199217120031C019 /* AsynchronousTests */,
 				0315A0441923D6DF001C6C02 /* cli */,
+				AE45B7E81C881C6600BA0D1C /* STHTTPRequest-iOS */,
+				AE45B7FA1C881D6F00BA0D1C /* STHTTPRequest-OSX */,
 			);
 		};
 /* End PBXProject section */
@@ -367,6 +477,20 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		038AB2CF199217120031C019 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AE45B7E71C881C6600BA0D1C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AE45B7F91C881D6F00BA0D1C /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -443,6 +567,22 @@
 			files = (
 				036590DD1B735B9400C9570E /* STHTTPRequest.m in Sources */,
 				038AB2D8199217420031C019 /* STHTTPRequestAsyncTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AE45B7E41C881C6600BA0D1C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AE45B8061C8823B100BA0D1C /* STHTTPRequest.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AE45B7F61C881D6F00BA0D1C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AE45B8071C8823B200BA0D1C /* STHTTPRequest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -598,6 +738,7 @@
 				GCC_PREFIX_HEADER = "Demo Project/STHTTPRequest-Prefix.pch";
 				INFOPLIST_FILE = "Demo Project/STHTTPRequest-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = ch.seriot.STHTTPRequest2;
 				PRODUCT_NAME = STHTTPRequest2;
 				WRAPPER_EXTENSION = app;
@@ -613,6 +754,7 @@
 				GCC_PREFIX_HEADER = "Demo Project/STHTTPRequest-Prefix.pch";
 				INFOPLIST_FILE = "Demo Project/STHTTPRequest-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = ch.seriot.STHTTPRequest2;
 				PRODUCT_NAME = STHTTPRequest2;
 				WRAPPER_EXTENSION = app;
@@ -697,6 +839,160 @@
 			};
 			name = Release;
 		};
+		AE45B7F21C881C6700BA0D1C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				INFOPLIST_FILE = ../Framework/STHTTPRequestFramework.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = ../Framework/STHTTPRequestFramework.modulemap;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = ch.seriot.STHTTPRequest;
+				PRODUCT_NAME = STHTTPRequest;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		AE45B7F31C881C6700BA0D1C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				INFOPLIST_FILE = ../Framework/STHTTPRequestFramework.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = ../Framework/STHTTPRequestFramework.modulemap;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = ch.seriot.STHTTPRequest;
+				PRODUCT_NAME = STHTTPRequest;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		AE45B8011C881D6F00BA0D1C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				INFOPLIST_FILE = ../Framework/STHTTPRequestFramework.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MODULEMAP_FILE = ../Framework/STHTTPRequestFramework.modulemap;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = ch.seriot.STHTTPRequest;
+				PRODUCT_NAME = STHTTPRequest;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		AE45B8021C881D6F00BA0D1C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				INFOPLIST_FILE = ../Framework/STHTTPRequestFramework.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MODULEMAP_FILE = ../Framework/STHTTPRequestFramework.modulemap;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = ch.seriot.STHTTPRequest;
+				PRODUCT_NAME = STHTTPRequest;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -741,6 +1037,24 @@
 			buildConfigurations = (
 				038AB2D3199217120031C019 /* Debug */,
 				038AB2D4199217120031C019 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AE45B7F41C881C6700BA0D1C /* Build configuration list for PBXNativeTarget "STHTTPRequest-iOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AE45B7F21C881C6700BA0D1C /* Debug */,
+				AE45B7F31C881C6700BA0D1C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AE45B8001C881D6F00BA0D1C /* Build configuration list for PBXNativeTarget "STHTTPRequest-OSX" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AE45B8011C881D6F00BA0D1C /* Debug */,
+				AE45B8021C881D6F00BA0D1C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
