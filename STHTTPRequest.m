@@ -778,40 +778,15 @@ static STHTTPRequestCookiesStorage globalCookiesStoragePolicy = STHTTPRequestCoo
 }
 
 - (NSError *)errorDescribingRequestNonfulfillment {
-	if(_responseStatus < 400) return nil;
-
-	NSError *error = nil;
-
-    NSString *errorDescription = [[self class] descriptionForHTTPStatus:_responseStatus];
-
-	// If possible, expose the server's own description of the error...
-	BOOL serverSideDescriptionPossible = _responseData && [_responseData length];
-	BOOL serverSideDescriptionAdded = NO;
-	if(serverSideDescriptionPossible
-	&& _responseHeaders && [_responseHeaders[@"Content-Type"] hasPrefix: @"application/json"]) {
-		id container = [NSJSONSerialization JSONObjectWithData:_responseData options:0 error:&error];
-		id serverSideInfo;
-		if(container && [container isKindOfClass:[NSDictionary class]]
-		&& nil != (serverSideInfo = ((NSDictionary *)container)[@"error"])) {
-			errorDescription = [errorDescription stringByAppendingFormat:@" (%@)", [serverSideInfo description]];
-			serverSideDescriptionAdded = YES;
-		}
-	}
-
-	// When there was possibly server-side error information and it is in a form we don't cater for, optionally include header and data for debugging
-	NSDictionary *userInfo =
-	serverSideDescriptionPossible && !serverSideDescriptionAdded && [[NSUserDefaults standardUserDefaults] boolForKey:@"STHTTPRequestIncludeHeaderAndDataInError"]
-	? @{
-		NSLocalizedDescriptionKey : errorDescription,
-		@"headers" : _responseHeaders ?: @{},
-		@"data" : _responseData ? [[NSString alloc] initWithData:_responseData encoding:NSUTF8StringEncoding] : @"",
-	} : @{
-		NSLocalizedDescriptionKey : errorDescription,
-	};
-
-    error = [NSError errorWithDomain:NSStringFromClass([self class]) code:_responseStatus userInfo:userInfo];
-
-	return error;
+    if(_responseStatus < 400) return nil;
+    
+    NSDictionary *userInfo = @{
+                               NSLocalizedDescriptionKey : [[self class] descriptionForHTTPStatus:_responseStatus],
+                               @"headers": self.responseHeaders,
+                               @"body": self.responseString
+                               };
+    
+    return [NSError errorWithDomain:NSStringFromClass([self class]) code:_responseStatus userInfo:userInfo];
 }
 
 #pragma mark Start Request
@@ -839,7 +814,7 @@ static STHTTPRequestCookiesStorage globalCookiesStoragePolicy = STHTTPRequestCoo
     }
     
     sessionConfiguration.allowsCellularAccess = YES;
-
+    
     sessionConfiguration.sharedContainerIdentifier = [[NSBundle mainBundle] bundleIdentifier];
     
     NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfiguration
@@ -960,7 +935,7 @@ static STHTTPRequestCookiesStorage globalCookiesStoragePolicy = STHTTPRequestCoo
 #pragma mark NSURLSessionDelegate
 
 - (void)URLSession:(NSURLSession *)session didBecomeInvalidWithError:(NSError *)error {
-
+    
     __weak typeof(self) weakSelf = self;
     
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -969,7 +944,7 @@ static STHTTPRequestCookiesStorage globalCookiesStoragePolicy = STHTTPRequestCoo
         if(strongSelf == nil) return;
         
         if(error == nil) return; // normal session invalidation, no error
-
+        
         if(strongSelf.errorBlock) {
             strongSelf.errorBlock(error);
         }
