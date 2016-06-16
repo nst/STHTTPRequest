@@ -666,12 +666,6 @@ static STHTTPRequestCookiesStorage globalCookiesStoragePolicy = STHTTPRequestCoo
     return s;
 }
 
-+ (NSDictionary *)userInfoWithErrorDescriptionForHTTPStatus:(NSUInteger)status {
-    NSString *s = [self descriptionForHTTPStatus:status];
-    if(s == nil) return nil;
-    return @{ NSLocalizedDescriptionKey : s };
-}
-
 #pragma mark Descriptions
 
 - (NSString *)curlDescription {
@@ -781,6 +775,43 @@ static STHTTPRequestCookiesStorage globalCookiesStoragePolicy = STHTTPRequestCoo
     }
     
     return ms;
+}
+
+- (NSError *)errorDescribingRequestNonfulfillment {
+	if(_responseStatus < 400) return nil;
+
+	NSError *error = nil;
+
+    NSString *errorDescription = [[self class] descriptionForHTTPStatus:_responseStatus];
+
+	// If possible, expose the server's own description of the error...
+	BOOL serverSideDescriptionPossible = _responseData && [_responseData length];
+	BOOL serverSideDescriptionAdded = NO;
+	if(serverSideDescriptionPossible
+	&& _responseHeaders && [_responseHeaders[@"Content-Type"] hasPrefix: @"application/json"]) {
+		id container = [NSJSONSerialization JSONObjectWithData:_responseData options:0 error:&error];
+		id serverSideInfo;
+		if(container && [container isKindOfClass:[NSDictionary class]]
+		&& nil != (serverSideInfo = ((NSDictionary *)container)[@"error"])) {
+			errorDescription = [errorDescription stringByAppendingFormat:@" (%@)", [serverSideInfo description]];
+			serverSideDescriptionAdded = YES;
+		}
+	}
+
+	// When there was possibly server-side error information and it is in a form we don't cater for, optionally include header and data for debugging
+	NSDictionary *userInfo =
+	serverSideDescriptionPossible && !serverSideDescriptionAdded && [[NSUserDefaults standardUserDefaults] boolForKey:@"STHTTPRequestIncludeHeaderAndDataInError"]
+	? @{
+		NSLocalizedDescriptionKey : errorDescription,
+		@"headers" : _responseHeaders ?: @{},
+		@"data" : _responseData ? [[NSString alloc] initWithData:_responseData encoding:NSUTF8StringEncoding] : @"",
+	} : @{
+		NSLocalizedDescriptionKey : errorDescription,
+	};
+
+    error = [NSError errorWithDomain:NSStringFromClass([self class]) code:_responseStatus userInfo:userInfo];
+
+	return error;
 }
 
 #pragma mark Start Request
@@ -897,8 +928,7 @@ static STHTTPRequestCookiesStorage globalCookiesStoragePolicy = STHTTPRequestCoo
     self.responseString = [self stringWithData:_responseData encodingName:_responseStringEncodingName];
     
     if(_responseStatus >= 400) {
-        NSDictionary *userInfo = [[self class] userInfoWithErrorDescriptionForHTTPStatus:_responseStatus];
-        if(e) *e = [NSError errorWithDomain:NSStringFromClass([self class]) code:_responseStatus userInfo:userInfo];
+        if(e) *e = [self errorDescribingRequestNonfulfillment];
     }
     
     return _responseString;
@@ -1052,8 +1082,7 @@ didCompleteWithError:(NSError *)error {
         }
         
         if(strongSelf.responseStatus >= 400) {
-            NSDictionary *userInfo = [[strongSelf class] userInfoWithErrorDescriptionForHTTPStatus:strongSelf.responseStatus];
-            strongSelf.error = [NSError errorWithDomain:NSStringFromClass([strongSelf class]) code:strongSelf.responseStatus userInfo:userInfo];
+            strongSelf.error = [strongSelf errorDescribingRequestNonfulfillment];
             strongSelf.errorBlock(strongSelf.error);
             [session finishTasksAndInvalidate];
             return;
