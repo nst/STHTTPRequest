@@ -22,6 +22,7 @@ _A NSURLSession wrapper for humans_
 
 ##### Typical usage
 
+Objective-C
 ```Objective-C
 STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"http://google.com"];
 
@@ -34,6 +35,21 @@ r.errorBlock = ^(NSError *error) {
 };
 
 [r startAsynchronous];
+```
+
+Swift
+```Swift
+let r = STHTTPRequest(URLString:"http://www.google.com")
+
+r.completionBlock = { (headers, body) in
+    // ...
+}
+
+r.errorBlock = { (error) in
+    // ...
+}
+
+r.startAsynchronous()
 ```
 
 Notes:
