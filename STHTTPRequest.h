@@ -57,7 +57,7 @@ typedef NS_ENUM(NSUInteger, STHTTPRequestCookiesStorage) {
 @property (nonatomic) STHTTPRequestCookiesStorage cookieStoragePolicyForInstance; // overrides globalCookiesStoragePolicy
 @property (nonatomic) NSString *sharedContainerIdentifier;
 
-+ (void)setBackgroundCompletionHandler:(void(^)())completionHandler forSessionIdentifier:(NSString *)sessionIdentifier;
++ (void)setBackgroundCompletionHandler:(void(^)(void))completionHandler forSessionIdentifier:(NSString *)sessionIdentifier;
 //+ (void(^)())backgroundCompletionHandlerForSessionIdentifier:(NSString *)sessionIdentifier;
 
 // response
